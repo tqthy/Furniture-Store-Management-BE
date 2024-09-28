@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     receiptDate: DataTypes.DATEONLY,
     totalCost: DataTypes.DECIMAL(20,2),
     shipping: DataTypes.DECIMAL(20,2),
+    status: DataTypes.ENUM('accepted', 'rejected','pending'),
   }, {
     sequelize,
     modelName: 'GoodsReceipt',

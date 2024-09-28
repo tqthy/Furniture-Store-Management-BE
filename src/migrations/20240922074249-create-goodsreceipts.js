@@ -12,6 +12,9 @@ module.exports = {
       receiptDate: {
         type: Sequelize.DATEONLY
       },
+      status: {
+        type: Sequelize.ENUM('accepted', 'pending', 'rejected')
+      },
       totalCost: {
         type: Sequelize.DECIMAL(20,2)
       },

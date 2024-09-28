@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.DECIMAL(20,2)
       },
       status: {
-        type: Sequelize.ENUM('paid', 'canceled')
+        type: Sequelize.ENUM('paid', 'canceled', 'pending')
       },
       customerId: {
         type: Sequelize.INTEGER

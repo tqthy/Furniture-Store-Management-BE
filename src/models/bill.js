@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Bill.init({
     totalCost: DataTypes.DECIMAL(20,2),
-    status: DataTypes.ENUM('paid', 'canceled'),
+    status: DataTypes.ENUM('paid', 'canceled','pending'),
   }, {
     sequelize,
     modelName: 'Bill',
