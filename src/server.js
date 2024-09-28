@@ -20,7 +20,7 @@ app.use(
 
 Connection();
 // use middleware
-// import path hear
+// import path here
 
 app.use((req, res) => {
     return res.send("404 not found");
