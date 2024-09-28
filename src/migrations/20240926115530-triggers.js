@@ -13,14 +13,21 @@ module.exports = {
       CREATE OR REPLACE FUNCTION update_total_good_receipt_cost()
       RETURNS TRIGGER AS $$
       BEGIN
-        UPDATE "GoodsReceipt"
-        SET "totalCost" = (SELECT SUM(cost) FROM "GoodsReceiptDetail" WHERE "goodsReceiptId" = NEW."goodsReceiptId") + "shipping"
-        WHERE id = NEW."goodsReceiptId";
+        IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
+          UPDATE "GoodsReceipt"
+          SET "totalCost" = (SELECT COALESCE(SUM(cost), 0) FROM "GoodsReceiptDetail" WHERE "goodsReceiptId" = NEW."goodsReceiptId") + "shipping"
+          WHERE id = NEW."goodsReceiptId";
+        
+        ELSIF TG_OP = 'DELETE' THEN
+          UPDATE "GoodsReceipt"
+          SET "totalCost" = (SELECT COALESCE(SUM(cost), 0) FROM "GoodsReceiptDetail" WHERE "goodsReceiptId" = OLD."goodsReceiptId") + "shipping"
+          WHERE id = OLD."goodsReceiptId";
+        END IF;
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
       CREATE TRIGGER update_total_good_receipt_cost_trigger
-      AFTER INSERT OR UPDATE ON "GoodsReceiptDetail"
+      AFTER INSERT OR INSERT OR DELETE ON "GoodsReceiptDetail"
       FOR EACH ROW
       EXECUTE PROCEDURE update_total_good_receipt_cost();
     `);
@@ -90,14 +97,21 @@ module.exports = {
       CREATE OR REPLACE FUNCTION update_total_bill_detail_cost()
       RETURNS TRIGGER AS $$
       BEGIN
-        UPDATE "Bill"
-        SET "totalCost" = (SELECT SUM(cost) FROM "BillDetail" WHERE "billId" = NEW."billId")
-        WHERE id = NEW."billId";
+        IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
+          UPDATE "Bill"
+          SET "totalCost" = (SELECT COALESCE(SUM(cost), 0) FROM "BillDetail" WHERE "billId" = NEW."billId") + "shipping"
+          WHERE id = NEW."goodsReceiptId";
+        
+        ELSIF TG_OP = 'DELETE' THEN
+          UPDATE "GoodsReceipt"
+          SET "totalCost" = (SELECT COALESCE(SUM(cost), 0) FROM "BillDetail" WHERE "billId" = OLD."billId") + "shipping"
+          WHERE id = OLD."goodsReceiptId";
+        END IF;
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
       CREATE TRIGGER update_total_bill_detail_cost_trigger
-      AFTER INSERT OR UPDATE ON "BillDetail"
+      AFTER INSERT OR UPDATE OR DELETE ON "BillDetail"
       FOR EACH ROW
       EXECUTE PROCEDURE update_total_bill_detail_cost();
       `);
