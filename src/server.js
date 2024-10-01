@@ -3,6 +3,8 @@ import cors from "cors";
 import Connection from "./config/connectDB";
 import express from "express";
 import bodyParser from "body-parser";
+import config from "./routes/index";
+import catalogueRoute from "./routes/CatalogueRoute";
 // import { checkUserJwt } from "./middlewares/jwtService";
 require("dotenv").config();
 const PORT = process.env.PORT || 8080;
@@ -21,7 +23,9 @@ app.use(
 Connection();
 // use middleware
 // import path here
-
+config.catalogueRoute(app);
+config.productRoute(app);
+config.goodsReceiptRoute(app);
 app.use((req, res) => {
     return res.send("404 not found");
 });

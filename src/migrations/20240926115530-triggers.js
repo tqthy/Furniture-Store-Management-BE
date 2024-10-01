@@ -27,7 +27,7 @@ module.exports = {
       END;
       $$ LANGUAGE plpgsql;
       CREATE TRIGGER update_total_good_receipt_cost_trigger
-      AFTER INSERT OR INSERT OR DELETE ON "GoodsReceiptDetail"
+      AFTER INSERT OR UPDATE OR DELETE ON "GoodsReceiptDetail"
       FOR EACH ROW
       EXECUTE PROCEDURE update_total_good_receipt_cost();
     `);
@@ -58,9 +58,21 @@ module.exports = {
       BEGIN
         IF NEW."status" = 'accepted' THEN
           UPDATE "Product"
-          SET "quantity" = "quantity" + (SELECT "quantity" FROM "GoodsReceiptDetail" WHERE "goodsReceiptId" = NEW."id" AND "productId" = "Product"."id"),
-              "available" = "available" + (SELECT "quantity" FROM "GoodsReceiptDetail" WHERE "goodsReceiptId" = NEW."id" AND "productId" = "Product"."id")
-          WHERE id IN (SELECT "productId" FROM "GoodsReceiptDetail" WHERE "goodsReceiptId" = NEW."id");
+          SET "quantity" = "quantity" + COALESCE((
+            SELECT SUM("quantity") 
+            FROM "GoodsReceiptDetail" 
+            WHERE "goodsReceiptId" = NEW."id" 
+            AND "productId" = "Product"."id"
+          ), 0),
+          "available" = "available" + COALESCE((
+            SELECT SUM("quantity") 
+            FROM "GoodsReceiptDetail" 
+            WHERE "goodsReceiptId" = NEW."id" 
+            AND "productId" = "Product"."id"
+          ), 0)
+          WHERE "id" IN (SELECT "productId" 
+                        FROM "GoodsReceiptDetail" 
+                        WHERE "goodsReceiptId" = NEW."id");
         END IF;
         RETURN NEW;
       END;
@@ -68,7 +80,7 @@ module.exports = {
       CREATE TRIGGER update_product_quantity_receipt_on_accept_trigger
       AFTER UPDATE ON "GoodsReceipt"
       FOR EACH ROW
-      EXECUTE PROCEDURE update_product_quantity_receipt_on_accept();      
+      EXECUTE PROCEDURE update_product_quantity_receipt_on_accept(); 
       `);
 
     await queryInterface.sequelize.query(`
@@ -142,10 +154,23 @@ module.exports = {
       RETURNS TRIGGER AS $$
       BEGIN
         IF NEW."status" = 'paid' THEN
+          -- Cập nhật số lượng sản phẩm dựa trên tổng số lượng bán ra từ chi tiết hoá đơn
           UPDATE "Product"
-          SET "available" = "available" - (SELECT "quantity" FROM "BillDetail" WHERE "billId" = NEW."id" AND "productId" = "Product"."id"),
-              "sold" = "sold" + (SELECT "quantity" FROM "BillDetail" WHERE "billId" = NEW."id" AND "productId" = "Product"."id")
-          WHERE id IN (SELECT "productId" FROM "BillDetail" WHERE "billId" = NEW."id");
+          SET "available" = "available" - COALESCE((
+            SELECT SUM("quantity") 
+            FROM "BillDetail" 
+            WHERE "billId" = NEW."id" 
+            AND "productId" = "Product"."id"
+          ), 0),
+          "sold" = "sold" + COALESCE((
+            SELECT SUM("quantity") 
+            FROM "BillDetail" 
+            WHERE "billId" = NEW."id" 
+            AND "productId" = "Product"."id"
+          ), 0)
+          WHERE "id" IN (SELECT "productId" 
+                        FROM "BillDetail" 
+                        WHERE "billId" = NEW."id");
         END IF;
         RETURN NEW;
       END;

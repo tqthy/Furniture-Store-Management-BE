@@ -12,7 +12,10 @@ const config = {
     "database": databasename,
     "port": databaseport,
     "dialect": databasedialect,
-    "host": databasehost
+    "host": databasehost,
+    "define": {
+      "freezeTableName": true
+    }
   },
   "test": {
     "username": databaseuser,

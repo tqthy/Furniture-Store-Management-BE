@@ -19,6 +19,9 @@ const sequelize = new Sequelize(
         port: databaseport,
         dialect: databasedialect,
         logging: false,
+        define: {
+            freezeTableName: true,
+        },
         query: { raw: true },
     }
 );
