@@ -2,24 +2,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('GoodsReceiptDetails', {
+    await queryInterface.createTable('UserActivityLog', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      variantId: {
+      staffId: {
         type: Sequelize.INTEGER
       },
-      quantity: {
+      action: {
+        type: Sequelize.TEXT
+      },
+      type: {
+        type: Sequelize.TEXT
+      },
+      ipAddress: {
+        type: Sequelize.TEXT
+      },
+      description: {
+        type: Sequelize.TEXT
+      },
+      recordId: {
         type: Sequelize.INTEGER
       },
-      cost: {
-        type: Sequelize.DECIMAL(20,2)
+      previousData: {
+        type: Sequelize.TEXT
       },
-      goodsReceiptId: {
-        type: Sequelize.INTEGER
+      newDate: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('GoodsReceiptDetails');
+    await queryInterface.dropTable('UserActivityLog');
   }
 };

@@ -24,8 +24,6 @@ class ProductService {
             const newProduct = await db.Product.create({
                 category: category,
                 name: name,
-                buyingPrice: buyingPrice,
-                sellingPrice: sellingPrice,
                 sku: sku,
                 image: "",
                 description: description,

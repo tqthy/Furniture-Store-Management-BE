@@ -12,6 +12,9 @@ module.exports = {
       receiptDate: {
         type: Sequelize.DATEONLY
       },
+      providerId: {
+        type: Sequelize.INTEGER
+      },
       status: {
         type: Sequelize.ENUM('accepted', 'pending', 'rejected')
       },

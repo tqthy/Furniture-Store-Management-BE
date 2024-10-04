@@ -1,8 +1,8 @@
 import GoodsReceiptService from "../services/GoodsReceiptService";
 class GoodsReceiptController {
     createGoodsReceipt = async(req, res) => {
-        const { shipping, goodsReceiptDetailData } = req.body;
-        if (!shipping || !goodsReceiptDetailData) {
+        const { shipping, GoodsReceiptDetailsData } = req.body;
+        if (!shipping || !GoodsReceiptDetailsData) {
             return res.status(200).json({
                 EM: 'Missing shipping or goods receipt details data',
                 EC: 1,
@@ -10,7 +10,7 @@ class GoodsReceiptController {
             });
         }
         try {
-            const response = await GoodsReceiptService.createGoodsReceipt(shipping, goodsReceiptDetailData);
+            const response = await GoodsReceiptService.createGoodsReceipt(shipping, GoodsReceiptDetailsData);
             res.status(200).json(response);
 
         } catch(error) {

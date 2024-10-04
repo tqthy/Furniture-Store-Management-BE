@@ -1,4 +1,5 @@
 'use strict';
+const { DataTypes } = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -15,14 +16,8 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      buyingPrice: {
-        type: Sequelize.DECIMAL(20,2)
-      },
-      sellingPrice: {
-        type: Sequelize.DECIMAL(20,2)
-      },
-      sku: {
-        type: Sequelize.TEXT
+      price: {
+        type: Sequelize.RANGE(DataTypes.DECIMAL(20,2))
       },
       image: {
         type: Sequelize.TEXT

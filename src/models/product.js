@@ -11,20 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Product.hasMany(models.WarrantyAndRepair, { foreignKey: "productId" });
-      Product.hasMany(models.GoodsReceiptDetail, { foreignKey: "productId" });
-      Product.hasMany(models.ProductProvider, { foreignKey: "productId" });
-      Product.hasMany(models.SaleProduct, { foreignKey: "productId" });
-      Product.hasMany(models.BillDetail, { foreignKey: "productId" });
+      Product.hasMany(models.ProductVariant, { foreignKey: "productId" });
       Product.belongsTo(models.Catalogue, { foreignKey: "catalogueId" });
+
     }
   }
   Product.init({
     category: DataTypes.STRING,
     name: DataTypes.STRING,
-    buyingPrice: DataTypes.DECIMAL(20,2),
-    sellingPrice: DataTypes.DECIMAL(20,2),
-    sku: DataTypes.TEXT,
+    price: DataTypes.RANGE(DataTypes.DECIMAL),
     image: DataTypes.TEXT,
     description: DataTypes.TEXT,
     available: DataTypes.INTEGER,

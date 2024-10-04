@@ -1,7 +1,7 @@
 import db from "../models/index";
 
 class GoodsReceiptService {
-    createGoodsReceipt = async(shipping, goodsReceiptDetailData) => {
+    createGoodsReceipt = async(shipping, GoodsReceiptDetailsData) => {
         try {
             const goodsReceipt = await db.GoodsReceipt.create({
                 receiptDate: new Date(),
@@ -9,8 +9,8 @@ class GoodsReceiptService {
                 status: "pending",
                 shipping: shipping
             })
-            goodsReceiptDetailData.forEach(async(data) => {
-                await db.GoodsReceiptDetail.create({
+            GoodsReceiptDetailsData.forEach(async(data) => {
+                await db.GoodsReceiptDetails.create({
                     goodsReceiptId: goodsReceipt.id,
                     productId: data.productId,
                     quantity: data.quantity

@@ -2,24 +2,33 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('GoodsReceiptDetails', {
+    await queryInterface.createTable('ProductVariant', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      variantId: {
+      SKU: {
+        type: Sequelize.TEXT
+      },
+      productId: {
         type: Sequelize.INTEGER
       },
-      quantity: {
-        type: Sequelize.INTEGER
+      price: {
+        type: Sequelize.DECIMAL(20,2),
       },
-      cost: {
-        type: Sequelize.DECIMAL(20,2)
+      status: {
+        type: Sequelize.ENUM('in stock', 'sold out')
       },
-      goodsReceiptId: {
-        type: Sequelize.INTEGER
+      color: {
+        type: Sequelize.STRING
+      },
+      size: {
+        type: Sequelize.STRING
+      },
+      image: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('GoodsReceiptDetails');
+    await queryInterface.dropTable('ProductVariant');
   }
 };

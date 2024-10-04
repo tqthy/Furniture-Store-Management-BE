@@ -2,20 +2,23 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Sale', {
+    await queryInterface.createTable('Invoice', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      finishDate: {
-        type: Sequelize.DATEONLY
+      totalCost: {
+        type: Sequelize.DECIMAL(20,2)
       },
-      startDate: {
-        type: Sequelize.DATEONLY
+      status: {
+        type: Sequelize.ENUM('paid', 'canceled', 'pending')
       },
-      discount: {
+      customerId: {
+        type: Sequelize.INTEGER
+      },
+      staffId: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -29,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Sale');
+    await queryInterface.dropTable('Invoice');
   }
 };

@@ -2,24 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Bill', {
+    await queryInterface.createTable('Promotion', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      totalCost: {
-        type: Sequelize.DECIMAL(20,2)
+      finishDate: {
+        type: Sequelize.DATEONLY
       },
-      status: {
-        type: Sequelize.ENUM('paid', 'canceled', 'pending')
+      startDate: {
+        type: Sequelize.DATEONLY
       },
-      customerId: {
-        type: Sequelize.INTEGER
-      },
-      staffId: {
-        type: Sequelize.INTEGER
+      desscription: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Bill');
+    await queryInterface.dropTable('Promotion');
   }
 };

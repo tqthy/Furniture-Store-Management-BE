@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       GoodsReceipt.belongsTo(models.Staff, { foreignKey: "staffId" });
-      GoodsReceipt.hasMany(models.GoodsReceiptDetail, { foreignKey: "goodsReceiptId" });
+      GoodsReceipt.hasMany(models.GoodsReceiptDetails, { foreignKey: "goodsReceiptId" });
+      GoodsReceipt.belongsTo(models.Provider, { foreignKey: "providerId" });
     }
   }
   GoodsReceipt.init({
