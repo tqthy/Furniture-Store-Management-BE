@@ -10,7 +10,8 @@ module.exports = {
         table: 'Account',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_01"
     })
 
     await queryInterface.addConstraint('Account', {
@@ -20,7 +21,8 @@ module.exports = {
         table: 'Role',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_02"
     })
 
     await queryInterface.addConstraint('RolePermission', {
@@ -30,7 +32,8 @@ module.exports = {
         table: 'Role',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_03"
     })
 
     await queryInterface.addConstraint('RolePermission', {
@@ -40,7 +43,8 @@ module.exports = {
         table: 'Permission',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_04",
     })
 
     await queryInterface.addConstraint('WarrantyAndRepair', {
@@ -50,7 +54,8 @@ module.exports = {
         table: 'Staff',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_05"
     })
 
     await queryInterface.addConstraint('WarrantyAndRepair', {
@@ -60,7 +65,8 @@ module.exports = {
         table: 'Customer',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_06"
     })
 
     await queryInterface.addConstraint('WarrantyAndRepair', {
@@ -70,7 +76,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_07"
     })
 
     await queryInterface.addConstraint('GoodsReceipt', {
@@ -80,7 +87,8 @@ module.exports = {
         table: 'Staff',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_08"
     })
 
     await queryInterface.addConstraint('GoodsReceipt', {
@@ -90,7 +98,8 @@ module.exports = {
         table: 'Provider',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_09"
     })
 
     await queryInterface.addConstraint('GoodsReceiptDetails', {
@@ -100,7 +109,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_10"
     })
 
     await queryInterface.addConstraint('GoodsReceiptDetails', {
@@ -110,7 +120,8 @@ module.exports = {
         table: 'GoodsReceipt',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_11"
     })
 
     await queryInterface.addConstraint('ProductProvider', {
@@ -120,7 +131,8 @@ module.exports = {
         table: 'Provider',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_12"
     })
 
     await queryInterface.addConstraint('ProductProvider', {
@@ -130,7 +142,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_13"
     })
 
     await queryInterface.addConstraint('Product', {
@@ -140,7 +153,8 @@ module.exports = {
         table: 'Catalogue',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'SET NULL',
+      name: "FK_14"
     })
 
     await queryInterface.addConstraint('ProductVariant', {
@@ -150,7 +164,8 @@ module.exports = {
         table: 'Product',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_15"
     })
 
     await queryInterface.addConstraint('InvoiceDetails', {
@@ -160,7 +175,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_16"
     })
 
     await queryInterface.addConstraint('InvoiceDetails', {
@@ -170,7 +186,8 @@ module.exports = {
         table: 'Invoice',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_17"
     })
 
     await queryInterface.addConstraint('Invoice', {
@@ -180,7 +197,8 @@ module.exports = {
         table: 'Customer',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_18"
     })
 
     await queryInterface.addConstraint('Invoice', {
@@ -190,7 +208,8 @@ module.exports = {
         table: 'Staff',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_19"
     })
 
     await queryInterface.addConstraint('Inventory', {
@@ -200,7 +219,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_20"
     })
 
     await queryInterface.addConstraint('InventoryLog', {
@@ -210,7 +230,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_21"
     })
 
     await queryInterface.addConstraint('PromotionProduct', {
@@ -220,7 +241,8 @@ module.exports = {
         table: 'ProductVariant',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_22"
     })
 
     await queryInterface.addConstraint('PromotionProduct', {
@@ -230,7 +252,8 @@ module.exports = {
         table: 'Promotion',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_23"
     })
 
     await queryInterface.addConstraint('PromotionUsageDetails', {
@@ -240,7 +263,8 @@ module.exports = {
         table: 'Promotion',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_24"
     })
 
     await queryInterface.addConstraint('PromotionUsageDetails', {
@@ -250,7 +274,8 @@ module.exports = {
         table: 'InvoiceDetails',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_25"
     })
 
     await queryInterface.addConstraint('UserActivityLog', {
@@ -260,16 +285,43 @@ module.exports = {
         table: 'Staff',
         field: 'id'
       },
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      name: "FK_26"
     })
   },
 
   async down (queryInterface, Sequelize) {
-    /**
+    /*************************************************************************************************************************
      * Add reverting commands here.
      *
      * Example:
      * await queryInterface.dropTable('users');
-     */
+     ***********************************************************************************************************************/
+    await queryInterface.removeConstraint('Staff', "FK_01")
+    await queryInterface.removeConstraint('Account', "FK_02")
+    await queryInterface.removeConstraint('RolePermission', "FK_03")
+    await queryInterface.removeConstraint('RolePermission', "FK_04")
+    await queryInterface.removeConstraint('WarrantyAndRepair', "FK_05")
+    await queryInterface.removeConstraint('WarrantyAndRepair', "FK_06")
+    await queryInterface.removeConstraint('WarrantyAndRepair', "FK_07")
+    await queryInterface.removeConstraint('GoodsReceipt', "FK_08")
+    await queryInterface.removeConstraint('GoodsReceipt', "FK_09")
+    await queryInterface.removeConstraint('GoodsReceiptDetails', "FK_10")
+    await queryInterface.removeConstraint('GoodsReceiptDetails', "FK_11")
+    await queryInterface.removeConstraint('ProductProvider', "FK_12")
+    await queryInterface.removeConstraint('ProductProvider', "FK_13")
+    await queryInterface.removeConstraint('Product', "FK_14")
+    await queryInterface.removeConstraint('ProductVariant', "FK_15")
+    await queryInterface.removeConstraint('InvoiceDetails', "FK_16")
+    await queryInterface.removeConstraint('InvoiceDetails', "FK_17")
+    await queryInterface.removeConstraint('Invoice', "FK_18")
+    await queryInterface.removeConstraint('Invoice', "FK_19")
+    await queryInterface.removeConstraint('Inventory', "FK_20")
+    await queryInterface.removeConstraint('InventoryLog', "FK_21")
+    await queryInterface.removeConstraint('PromotionProduct', "FK_22")
+    await queryInterface.removeConstraint('PromotionProduct', "FK_23")
+    await queryInterface.removeConstraint('PromotionUsageDetails', "FK_24")
+    await queryInterface.removeConstraint('PromotionUsageDetails', "FK_25")
+    await queryInterface.removeConstraint('UserActivityLog', "FK_26")
   }
 };
