@@ -18,7 +18,6 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - name: Build Docker image
         run: |
-          cd backend
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/expressjs-app:latest .
       - name: Push Docker image
         run: |
