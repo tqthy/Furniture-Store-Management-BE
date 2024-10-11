@@ -1,0 +1,55 @@
+name: CI/CD for ExpressJS Docker Deployment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/expressjs-app:latest .
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/expressjs-app:latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH client
+        run: sudo apt-get install openssh-client
+      # - name: Deploy to EC2
+      #   env:
+      #     EC2_HOST: ${{ secrets.EC2_HOST }}
+      #     EC2_USER: ${{ secrets.EC2_USER }}
+      #     PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+      #     DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #     APP_SECRET: ${{ secrets.APP_SECRET }}
+      #   run: |
+      #     echo "${PRIVATE_KEY}" > key.pem
+      #     echo "${APP_SECRET}" > env
+      #     chmod 600 key.pem env
+      #     scp -o StrictHostKeyChecking=no -i key.pem env $EC2_USER@$EC2_HOST:/path/on/ec2/env
+      #     echo "Begin ssh"
+      #     ssh -o StrictHostKeyChecking=no -i key.pem $EC2_USER@$EC2_HOST << EOF
+      #       echo "Pulling Docker image..."
+      #       docker pull maikusobu/nestjs-app:latest || { echo "Failed to pull image"; exit 1; }
+      #       echo "Stopping old container..."
+      #       docker stop nestjs-app || true
+      #       echo "Removing old container..."
+      #       docker rm nestjs-app || true
+      #       echo "Starting new container..."
+      #       docker run --env-file /path/on/ec2/env -d --name nestjs-app -p 3000:3000 maikusobu/nestjs-app:latest
+      #     EOF
+      #     echo "Finish ssh"
+      #     rm key.pem env
