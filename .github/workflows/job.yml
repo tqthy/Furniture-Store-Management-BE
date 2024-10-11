@@ -39,17 +39,17 @@ jobs:
           echo "${PRIVATE_KEY}" > key.pem
           echo "${APP_SECRET}" > env
           chmod 600 key.pem env
-          scp -o StrictHostKeyChecking=no -i key.pem env $EC2_USER@$EC2_HOST:/path/on/ec2/env
+          scp -o StrictHostKeyChecking=no -i key1.pem env $EC2_USER@$EC2_HOST:/path/on/ec2/env
           echo "Begin ssh"
-          ssh -o StrictHostKeyChecking=no -i key.pem $EC2_USER@$EC2_HOST << EOF
+          ssh -o StrictHostKeyChecking=no -i key1.pem $EC2_USER@$EC2_HOST << EOF
             echo "Pulling Docker image..."
-            docker pull ${DOCKER_HUB_USERNAME}/expressjs-app:latest || { echo "Failed to pull image"; exit 1; }
+            docker pull tqt0304/expressjs-app:latest || { echo "Failed to pull image"; exit 1; }
             echo "Stopping old container..."
             docker stop expressjs-app || true
             echo "Removing old container..."
             docker rm expressjs-app || true
             echo "Starting new container..."
-            docker run --env-file /path/on/ec2/env -d --name expressjs-app -p 3000:3000 ${DOCKER_HUB_USERNAME}/expressjs-app:latest
+            docker run --env-file /path/on/ec2/env -d --name expressjs-app -p 3000:3000 tqt0304/expressjs-app:latest
           EOF
           echo "Finish ssh"
           rm key.pem env
