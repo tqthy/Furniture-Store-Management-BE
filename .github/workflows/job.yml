@@ -36,9 +36,9 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           APP_SECRET: ${{ secrets.APP_SECRET }}
         run: |
-          echo "${PRIVATE_KEY}" > key.pem
+          echo "${PRIVATE_KEY}" > key1.pem
           echo "${APP_SECRET}" > env
-          chmod 600 key.pem env
+          chmod 600 key1.pem env
           scp -o StrictHostKeyChecking=no -i key1.pem env $EC2_USER@$EC2_HOST:/path/on/ec2/env
           echo "Begin ssh"
           ssh -o StrictHostKeyChecking=no -i key1.pem $EC2_USER@$EC2_HOST << EOF
