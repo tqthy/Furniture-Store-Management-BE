@@ -39,11 +39,11 @@ jobs:
           echo "${PRIVATE_KEY}" > key1.pem
           echo "${APP_SECRET}" > env
           chmod 600 key1.pem env
-          ssh -t -o StrictHostKeyChecking=no -i key1.pem $EC2_USER@$EC2_HOST "ls -ld /path/on/ec2/"
 
-          scp -o StrictHostKeyChecking=no -i key1.pem env $EC2_USER@$EC2_HOST:/path/on/ec2/env
+          scp -o StrictHostKeyChecking=no -i key1.pem env $EC2_USER@$EC2_HOST:~/env
           echo "Begin ssh"
           ssh -o StrictHostKeyChecking=no -i key1.pem $EC2_USER@$EC2_HOST << EOF
+            sudo mv ~/env /path/on/ec2/env
             echo "Pulling Docker image..."
             docker pull tqt0304/expressjs-app:latest || { echo "Failed to pull image"; exit 1; }
             echo "Stopping old container..."
