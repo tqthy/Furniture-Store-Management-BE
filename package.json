@@ -7,14 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/server.js",
     "build-src": "babel src -d build --copy-files",
-    "build": "node build/server.js"
+    "build": "babel src --out-dir dist"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.25.2",
     "@babel/node": "^7.25.0",
-    "@babel/preset-env": "^7.25.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.6",
@@ -33,6 +31,9 @@
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.25.7",
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
     "sequelize-cli": "^6.6.2"
   }
 }
