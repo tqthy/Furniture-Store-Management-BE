@@ -24,11 +24,13 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
+RUN npm install --save-dev @babel/cli @babel/preset-env @babel/core
 RUN npm ci
 
 COPY --chown=node:node . .
 
 USER node
+CMD ["npx", "babel-node", "src/server.js"]
 
 ###################
 # BUILD FOR PRODUCTION
@@ -44,6 +46,7 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
+RUN npm install --save-dev @babel/cli @babel/preset-env @babel/core
 RUN npm run build
 
 ENV NODE_ENV production
@@ -59,6 +62,7 @@ USER node
 FROM node:20-alpine As production
 
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
 
 CMD [ "node", "dist/main.js" ]
