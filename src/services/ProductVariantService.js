@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import db from "../models/index";
 
 class ProductVariantService {
@@ -128,13 +129,31 @@ class ProductVariantService {
         }
     };
 
-    getAllProductVariants = async() => {
+    getAllProductVariants = async(productId) => {
         try {
-            const productVariants = await db.ProductVariant.findAll();
+            let productVariants = await db.ProductVariant.findAll(
+                {
+                    include: [
+                        {
+                            model: db.Product,
+                            attributes: ['name'],
+                            where: {
+                                id: productId
+                            }
+                        },
+                        {
+                            model: db.Inventory,
+                            attributes: ['quantity', 'defective', 'sold', 'available']
+                        }
+                    ],
+                    nest: true,
+                    raw: true
+                },
+            );
             return {
                 EM: 'Get all product variants successfully',
                 EC: 0,
-                DT: productVariants
+                DT: productVariants,
             }  
         } catch (error) {
             return {
@@ -150,7 +169,20 @@ class ProductVariantService {
             const productVariant = await db.ProductVariant.findOne({
                 where: {
                     id: id
-                }
+                },
+                attributes: { exclude: ["createdAt", "updatedAt"] },
+                include:[
+                    {
+                        model: db.Product,
+                        attributes: ['name']
+                    },
+                    {
+                        model: db.Inventory,
+                        attributes: ['quantity', 'defective', 'sold', 'available']
+                    }
+                ],
+                nest: true,
+                raw: true
             });
             if (!productVariant) {
                 return {

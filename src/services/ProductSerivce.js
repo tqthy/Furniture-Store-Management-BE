@@ -76,7 +76,7 @@ class ProductService {
             return {
                 EM: 'Update product successfully',
                 EC: 0,
-                DT: ''
+                DT: product
             }
         } catch(error) {
             return {
@@ -122,7 +122,11 @@ class ProductService {
 
     getAllProducts = async() => {
         try {
-            const products = await db.Product.findAll();
+            const products = await db.Product.findAll(
+                {
+                    attributes: ['id', 'catalogueId', 'category', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status']
+                }
+            );
             return {
                 EM: 'Get products successfully',
                 EC: 0,
@@ -146,8 +150,16 @@ class ProductService {
                 include: [
                     {
                         model: db.ProductVariant,
+                        attributes: { exclude: ["createdAt", "updatedAt"] },
+                        include: [
+                            {
+                                model: db.Inventory,
+                                attributes: { exclude: ["createdAt", "updatedAt"] },
+                            },
+                        ]
                     }
                 ],
+                attributes: ['id', 'catalogueId', 'category', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
                 nest : true,
                 raw: true
             });

@@ -1,0 +1,128 @@
+@Web = http://localhost:8080
+@Email=
+@Password=
+@BearerToken=
+
+// Tạo catalogue
+POST {{Web}}/catalogues/create-catalogue
+Content-Type: application/json
+
+{
+    "name": "nội thất nhà riêng"
+}
+
+###
+//tạo product
+POST {{Web}}/products/create-product
+Content-Type: application/json
+
+{
+    "category": "bàn ghế gỗ", // cái này hard code bên front nếu ô muốn truyền số hay chữ vô thì kêu tui
+    "name": "tủ gỗ",
+    "description": "aaaaaaa",
+    "warranty": 1, //số năm bảo hành
+    "catalogueId": 1
+}
+
+###
+//update product
+//số 1 là id của product
+PUT {{Web}}/products/update-product/1 
+Content-Type: application/json
+
+{
+    "category": "bàn ghế nhựa",
+    "name": "bàn ghế",
+    "description": "aaaa",
+    "warranty": 1,
+    "catalogueId": 1
+}
+
+###
+//ngưng bán một sản phẩm
+PUT {{Web}}/products/stop-selling/1
+Content-Type: application/json
+
+
+###
+//danh sách sản phẩm
+GET {{Web}}/products/get-all-products
+
+###
+//tạo variant cho product
+//với 1 là productId
+POST {{Web}}/variants/create-variant/1
+Content-Type: application/json
+
+{
+    "sku": "aaaa",
+    "buyingPrice": 10000,
+    "price": 9000,
+    "color": "green",
+    "size": "dài 25cm, rộng 30cm"
+}
+
+###
+//lấy product variant của 1 product
+GET {{Web}}/products/get-product/1
+
+###
+//tạo hóa đơn thanh toán
+//const = quantity * price của một variant, tui nghĩ cái const này front xử lý vì 
+//còn phải hiện ra giá trong đơn thanh toán
+POST {{Web}}/goods-receipt/create-goods-receipt
+Content-Type: application/json
+
+{
+    "shipping": 1000,
+    "GoodsReceiptDetailsData": [
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 10, "cost": 1000}
+    ],
+    "totalCost": 10000
+}
+
+###
+//lấy danh sách hóa đơn thanh toán
+GET {{Web}}/goods-receipt/get-all-goods-receipts
+
+###
+//sửa hóa đơn thanh toán
+//với 1 là id của hóa đơn
+PUT {{Web}}/goods-receipt/update-goods-receipt/1
+Content-Type: application/json
+
+{
+    "shipping": 1000,
+    "GoodsReceiptDetailsData": [
+        {"variantId": 1, "quantity": 20, "cost": 2000},
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 40, "cost": 4000},
+        {"variantId": 1, "quantity": 20, "cost": 2000}
+    ],
+    "totalCost": 10000
+}
+
+###
+//accept hóa đơn thanh toán (xác nhận đã nhận đc hàng)
+//sau khi xác nhận thì inventory sẽ tăng lên
+//khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
+//khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
+//với 1 là id của hóa đơn
+PUT {{Web}}/goods-receipt/accept-goods-receipt/1
+
+###
+//từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
+//với 1 là id của hóa đơn
+PUT {{Web}}/goods-receipt/reject-goods-receipt/1
+
+###
+//lấy danh sách product variant của 1 product
+//với 1 là id của product
+GET {{Web}}/variants/get-all-variants/1
+
+###
+//chi tiết của 1 product variant
+GET {{Web}}/variants/get-variant/1
