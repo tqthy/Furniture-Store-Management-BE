@@ -69,10 +69,15 @@ class CatalogueService {
                     id: id
                 }
             });
+            const updatedCatalogue = await db.Catalogue.findOne({
+                where: {
+                    id: id
+                }
+            });
             return {
                 EM: 'Update catalogue successfully',
                 EC: 0,
-                DT: ''
+                DT: updatedCatalogue
             }
         } catch (error) {
             return {

@@ -32,7 +32,7 @@ class ProductService {
                 defective: 0,
                 sold: 0,
                 warranty: warranty,
-                status: "stop selling",
+                status: "sold out",
             });
             return {
                 EM: 'create product successfully',
@@ -73,10 +73,15 @@ class ProductService {
                     id: id
                 }
             });
+            const updatedProduct = await db.Product.findOne({
+                where: {
+                    id: id
+                }
+            });
             return {
                 EM: 'Update product successfully',
                 EC: 0,
-                DT: product
+                DT: updatedProduct
             }
         } catch(error) {
             return {

@@ -231,10 +231,15 @@ class GoodsReceiptService {
                     cost: data.cost
                 })
             });
+            const updatedgoodsReceipt = await db.GoodsReceipt.findOne({
+                where: {
+                    id: id
+                }
+            })
             return {
                 EM: 'Update goods receipt successfully',
                 EC: 0,
-                DT: ''
+                DT: updatedgoodsReceipt
             }
         } catch (error) {
             return {

@@ -80,10 +80,15 @@ class ProductVariantService {
                     id: id,
                 }
             });
+            const updatedProductVariant = await db.ProductVariant.findOne({
+                where: {
+                    id: id
+                }
+            });
             return {
                 EM: 'update product variant successfully',
                 EC: 0,
-                DT: ''
+                DT: updatedProductVariant
             }
         } catch (error) {
             return {
