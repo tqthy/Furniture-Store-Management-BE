@@ -134,7 +134,36 @@ class ProductVariantService {
         }
     };
 
-    getAllProductVariants = async(productId) => {
+    getAllProductVariants = async() => {
+        try {
+            let productVariants = await db.ProductVariant.findAll(
+                {
+                    include: [
+                        {
+                            model: db.Product,
+                            attributes: ['name']
+                        },
+                    ],
+                    attributes: { exclude: ["createdAt", "updatedAt"] },
+                    nest: true,
+                    raw: true
+                }
+            )
+            return {
+                EM: 'Get all product variants successfully',
+                EC: 0,
+                DT: productVariants
+            }
+        } catch (error) {
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }   
+    }        
+
+    getAllProductVariantsByProductId = async(productId) => {
         try {
             let productVariants = await db.ProductVariant.findAll(
                 {
@@ -209,5 +238,6 @@ class ProductVariantService {
             }
         }
     };
-}  
+  
+}
 module.exports = new ProductVariantService();

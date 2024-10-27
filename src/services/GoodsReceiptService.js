@@ -234,7 +234,24 @@ class GoodsReceiptService {
             const updatedgoodsReceipt = await db.GoodsReceipt.findOne({
                 where: {
                     id: id
-                }
+                },
+                include: [
+                    {
+                        model: db.GoodsReceiptDetails,
+                        attributes: ['quantity', 'cost'],
+                        include: [
+                            {
+                                model: db.ProductVariant,
+                                include: [
+                                    {
+                                        model: db.Product,
+                                        attributes: ['name']
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
             })
             return {
                 EM: 'Update goods receipt successfully',

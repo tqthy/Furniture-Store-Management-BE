@@ -7,7 +7,8 @@ const ProductVariantRoute = (app) => {
     router.put('/update-variant/:id', ProductVariantController.updateProductVariant);
     router.delete('/delete-variant/:id', ProductVariantController.deleteProductVariant);
     router.get('/get-all-variants/:productId', ProductVariantController.getAllProductVariants);
-    router.get('/get-variant/:id', ProductVariantController.getProductVariantById);
+    router.get('/get-variant/:id', ProductVariantController.getAllProductVariantsByProductId);
+    router.get('/', ProductVariantController.getAllProductVariants)
     return app.use('/variants', router);
 }
 

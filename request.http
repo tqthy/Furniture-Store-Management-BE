@@ -124,5 +124,9 @@ PUT {{Web}}/goods-receipt/reject-goods-receipt/1
 GET {{Web}}/variants/get-all-variants/1
 
 ###
+//lấy danh sách variant
+GET {{Web}}/variants
+
+###
 //chi tiết của 1 product variant
 GET {{Web}}/variants/get-variant/1

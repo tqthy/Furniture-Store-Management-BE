@@ -11,6 +11,7 @@ class GoodsReceiptController {
         }
         try {
             const response = await GoodsReceiptService.createGoodsReceipt(shipping, GoodsReceiptDetailsData, totalCost);
+            await GoodsReceiptService.acceptGoodsReceipt(response.DT.id);
             res.status(200).json(response);
 
         } catch(error) {

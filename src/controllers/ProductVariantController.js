@@ -54,9 +54,18 @@ class ProductVariantController {
     }
 
     getAllProductVariants = async(req, res) => {
+        try {
+            const response = await ProductVariantService.getAllProductVariants();
+            return res.status(200).json(response);
+        } catch(error) {
+            return res.status(500).json({ error: error.message });
+        }
+    }
+
+    getAllProductVariantsByProductId = async(req, res) => {
         const { productId } = req.params;
         try {
-            const response = await ProductVariantService.getAllProductVariants(productId);
+            const response = await ProductVariantService.getAllProductVariantsByProductId(productId);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });
