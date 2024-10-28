@@ -89,6 +89,9 @@ Content-Type: application/json
 GET {{Web}}/goods-receipt/get-all-goods-receipts
 
 ###
+GET  {{Web}}/goods-receipt/get-goods-receipt/1
+
+###
 //sửa hóa đơn thanh toán
 //với 1 là id của hóa đơn
 PUT {{Web}}/goods-receipt/update-goods-receipt/1

@@ -1,3 +1,4 @@
+import { raw } from "body-parser";
 import db from "../models/index";
 
 class GoodsReceiptService {
@@ -188,11 +189,12 @@ class GoodsReceiptService {
                                     }
                                 ]
                             }
-                        ]
+                        ],
+                        paranoid: true,
                     }
                 ],
                 nest : true,
-                raw : true,
+                raw : true
             })
             if (!goodsReceipt) {
                 return {
