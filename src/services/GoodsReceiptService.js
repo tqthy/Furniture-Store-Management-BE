@@ -190,11 +190,11 @@ class GoodsReceiptService {
                                 ]
                             }
                         ],
-                        paranoid: true,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
                     }
                 ],
-                nest : true,
-                raw : true
+                nest: true,
+                raw: false
             })
             if (!goodsReceipt) {
                 return {
