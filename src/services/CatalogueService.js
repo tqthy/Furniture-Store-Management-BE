@@ -62,6 +62,18 @@ class CatalogueService {
                     DT: ''
                 }
             }
+            const check = await db.Catalogue.findOne({
+                where: {
+                    name: name
+                }
+            });
+            if (check) {
+                return {
+                    EM: 'Catalogue already exists',
+                    EC: 1,
+                    DT: ''
+                }
+            }
             await db.Catalogue.update({
                 name: name
             }, {

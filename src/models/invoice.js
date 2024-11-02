@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Invoice.belongsTo(models.Customer, { foreignKey: "customerId" });
       Invoice.belongsTo(models.Staff, { foreignKey: "staffId" });
-      Invoice.hasMany(models.InvoiceDetails, { foreignKey: "InvoiceId" });
+      Invoice.hasMany(models.InvoiceDetails, { foreignKey: "invoiceId" });
     }
   }
   Invoice.init({

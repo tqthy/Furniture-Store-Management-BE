@@ -3,14 +3,31 @@
 @Password=
 @BearerToken=
 
+//Catalogue
 // Tạo catalogue
 POST {{Web}}/catalogues/create-catalogue
 Content-Type: application/json
 
 {
-    "name": "nội thất nhà riêng"
+    "name": "nội thất nhà bếp"
 }
 
+###
+// Lấy danh sách catalogue
+GET {{Web}}/catalogues/get-all-catalogues
+
+
+###
+// chỉnh sửa catalogue
+# với 1 là id của catalogue (int) 
+PUT {{Web}}/catalogues/update-catalogue/2
+Content-Type: application/json
+
+{
+    "name": "nội thất văn phòng"
+}
+
+////////////////////////////////////Product////////////////////////////////////
 ###
 //tạo product
 POST {{Web}}/products/create-product
@@ -48,6 +65,8 @@ Content-Type: application/json
 //danh sách sản phẩm
 GET {{Web}}/products/get-all-products
 
+////////////////////////////////////ProductVariant////////////////////////////////////
+
 ###
 //tạo variant cho product
 //với 1 là productId
@@ -63,8 +82,23 @@ Content-Type: application/json
 }
 
 ###
+//lấy danh sách product variant của 1 product
+//với 1 là id của product
+GET {{Web}}/variants/get-all-variants/1
+
+###
+//lấy danh sách variant
+GET {{Web}}/variants
+
+###
+//chi tiết của 1 product variant
+GET {{Web}}/variants/get-variant/1
+
+###
 //lấy product variant của 1 product
 GET {{Web}}/products/get-product/1
+
+////////////////////////////////////Goods Receipt////////////////////////////////////
 
 ###
 //tạo hóa đơn thanh toán
@@ -121,15 +155,130 @@ PUT {{Web}}/goods-receipt/accept-goods-receipt/1
 //với 1 là id của hóa đơn
 PUT {{Web}}/goods-receipt/reject-goods-receipt/1
 
+////////////////////////////////////Invoice////////////////////////////////////
 ###
-//lấy danh sách product variant của 1 product
-//với 1 là id của product
-GET {{Web}}/variants/get-all-variants/1
+POST {{Web}}/invoices/create-invoice
+Content-Type: application/json
+
+{
+    "InvoiceDetailsData": [
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 10, "cost": 1000}
+    ],
+    "totalCost": 10000
+}
 
 ###
-//lấy danh sách variant
-GET {{Web}}/variants
+//lấy danh sách hóa đơn thanh toán
+GET {{Web}}/invoices/get-all-invoices
 
 ###
-//chi tiết của 1 product variant
-GET {{Web}}/variants/get-variant/1
+GET  {{Web}}/invoices/get-invoice/21
+
+###
+//sửa hóa đơn thanh toán
+//với 21 là id của hóa đơn
+PUT {{Web}}/invoices/update-invoice/21
+Content-Type: application/json
+
+{
+    "InvoiceDetailsData": [
+        {"variantId": 1, "quantity": 20, "cost": 2000},
+        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 1, "quantity": 40, "cost": 4000},
+        {"variantId": 1, "quantity": 20, "cost": 2000}
+    ],
+    "totalCost": 10000
+}
+
+###
+//accept hóa đơn thanh toán (xác nhận đã nhận đc hàng)
+//sau khi xác nhận thì inventory sẽ tăng lên
+//khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
+//khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
+//với 1 là id của hóa đơn
+PUT {{Web}}/invoices/accept-invoice/21
+
+###
+//từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
+//với 1 là id của hóa đơn
+PUT {{Web}}/invoices/reject-invoice/1
+
+////////////////////////////////////Provider////////////////////////////////////
+###
+//tạo nhà cung cấp
+POST {{Web}}/providers/create-provider
+Content-Type: application/json
+
+{
+    "name": "công ty TNHH xyz",
+    "address": "123 đường ABC",
+    "phone": "0123456789",
+    "email": "abc@gmail.com",
+    "president": "Nguyễn Văn A"
+}
+
+###
+//lấy danh sách nhà cung cấp
+GET {{Web}}/providers/get-all-providers
+
+###
+//lấy danh sách nhà cung cấp còn hoạt động
+GET {{Web}}/providers/get-all-active-providers
+
+###
+// tra cứu nhà cung cấp
+GET {{Web}}/providers/get-provider/1
+
+###
+//sửa nhà cung cấp
+//với 1 là id của nhà cung cấp
+PUT {{Web}}/providers/update-provider/1
+Content-Type: application/json
+
+{
+    "name": "công ty TNHH ABC",
+    "address": "123 đường ABC",
+    "phone": "0123456789",
+    "email": "updatedAbc@gmail.com",
+    "president": "Nguyễn Văn B"
+}
+
+###
+//xóa nhà cung cấp
+//với 1 là id của nhà cung cấp
+DELETE {{Web}}/providers/delete-provider/1
+
+////////////////////////////////////Customer////////////////////////////////////
+###
+//tạo khách hàng
+POST {{Web}}/customers/create-customer
+Content-Type: application/json
+
+{
+    "name": "Nguyễn Văn B",
+    "phone": "0123456789",
+    "email": "nguyenvanb@gmail.com"
+}
+
+###
+//lấy danh sách khách hàng
+GET {{Web}}/customers/get-all-customers
+
+###
+// tra cứu khách hàng
+GET {{Web}}/customers/get-customer/2
+
+###
+//sửa khách hàng
+//với 1 là id của khách hàng
+PUT {{Web}}/customers/update-customer/1
+Content-Type: application/json
+
+{
+    "name": "Nguyễn Văn C",
+    "phone": "0123456789",
+    "email": "nguyenvanc@gmail.com"
+}

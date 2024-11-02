@@ -273,6 +273,8 @@ class GoodsReceiptService {
                         ]
                     }
                 ],
+                raw: false,
+                nest: true,
             })
             return {
                 EM: 'Update goods receipt successfully',
