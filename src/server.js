@@ -4,7 +4,7 @@ import Connection from "./config/connectDB";
 import express from "express";
 import bodyParser from "body-parser";
 import config from "./routes/index";
-import catalogueRoute from "./routes/CatalogueRoute";
+// import catalogueRoute from "./routes/CatalogueRoute";
 // import { checkUserJwt } from "./middlewares/jwtService";
 require("dotenv").config();
 const PORT = process.env.PORT || 8080;
