@@ -26,6 +26,7 @@ COPY --chown=node:node package*.json ./
 
 RUN npm install --save-dev @babel/cli @babel/preset-env @babel/core
 RUN npm ci
+RUN npm install -g pg
 
 COPY --chown=node:node . .
 
@@ -51,7 +52,9 @@ RUN npm run build
 
 ENV NODE_ENV production
 
+RUN npm install -g pg
 RUN npm ci --only=production && npm cache clean --force
+
 
 USER node
 
