@@ -45,13 +45,15 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i key1.pem $EC2_USER@$EC2_HOST << EOF
             sudo mv ~/env /path/on/ec2/env
             echo "Pulling Docker image..."
-            docker pull tqt0304/expressjs-app:latest || { echo "Failed to pull image"; exit 1; }
+            docker pull ${DOCKER_HUB_USERNAME}/expressjs-app:latest || { echo "Failed to pull image"; exit 1; }
             echo "Stopping old container..."
             docker stop expressjs-app || true
             echo "Removing old container..."
             docker rm expressjs-app || true
+            echo "Removing old images..."
+            docker rmi ${DOCKER_HUB_USERNAME}/expressjs-app:latest
             echo "Starting new container..."
-            docker run --env-file /path/on/ec2/env -d --name expressjs-app -p 3000:8080 tqt0304/expressjs-app:latest
+            docker run --env-file /path/on/ec2/env -d --name expressjs-app -p 3000:8080 ${DOCKER_HUB_USERNAME}/expressjs-app:latest
           EOF
           echo "Finish ssh"
           rm key1.pem env
