@@ -1,3 +1,4 @@
+import { raw } from "body-parser";
 import db from "../models/index";
 
 class GoodsReceiptService {
@@ -118,29 +119,48 @@ class GoodsReceiptService {
 
     getAllGoodsReceipts = async() => {
         try {
-            const goodsReceipts = await db.GoodsReceipt.findAll({
+            const goodsReceiptDetails = await db.GoodsReceiptDetails.findAll({
                 include: [
                     {
-                        model: db.GoodsReceiptDetails,
+                        model: db.GoodsReceipt,
+                        attributes: { exclude: ["createdAt", "updatedAt"]}
+                    },
+                    {
+                        model: db.ProductVariant,
                         include: [
                             {
-                                model: db.ProductVariant,
-                                include: [
-                                    {
-                                        model: db.Product
-                                    }
-                                ]
+                                model: db.Product,
+                                attributes: ['name']
                             }
-                        ]
-                    }
+                        ],
+                        attributes: { exclude: ["createdAt", "updatedAt", "status", "buyingPrice"] }
+                    },
                 ],
-                raw : true,
-                nest : true
+                raw: true,
+                nest: true,
+                attributes: { exclude: ["createdAt", "updatedAt"] }
             });
+
+            const groupedGoodsReceiptDetails = goodsReceiptDetails.reduce((acc, curr) => {
+                const goodsReceiptId = curr.goodsReceiptId;
+            
+                if (!acc[goodsReceiptId]) {
+                    acc[goodsReceiptId] = {
+                        goodsReceiptId,
+                        ...curr.GoodsReceipt,
+                        details: []
+                    };
+                }
+                delete curr.GoodsReceipt;
+                acc[goodsReceiptId].details.push(curr); 
+                return acc;
+            }, {});
+
+            const finalResult = Object.values(groupedGoodsReceiptDetails);
             return {
                 EM: 'Get all goods receipts successfully',
                 EC: 0,
-                DT: goodsReceipts
+                DT: finalResult
             }
         } catch (error) {
             return {
@@ -169,11 +189,12 @@ class GoodsReceiptService {
                                     }
                                 ]
                             }
-                        ]
+                        ],
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
                     }
                 ],
-                nest : true,
-                raw : true,
+                nest: true,
+                raw: false
             })
             if (!goodsReceipt) {
                 return {
@@ -231,10 +252,34 @@ class GoodsReceiptService {
                     cost: data.cost
                 })
             });
+            const updatedgoodsReceipt = await db.GoodsReceipt.findOne({
+                where: {
+                    id: id
+                },
+                include: [
+                    {
+                        model: db.GoodsReceiptDetails,
+                        attributes: ['quantity', 'cost'],
+                        include: [
+                            {
+                                model: db.ProductVariant,
+                                include: [
+                                    {
+                                        model: db.Product,
+                                        attributes: ['name']
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                raw: false,
+                nest: true,
+            })
             return {
                 EM: 'Update goods receipt successfully',
                 EC: 0,
-                DT: ''
+                DT: updatedgoodsReceipt
             }
         } catch (error) {
             return {

@@ -27,6 +27,9 @@ config.catalogueRoute(app);
 config.productRoute(app);
 config.goodsReceiptRoute(app);
 config.ProductVariantRoute(app);
+config.invoiceRoute(app);
+config.providerRoute(app);
+config.customerRoute(app);
 
 app.use((req, res) => {
     return res.send("404 not found");

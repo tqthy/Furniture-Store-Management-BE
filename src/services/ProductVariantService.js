@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import db from "../models/index";
 
 class ProductVariantService {
@@ -79,10 +80,15 @@ class ProductVariantService {
                     id: id,
                 }
             });
+            const updatedProductVariant = await db.ProductVariant.findOne({
+                where: {
+                    id: id
+                }
+            });
             return {
                 EM: 'update product variant successfully',
                 EC: 0,
-                DT: ''
+                DT: updatedProductVariant
             }
         } catch (error) {
             return {
@@ -130,11 +136,58 @@ class ProductVariantService {
 
     getAllProductVariants = async() => {
         try {
-            const productVariants = await db.ProductVariant.findAll();
+            let productVariants = await db.ProductVariant.findAll(
+                {
+                    include: [
+                        {
+                            model: db.Product,
+                            attributes: ['name']
+                        },
+                    ],
+                    attributes: { exclude: ["createdAt", "updatedAt"] },
+                    nest: true,
+                    raw: true
+                }
+            )
             return {
                 EM: 'Get all product variants successfully',
                 EC: 0,
                 DT: productVariants
+            }
+        } catch (error) {
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }   
+    }        
+
+    getAllProductVariantsByProductId = async(productId) => {
+        try {
+            let productVariants = await db.ProductVariant.findAll(
+                {
+                    include: [
+                        {
+                            model: db.Product,
+                            attributes: ['name'],
+                            where: {
+                                id: productId
+                            }
+                        },
+                        {
+                            model: db.Inventory,
+                            attributes: ['quantity', 'defective', 'sold', 'available']
+                        }
+                    ],
+                    nest: true,
+                    raw: true
+                },
+            );
+            return {
+                EM: 'Get all product variants successfully',
+                EC: 0,
+                DT: productVariants,
             }  
         } catch (error) {
             return {
@@ -150,7 +203,20 @@ class ProductVariantService {
             const productVariant = await db.ProductVariant.findOne({
                 where: {
                     id: id
-                }
+                },
+                attributes: { exclude: ["createdAt", "updatedAt"] },
+                include:[
+                    {
+                        model: db.Product,
+                        attributes: ['name']
+                    },
+                    {
+                        model: db.Inventory,
+                        attributes: ['quantity', 'defective', 'sold', 'available']
+                    }
+                ],
+                nest: true,
+                raw: true
             });
             if (!productVariant) {
                 return {
@@ -172,5 +238,6 @@ class ProductVariantService {
             }
         }
     };
-}  
+  
+}
 module.exports = new ProductVariantService();

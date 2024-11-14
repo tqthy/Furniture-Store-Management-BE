@@ -16,9 +16,6 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      price: {
-        type: Sequelize.RANGE(DataTypes.DECIMAL(20,2))
-      },
       image: {
         type: Sequelize.TEXT
       },

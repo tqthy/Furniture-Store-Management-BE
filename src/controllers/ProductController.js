@@ -3,7 +3,7 @@ class ProductController {
     createProduct = async(req, res) => {
         const { category, name, description, warranty, catalogueId } = req.body;
         console.log(req.body);
-        if (!category || !name || !description || !warranty) {
+        if (!category || !name  || !warranty) {
             return res.status(200).json({
                 EM: 'Missing product data',
                 EC: 1,

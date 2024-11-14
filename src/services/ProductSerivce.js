@@ -32,7 +32,7 @@ class ProductService {
                 defective: 0,
                 sold: 0,
                 warranty: warranty,
-                status: "stop selling",
+                status: "sold out",
             });
             return {
                 EM: 'create product successfully',
@@ -73,10 +73,15 @@ class ProductService {
                     id: id
                 }
             });
+            const updatedProduct = await db.Product.findOne({
+                where: {
+                    id: id
+                }
+            });
             return {
                 EM: 'Update product successfully',
                 EC: 0,
-                DT: ''
+                DT: updatedProduct
             }
         } catch(error) {
             return {
@@ -122,7 +127,11 @@ class ProductService {
 
     getAllProducts = async() => {
         try {
-            const products = await db.Product.findAll();
+            const products = await db.Product.findAll(
+                {
+                    attributes: ['id', 'catalogueId', 'category', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status']
+                }
+            );
             return {
                 EM: 'Get products successfully',
                 EC: 0,
@@ -146,8 +155,16 @@ class ProductService {
                 include: [
                     {
                         model: db.ProductVariant,
+                        attributes: { exclude: ["createdAt", "updatedAt"] },
+                        include: [
+                            {
+                                model: db.Inventory,
+                                attributes: { exclude: ["createdAt", "updatedAt"] },
+                            },
+                        ]
                     }
                 ],
+                attributes: ['id', 'catalogueId', 'category', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
                 nest : true,
                 raw: true
             });
