@@ -6,6 +6,7 @@ import ProductVariantRoute from './ProductVariantRoute'
 import invoiceRoute from './InvoiceRoute'
 import providerRoute from './ProviderRoute'
 import customerRoute from './CustomerRoute'
+import fileRoute from './FileRoute'
 const config = { 
     catalogueRoute,
     productRoute,
@@ -13,6 +14,7 @@ const config = {
     ProductVariantRoute,
     invoiceRoute,
     providerRoute,
-    customerRoute
+    customerRoute,
+    fileRoute,
 }
 export default config;
