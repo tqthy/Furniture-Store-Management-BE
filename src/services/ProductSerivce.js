@@ -1,7 +1,7 @@
 import db from "../models/index";
 
 class ProductService {
-    createProduct = async(catalogueId, name, description, warranty, category) => {
+    createProduct = async(catalogueId, name, description, warranty) => {
         try {
             const check = await db.Product.findOne(
                 { 
@@ -10,7 +10,6 @@ class ProductService {
                         name: name,
                         description: description,
                         warranty: warranty,
-                        category: category
                     } 
                 }
             );
@@ -23,7 +22,6 @@ class ProductService {
             }
             const newProduct = await db.Product.create({
                 catalogueId: catalogueId,
-                category: category,
                 name: name,
                 image: "",
                 description: description,
@@ -48,7 +46,7 @@ class ProductService {
         }
     }
 
-    updateProduct = async(id, catalogueId, name, description, warranty, category) => {
+    updateProduct = async(id, catalogueId, name, description, warranty) => {
         try {
             const product = await db.Product.findOne({
                 where: {
@@ -67,7 +65,6 @@ class ProductService {
                 name: name,
                 description: description,
                 warranty: warranty,
-                category: category
             }, {
                 where: {
                     id: id
@@ -129,7 +126,13 @@ class ProductService {
         try {
             const products = await db.Product.findAll(
                 {
-                    attributes: ['id', 'catalogueId', 'category', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status']
+                    attributes: ['id', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
+                    include:[
+                        {
+                            model: db.catalogue,
+                            attributes: ['name'],
+                        }
+                    ]
                 }
             );
             return {
@@ -164,7 +167,7 @@ class ProductService {
                         ]
                     }
                 ],
-                attributes: ['id', 'catalogueId', 'category', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
+                attributes: ['id', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
                 nest : true,
                 raw: true
             });

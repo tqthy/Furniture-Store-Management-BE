@@ -30,7 +30,7 @@ config.ProductVariantRoute(app);
 config.invoiceRoute(app);
 config.providerRoute(app);
 config.customerRoute(app);
-
+config.staffRoute(app);
 app.use((req, res) => {
     return res.send("404 not found");
 });

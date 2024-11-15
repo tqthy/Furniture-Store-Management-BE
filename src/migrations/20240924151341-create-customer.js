@@ -21,6 +21,9 @@ module.exports = {
       point: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.ENUM('active', 'inactive')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

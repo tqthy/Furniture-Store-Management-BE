@@ -1,9 +1,9 @@
 import ProductService from '../services/ProductSerivce';
 class ProductController {
     createProduct = async(req, res) => {
-        const { category, name, description, warranty, catalogueId } = req.body;
+        const { name, description, warranty, catalogueId } = req.body;
         console.log(req.body);
-        if (!category || !name  || !warranty) {
+        if (!name  || !warranty) {
             return res.status(200).json({
                 EM: 'Missing product data',
                 EC: 1,
@@ -11,7 +11,7 @@ class ProductController {
             });
         }
         try {
-            const response = await ProductService.createProduct(catalogueId, name, description, warranty, category);
+            const response = await ProductService.createProduct(catalogueId, name, description, warranty);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });
@@ -20,8 +20,8 @@ class ProductController {
 
     updateProduct = async(req, res) => {
         const { id } = req.params;
-        const { catalogueId, name, description, warranty, category } = req.body;
-        if (!id || !catalogueId || !name || !description || !warranty || !category) {
+        const { catalogueId, name, description, warranty } = req.body;
+        if (!id || !name || !description || !warranty) {
             return res.status(200).json({
                 EM: 'Missing required fields',
                 EC: 1,
@@ -29,7 +29,7 @@ class ProductController {
             });
         }
         try {
-            const response = await ProductService.updateProduct(id, catalogueId, name, description, warranty, category);
+            const response = await ProductService.updateProduct(id, catalogueId, name, description, warranty);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });

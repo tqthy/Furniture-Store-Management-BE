@@ -16,6 +16,7 @@ class GoodsReceiptService {
                     goodsReceiptId: goodsReceipt.id,
                     variantId: data.variantId,
                     quantity: data.quantity,
+                    
                     cost: data.cost
                 })
             });

@@ -9,7 +9,7 @@ POST {{Web}}/catalogues/create-catalogue
 Content-Type: application/json
 
 {
-    "name": "nội thất nhà bếp"
+    "name": "nội thất nhà bếp 1"
 }
 
 ###
@@ -52,7 +52,7 @@ Content-Type: application/json
     "name": "bàn ghế",
     "description": "aaaa",
     "warranty": 1,
-    "catalogueId": 1
+    "catalogueId": null
 }
 
 ###
@@ -281,4 +281,24 @@ Content-Type: application/json
     "name": "Nguyễn Văn C",
     "phone": "0123456789",
     "email": "nguyenvanc@gmail.com"
+}
+
+###
+DELETE {{Web}}/customers/delete-customer/1
+
+////////////////////////////////////Staff////////////////////////////////////
+//thêm nhân viên
+###
+POST {{Web}}/staffs/create-staff
+Content-Type: application/json
+
+{
+    "fullname": "Nguyễn Văn A",
+    "birth": "1999-12-20",
+    "gender": "male",
+    "idNumber": "0123456789",
+    "startDate": "2020-08-30",
+    "phone": "0123456789",
+    "email": "nguyenvanc@gmail.com",
+    "role": 5
 }
