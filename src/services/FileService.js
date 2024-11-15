@@ -1,10 +1,11 @@
 const s3 = require('../config/s3config');
 class FileService {
-  generatePresignedUrl = async(bucketName, fileName, expiresIn = 3600) => {
+  generatePresignedUrl = async(bucketName, fileName, contentType, expiresIn = 3600) => {
     const params = {
       Bucket: bucketName,
       Key: fileName, 
-      Expires: expiresIn, 
+      Expires: expiresIn,
+      ContentType: contentType, 
     };
   
     try {
