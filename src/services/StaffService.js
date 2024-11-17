@@ -1,6 +1,7 @@
 import db from '../models';
 import DbValueService from '../utils/DbValueService';
-import SecurityHandler from '../utils/SecurityHandler';
+import SecurityHandler from '../utils/SecurityService';
+
 class StaffService {
     createStaff = async (fullname, birth, gender, idNumber, startDate, phone, email, role) => {
         const t = await db.sequelize.transaction();
@@ -53,7 +54,8 @@ class StaffService {
             const account = await db.Account.create({
                 username: username,
                 password: password,
-                role: role
+                roleId: role,
+                status: 'active'
             }, { transaction: t })
 
             const newStaff = await db.Staff.create({
@@ -64,7 +66,6 @@ class StaffService {
                 startDate: startDate,
                 phone: phone,
                 email: email,
-                status: 'active',
                 accountId: account.id,
             }, { transaction: t });
 

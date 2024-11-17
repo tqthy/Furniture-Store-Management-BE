@@ -1,3 +1,4 @@
+import { INTEGER, where } from "sequelize";
 import db from "../models/index";
 class CatalogueService {
     createCatalogue = async (name) => {
@@ -33,7 +34,35 @@ class CatalogueService {
 
     getAllCatalogues = async () => {
         try {
-            const catalogues = await db.Catalogue.findAll();
+            const catalogues = await db.Catalogue.findAll({
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                    include: [
+                        // Đếm số lượng Product trong từng Catalogue
+                        [                             
+                            db.Sequelize.literal(`(
+                                SELECT COUNT(*)
+                                FROM "Product" AS p
+                                WHERE p."catalogueId" = "Catalogue"."id"
+                            )`),
+                            'productCount'
+                        ],
+                        // Đếm số lượng ProductVariant liên quan
+                        [
+                            db.Sequelize.literal(`(
+                                SELECT COUNT(*)
+                                FROM "ProductVariant" AS pv
+                                WHERE pv."productId" IN (
+                                    SELECT p."id"
+                                    FROM "Product" AS p
+                                    WHERE p."catalogueId" = "Catalogue"."id"
+                                )
+                            )`),
+                            'variantCount'
+                        ]
+                    ]
+                }
+            });
             return {
                 EM: 'Get all catalogues successfully',
                 EC: 0,

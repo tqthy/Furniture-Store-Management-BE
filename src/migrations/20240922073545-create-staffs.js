@@ -30,9 +30,9 @@ module.exports = {
       idNumber: {
         type: Sequelize.STRING
       },
-      status: {
-        type: Sequelize.ENUM('active', 'inactive', 'resigned')
-      },
+      // status: {
+      //   type: Sequelize.ENUM('active', 'inactive', 'resigned')
+      // },
       accountId: {
         type: Sequelize.INTEGER
       },
