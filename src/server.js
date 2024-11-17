@@ -23,6 +23,7 @@ app.use(
 Connection();
 // use middleware
 // import path here
+config.authRoute(app);
 config.catalogueRoute(app);
 config.productRoute(app);
 config.goodsReceiptRoute(app);
@@ -30,7 +31,7 @@ config.ProductVariantRoute(app);
 config.invoiceRoute(app);
 config.providerRoute(app);
 config.customerRoute(app);
-config.fileRoute(app);
+// config.fileRoute(app);
 
 config.staffRoute(app);
 app.use((req, res) => {

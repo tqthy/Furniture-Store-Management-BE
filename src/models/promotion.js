@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Promotion.hasMany(models.PromotionProduct, { foreignKey: "promotionId" });
-      Promotion.hasMany(models.PromotionUsageDetails, { foreignKey: "promotionId" });
     }
   }
   Promotion.init({

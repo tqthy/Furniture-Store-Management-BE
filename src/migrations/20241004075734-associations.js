@@ -190,6 +190,17 @@ module.exports = {
       name: "FK_17"
     })
 
+    await queryInterface.addConstraint('InvoiceDetails', {
+      fields: ['promotionId'],
+      type: 'foreign key',
+      references: {
+        table: 'Promotion',
+        field: 'id'
+      },
+      onDelete: 'cascade',
+      name: "FK_27"
+    })
+
     await queryInterface.addConstraint('Invoice', {
       fields: ['customerId'],
       type: 'foreign key',
@@ -256,22 +267,22 @@ module.exports = {
       name: "FK_23"
     })
 
-    await queryInterface.addConstraint('PromotionUsageDetails', {
-      fields: ['promotionId'],
+    await queryInterface.addConstraint('VariantReceiptDetails', {
+      fields: ['goodsReceiptDetailsId'],
       type: 'foreign key',
       references: {
-        table: 'Promotion',
+        table: 'GoodsReceiptDetails',
         field: 'id'
       },
       onDelete: 'cascade',
       name: "FK_24"
     })
 
-    await queryInterface.addConstraint('PromotionUsageDetails', {
-      fields: ['invoiceDetailsId'],
+    await queryInterface.addConstraint('VariantReceiptDetails', {
+      fields: ['variantId'],
       type: 'foreign key',
       references: {
-        table: 'InvoiceDetails',
+        table: 'ProductVariant',
         field: 'id'
       },
       onDelete: 'cascade',
@@ -320,8 +331,9 @@ module.exports = {
     await queryInterface.removeConstraint('InventoryLog', "FK_21")
     await queryInterface.removeConstraint('PromotionProduct', "FK_22")
     await queryInterface.removeConstraint('PromotionProduct', "FK_23")
-    await queryInterface.removeConstraint('PromotionUsageDetails', "FK_24")
-    await queryInterface.removeConstraint('PromotionUsageDetails', "FK_25")
+    await queryInterface.removeConstraint('VariantReceiptDetails', "FK_24")
+    await queryInterface.removeConstraint('VariantReceiptDetails', "FK_25")
     await queryInterface.removeConstraint('UserActivityLog', "FK_26")
+    await queryInterface.removeConstraint('InvoiceDetails', "FK_27")
   }
 };

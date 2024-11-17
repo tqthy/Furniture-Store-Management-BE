@@ -16,10 +16,10 @@ class GoodsReceiptService {
                     goodsReceiptId: goodsReceipt.id,
                     variantId: data.variantId,
                     quantity: data.quantity,
-                    
                     cost: data.cost
                 })
             });
+
             return {
                 EM: 'Create goods receipt successfully',
                 EC: 0,
@@ -134,7 +134,7 @@ class GoodsReceiptService {
                                 attributes: ['name']
                             }
                         ],
-                        attributes: { exclude: ["createdAt", "updatedAt", "status", "buyingPrice"] }
+                        attributes: { exclude: ["createdAt", "updatedAt", "status"] }
                     },
                 ],
                 raw: true,

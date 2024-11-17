@@ -34,10 +34,9 @@ POST {{Web}}/products/create-product
 Content-Type: application/json
 
 {
-    "category": "bàn ghế gỗ", // cái này hard code bên front nếu ô muốn truyền số hay chữ vô thì kêu tui
     "name": "tủ gỗ",
     "description": "aaaaaaa",
-    "warranty": 1, //số năm bảo hành
+    "warranty": 1,
     "catalogueId": 1
 }
 
@@ -48,7 +47,6 @@ PUT {{Web}}/products/update-product/1
 Content-Type: application/json
 
 {
-    "category": "bàn ghế nhựa",
     "name": "bàn ghế",
     "description": "aaaa",
     "warranty": 1,
@@ -75,7 +73,6 @@ Content-Type: application/json
 
 {
     "sku": "aaaa",
-    "buyingPrice": 10000,
     "price": 9000,
     "color": "green",
     "size": "dài 25cm, rộng 30cm"
@@ -299,6 +296,16 @@ Content-Type: application/json
     "idNumber": "0123456789",
     "startDate": "2020-08-30",
     "phone": "0123456789",
-    "email": "nguyenvanc@gmail.com",
-    "role": 5
+    "email": "nguyenvana@gmail.com",
+    "role": 3
+}
+
+////////////////////////////////////Authentication////////////////////////////////////
+###
+POST {{Web}}/login
+Content-Type: application/json
+
+{
+    "username": "SaleStaff0002",
+    "password": "SaleStaff0002"
 }

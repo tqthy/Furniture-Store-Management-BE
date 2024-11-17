@@ -2,8 +2,8 @@ import ProductVariantService from '../services/ProductVariantService';
 class ProductVariantController {
     createProductVariant = async(req, res) => {
         const { productId } = req.params;
-        const { sku, buyingPrice, price, color, size } = req.body;
-        if (!productId || !sku || !buyingPrice || !price || !color || !size) {
+        const { sku, price, color, size } = req.body;
+        if (!productId || !sku || !price || !color || !size) {
             return res.status(200).json({
                 EM: 'Missing required fields',
                 EC: 1,
@@ -11,7 +11,7 @@ class ProductVariantController {
             });
         }
         try {
-            const response = await ProductVariantService.createProductVariant(productId, sku, buyingPrice, price, color, size);
+            const response = await ProductVariantService.createProductVariant(productId, sku, price, color, size);
             return res.status(200).json(response);
         } catch(error) { 
             return res.status(500).json({ error: error.message });
@@ -20,8 +20,8 @@ class ProductVariantController {
 
     updateProductVariant = async(req, res) => {
         const { id } = req.params;
-        const { sku, buyingPrice, price, color, size } = req.body;
-        if (!id || !sku || !buyingPrice || !price || !color || !size) {
+        const { sku, price, color, size } = req.body;
+        if (!id || !sku || !price || !color || !size) {
             return res.status(200).json({
                 EM: 'Missing required fields',
                 EC: 1,
@@ -29,7 +29,7 @@ class ProductVariantController {
             });
         }
         try {
-            const response = await ProductVariantService.updateProductVariant(id, sku, buyingPrice, price, color, size);
+            const response = await ProductVariantService.updateProductVariant(id, sku, price, color, size);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });

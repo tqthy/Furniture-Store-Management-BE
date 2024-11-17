@@ -18,9 +18,6 @@ module.exports = {
       price: {
         type: Sequelize.DECIMAL(20,2),
       },
-      buyingPrice: {
-        type: Sequelize.DECIMAL(20,2)
-      },
       status: {
         type: Sequelize.ENUM('in stock', 'sold out')
       },

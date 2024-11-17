@@ -24,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
   ProductVariant.init({
     SKU: DataTypes.TEXT,
     price: DataTypes.DECIMAL(20,2),
-    buyingPrice: DataTypes.DECIMAL(20,2),
     status: DataTypes.ENUM('in stock', 'sold out'),
     color: DataTypes.STRING,
     size: DataTypes.STRING,

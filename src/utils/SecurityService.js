@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10);
-class SecurityHandler {
+class SecurityService {
 
     hashUserPassword = (userPass) => {
     let hashPassword = bcrypt.hashSync(userPass, salt);
@@ -12,4 +12,4 @@ class SecurityHandler {
     };
 
 }
-module.exports = new SecurityHandler();
+module.exports = new SecurityService();

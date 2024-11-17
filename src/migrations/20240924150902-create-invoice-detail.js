@@ -15,6 +15,9 @@ module.exports = {
       cost: {
         type: Sequelize.DECIMAL(20,2)
       },
+      promotionId: {
+        type: Sequelize.INTEGER
+      },
       variantId: {
         type: Sequelize.INTEGER
       },
