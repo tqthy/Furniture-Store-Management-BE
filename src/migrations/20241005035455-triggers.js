@@ -46,28 +46,24 @@ module.exports = {
 
       // cập nhật số lượng hàng đã bán sau khi thêm hóa đơn
       await queryInterface.sequelize.query(`
-        CREATE OR REPLACE FUNCTION update_inventory_after_add_invoice()
-        RETURNS TRIGGER AS $$
-        BEGIN
-          IF NEW.status = 'accepted' THEN
-            UPDATE "Inventory"
-            SET 
-              "sold" = "sold" + COALESCE((
-                SELECT SUM(grd."sold") 
-                FROM "InvoiceDetails" grd
-                WHERE grd."invoiceDetailsId" = NEW."id" 
-                AND grd."variantId" = "Inventory"."variantId"
-              ), 0)
-            WHERE "variantId" = "Inventory"."variantId";
-          END IF;
-          RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
-        CREATE TRIGGER trg_update_inventory_after_add_invoice
-        AFTER INSERT
-        ON "Invoice"
-        FOR EACH ROW
-        EXECUTE FUNCTION update_inventory_after_add_invoice();     
+      CREATE OR REPLACE FUNCTION update_inventory_after_add_invoice_details()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        -- Cập nhật sold trong Inventory sau khi thêm một InvoiceDetails
+        UPDATE "Inventory"
+        SET 
+          "sold" = "sold" + NEW."quantity"
+        WHERE "variantId" = NEW."variantId";
+
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+
+      CREATE TRIGGER trg_update_inventory_after_add_invoice_details
+      AFTER INSERT
+      ON "InvoiceDetails"
+      FOR EACH ROW
+      EXECUTE FUNCTION update_inventory_after_add_invoice_details();   
       `)
 
       // cập nhật số lượng tồn kho sau khi hủy hóa đơn
@@ -81,19 +77,13 @@ module.exports = {
                     "sold" = "sold" - COALESCE((
                         SELECT SUM(id."quantity") 
                         FROM "InvoiceDetails" id
-                        WHERE id."invoiceDetailsId" = OLD."id" 
-                          AND id."variantId" = "Inventory"."variantId"
-                    ), 0),
-                    "available" = "available" + COALESCE((
-                        SELECT SUM(id."quantity") 
-                        FROM "InvoiceDetails" id
-                        WHERE id."invoiceDetailsId" = OLD."id" 
+                        WHERE id."invoiceId" = OLD."id" 
                           AND id."variantId" = "Inventory"."variantId"
                     ), 0)
                 WHERE "variantId" IN (
                     SELECT id."variantId"
                     FROM "InvoiceDetails" id
-                    WHERE id."invoiceDetailsId" = OLD."id"
+                    WHERE id."invoiceId" = OLD."id"
                 );
             END IF;
             RETURN NEW;
@@ -106,6 +96,28 @@ module.exports = {
         WHEN (NEW."status" = 'canceled' AND OLD."status" != 'canceled')
         EXECUTE FUNCTION revert_inventory_after_invoice_canceled();
       `);
+
+      await queryInterface.sequelize.query(`
+        CREATE OR REPLACE FUNCTION update_inventory_after_delete_invoice_details()
+        RETURNS TRIGGER AS $$
+        BEGIN
+          -- Giảm số lượng sold trong Inventory sau khi xóa một InvoiceDetails
+          UPDATE "Inventory"
+          SET 
+            "sold" = "sold" - OLD."quantity"
+          WHERE "variantId" = OLD."variantId";
+
+          RETURN OLD;
+        END;
+        $$ LANGUAGE plpgsql;
+
+        -- Tạo Trigger
+        CREATE TRIGGER trg_update_inventory_after_delete_invoice_details
+        AFTER DELETE
+        ON "InvoiceDetails"
+        FOR EACH ROW
+        EXECUTE FUNCTION update_inventory_after_delete_invoice_details();
+        `);
 
       // cập nhật số lượng hàng có sẵn sau khi cập nhật số lượng bán, lỗi
       await queryInterface.sequelize.query(`
@@ -253,9 +265,12 @@ module.exports = {
       `);
 
     await queryInterface.sequelize.query(`
-      DROP TRIGGER trg_update_inventory_after_add_invoice ON "Invoice";
+      DROP TRIGGER trg_update_inventory_after_add_invoice_details ON "InvoiceDetails";  
       `);
 
+    await queryInterface.sequelize.query(`
+      DROP TRIGGER trg_update_inventory_after_delete_invoice_details ON "InvoiceDetails";
+      `);  
     await queryInterface.sequelize.query(`
       DROP TRIGGER trg_revert_inventory_after_invoice_canceled ON "Invoice";
       `);

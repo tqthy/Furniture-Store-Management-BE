@@ -9,7 +9,7 @@ POST {{Web}}/catalogues/create-catalogue
 Content-Type: application/json
 
 {
-    "name": "nội thất nhà bếp 1"
+    "name": "nội thất nhà bếp"
 }
 
 ###
@@ -72,10 +72,25 @@ POST {{Web}}/variants/create-variant/1
 Content-Type: application/json
 
 {
+    "sku": "sgkfndf",
+    "price": 19000,
+    "buyingPrice": 100000,
+    "color": "red",
+    "size": "dài 25cm, rộng 20cm"
+}
+
+###
+//sửa variant
+//với 1 là id của variant
+PUT {{Web}}/variants/update-variant/2
+Content-Type: application/json
+
+{
     "sku": "aaaa",
     "price": 9000,
+    "buyingPrice": 120000,
     "color": "green",
-    "size": "dài 25cm, rộng 30cm"
+    "size": "dài 35cm, rộng 45cm"
 }
 
 ###
@@ -108,9 +123,9 @@ Content-Type: application/json
     "shipping": 1000,
     "GoodsReceiptDetailsData": [
         {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 2, "quantity": 10, "cost": 1000},
         {"variantId": 1, "quantity": 10, "cost": 1000},
-        {"variantId": 1, "quantity": 10, "cost": 1000},
-        {"variantId": 1, "quantity": 10, "cost": 1000}
+        {"variantId": 2, "quantity": 10, "cost": 1000}
     ],
     "totalCost": 10000
 }
@@ -132,9 +147,9 @@ Content-Type: application/json
     "shipping": 1000,
     "GoodsReceiptDetailsData": [
         {"variantId": 1, "quantity": 20, "cost": 2000},
-        {"variantId": 1, "quantity": 10, "cost": 1000},
+        {"variantId": 2, "quantity": 10, "cost": 1000},
         {"variantId": 1, "quantity": 40, "cost": 4000},
-        {"variantId": 1, "quantity": 20, "cost": 2000}
+        {"variantId": 2, "quantity": 20, "cost": 2000}
     ],
     "totalCost": 10000
 }
@@ -159,10 +174,10 @@ Content-Type: application/json
 
 {
     "InvoiceDetailsData": [
-        {"variantId": 1, "quantity": 10, "cost": 1000},
-        {"variantId": 1, "quantity": 10, "cost": 1000},
-        {"variantId": 1, "quantity": 10, "cost": 1000},
-        {"variantId": 1, "quantity": 10, "cost": 1000}
+        {"variantId": 1, "quantity": 3, "cost": 1000},
+        {"variantId": 2, "quantity": 2, "cost": 1000},
+        {"variantId": 1, "quantity": 6, "cost": 1000},
+        {"variantId": 2, "quantity": 2, "cost": 1000}
     ],
     "totalCost": 10000
 }
@@ -172,20 +187,19 @@ Content-Type: application/json
 GET {{Web}}/invoices/get-all-invoices
 
 ###
-GET  {{Web}}/invoices/get-invoice/21
+GET  {{Web}}/invoices/get-invoice/1
 
 ###
 //sửa hóa đơn thanh toán
-//với 21 là id của hóa đơn
-PUT {{Web}}/invoices/update-invoice/21
+PUT {{Web}}/invoices/update-invoice/2
 Content-Type: application/json
 
 {
     "InvoiceDetailsData": [
-        {"variantId": 1, "quantity": 20, "cost": 2000},
-        {"variantId": 1, "quantity": 10, "cost": 1000},
-        {"variantId": 1, "quantity": 40, "cost": 4000},
-        {"variantId": 1, "quantity": 20, "cost": 2000}
+        {"variantId": 1, "quantity": 5, "cost": 2000},
+        {"variantId": 2, "quantity": 2, "cost": 1000},
+        {"variantId": 1, "quantity": 2, "cost": 4000},
+        {"variantId": 2, "quantity": 7, "cost": 2000}
     ],
     "totalCost": 10000
 }
@@ -196,7 +210,7 @@ Content-Type: application/json
 //khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
 //khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
 //với 1 là id của hóa đơn
-PUT {{Web}}/invoices/accept-invoice/21
+PUT {{Web}}/invoices/accept-invoice/1
 
 ###
 //từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
@@ -306,6 +320,6 @@ POST {{Web}}/login
 Content-Type: application/json
 
 {
-    "username": "SaleStaff0002",
-    "password": "SaleStaff0002"
+    "username": "SaleStaff0001",
+    "password": "SaleStaff0001"
 }

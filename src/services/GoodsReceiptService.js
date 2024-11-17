@@ -3,6 +3,7 @@ import db from "../models/index";
 
 class GoodsReceiptService {
     createGoodsReceipt = async(shipping, GoodsReceiptDetailsData, totalCost) => {
+        const t = await db.sequelize.transaction();
         try {
             const goodsReceipt = await db.GoodsReceipt.create({
                 receiptDate: new Date(),
@@ -10,22 +11,23 @@ class GoodsReceiptService {
                 status: "pending",
                 shipping: shipping,
                 totalCost: totalCost,
-            })
-            GoodsReceiptDetailsData.forEach(async(data) => {
+            }, { transaction: t })
+            for (const data of GoodsReceiptDetailsData) {
                 await db.GoodsReceiptDetails.create({
                     goodsReceiptId: goodsReceipt.id,
                     variantId: data.variantId,
                     quantity: data.quantity,
                     cost: data.cost
-                })
-            });
-
+                }, { transaction: t });
+            }
+            await t.commit();
             return {
                 EM: 'Create goods receipt successfully',
                 EC: 0,
                 DT: goodsReceipt
             }
         } catch (error) {
+            if (!t.finished) await t.rollback();
             return {
                 EM: error.message,
                 EC: 1,

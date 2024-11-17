@@ -2,7 +2,7 @@ import { where } from "sequelize";
 import db from "../models/index";
 
 class ProductVariantService {
-    createProductVariant = async(productId, sku, price, color, size) => {
+    createProductVariant = async(productId, sku, price, color, size, buyingPrice) => {
         try {
             const check = await db.ProductVariant.findOne(
                 { 
@@ -11,7 +11,8 @@ class ProductVariantService {
                         SKU: sku,
                         price: price,
                         color: color,
-                        size: size
+                        size: size,
+                        buyingPrice: buyingPrice
                     } 
                 }
             );
@@ -29,7 +30,8 @@ class ProductVariantService {
                 status: "sold out",
                 color: color,
                 size: size,
-                image: ""
+                image: "",
+                buyingPrice: buyingPrice
             });
             await db.Inventory.create({
                 variantId: newProductVariant.id,
@@ -53,7 +55,7 @@ class ProductVariantService {
 
     };
 
-    updateProductVariant = async(id, sku, price, color, size) => {
+    updateProductVariant = async(id, sku, price, color, size, buyingPrice) => {
         try {
             const productVariant = await db.ProductVariant.findOne({
                 where: {
@@ -71,7 +73,8 @@ class ProductVariantService {
                 SKU: sku,
                 price: price,
                 color: color,
-                size: size
+                size: size,
+                buyingPrice: buyingPrice
             }, {
                 where: {
                     id: id,

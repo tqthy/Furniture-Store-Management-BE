@@ -10,7 +10,6 @@ class InvoiceService {
             staffId: staffId,
             customerId: customerId
             }, { transaction: t });
-    
             for (const data of InvoiceDetailsData) {
                 await db.InvoiceDetails.create({
                     invoiceId: invoice.id,
@@ -52,7 +51,7 @@ class InvoiceService {
             }
             if (Invoice.status === 'paid') {
                 return {
-                    EM: 'Invoice already accepted',
+                    EM: 'Invoice already paid',
                     EC: 1,
                     DT: ''
                 }
@@ -214,7 +213,7 @@ class InvoiceService {
             })
             if (!Invoice || Invoice.status === 'paid' || Invoice.status === 'canceled') {
                 return {
-                    EM: 'Invoice not found or already accepted or rejected',
+                    EM: 'Invoice not found or already paid or rejected',
                     EC: 1,
                     DT: ''
                 }
