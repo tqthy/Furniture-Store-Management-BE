@@ -31,6 +31,7 @@ config.invoiceRoute(app);
 config.providerRoute(app);
 config.customerRoute(app);
 config.fileRoute(app);
+config.reportRoute(app);
 
 config.staffRoute(app);
 app.use((req, res) => {
