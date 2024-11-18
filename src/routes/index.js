@@ -9,6 +9,7 @@ import customerRoute from './CustomerRoute'
 import staffRoute from './StaffRoute';
 import fileRoute from './FileRoute'
 import authRoute from './AuthRoute'
+import promotionRoute from './PromotionRoute'
 const config = { 
     catalogueRoute,
     productRoute,
@@ -19,6 +20,7 @@ const config = {
     customerRoute,
     staffRoute,
     fileRoute,
-    authRoute
+    authRoute,
+    promotionRoute
 }
 export default config;
