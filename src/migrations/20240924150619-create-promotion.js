@@ -15,8 +15,11 @@ module.exports = {
       startDate: {
         type: Sequelize.DATEONLY
       },
-      desscription: {
+      description: {
         type: Sequelize.TEXT
+      },
+      status: {
+        type: Sequelize.ENUM('active', 'inactive', 'dropped')
       },
       createdAt: {
         allowNull: false,
