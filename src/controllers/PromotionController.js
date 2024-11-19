@@ -53,33 +53,53 @@ class PromotionController {
     }
   }
 
-  // Update an existing promotion
   static async updatePromotion(req, res) {
     try {
-      const { id, name, description, startDate, finishDate, promotionProducts } = req.body;
-      // check if status is not active and dropped
-      const promotion = await PromotionService.findById(id);
-      if (promotion.DT.status !== 'inactive') {
-        return res.status(400).json({ message: 'Cannot update an active promotion' });
-      }
-      
-      const newPromotion = PromotionService.updatePromotion(id, name, description, startDate, finishDate);
-      if (newPromotion.EC === 1) {
-        return res.status(400).json({ message: newPromotion.EM });
-      }
+        const { id, name, description, startDate, finishDate, promotionProducts } = req.body;
 
-      const deletedPromotionProducts = await PromotionService.deletePromotionProducts(id);
-      if (deletedPromotionProducts.EC === 1) {
-        return res.status(400).json({ message: deletedPromotionProducts.EM });
-      }
-      const newPromotionProducts = await PromotionService.createPromotionProduct(id, promotionProducts);
+        // Check if the promotion exists
+        const oldPromotion = await PromotionService.findById(id);
+        if (oldPromotion.EC === 1) {
+            return res.status(404).json({ message: 'Promotion not found' });
+        }
 
-      newPromotion.DT.promotionProducts = newPromotionProducts.DT;
-      res.status(200).json(newPromotion);
+        // Check if the promotion is active or finished
+        const now = new Date();
+        const isActive = oldPromotion.DT.startDate <= now && oldPromotion.DT.finishDate >= now;
+        const isFinished = oldPromotion.DT.finishDate < now;
+
+        if (isActive || isFinished) {
+            return res.status(400).json({ message: 'Cannot update a finished or active promotion' });
+        }
+
+        // Update promotion details
+        const newPromotion = await PromotionService.updatePromotion(id, name, description, startDate, finishDate);
+        if (newPromotion.EC === 1) {
+            return res.status(400).json({ message: newPromotion.EM });
+        }
+
+        // Delete old promotion products
+        const deletedPromotionProducts = await PromotionService.deletePromotionProducts(id);
+        if (deletedPromotionProducts.EC === 1) {
+            return res.status(400).json({ message: deletedPromotionProducts.EM });
+        }
+
+        // Create new promotion products
+        const newPromotionProducts = await PromotionService.createPromotionProduct(id, promotionProducts);
+        if (newPromotionProducts.EC === 1) {
+            return res.status(400).json({ message: newPromotionProducts.EM });
+        }
+
+        // Safely assign promotionProducts to the response object
+        newPromotion.DT = newPromotion.DT || {}; 
+        newPromotion.DT.promotionProducts = newPromotionProducts.DT;
+
+        // Return the updated promotion
+        res.status(200).json(newPromotion);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  }
+}
 
   // Delete a promotion
   static async deletePromotion(req, res) {

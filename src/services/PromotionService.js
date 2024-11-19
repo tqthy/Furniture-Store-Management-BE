@@ -174,18 +174,6 @@ class PromotionService {
 
   updatePromotion = async (id, name, description, startDate, finishDate) => {
     try {
-      const promotion = await db.Promotion.findOne({
-        where: {
-          id: id
-        }
-      });
-      if (!promotion) {
-        return {
-          EM: 'Promotion not found',
-          EC: 1,
-          DT: ''
-        };
-      }
       const overlappedPromotions = await db.Promotion.findAll({
         where: {
           startDate: {
@@ -195,6 +183,9 @@ class PromotionService {
           finishDate: {
             [db.Sequelize.Op.gte]: startDate,
             [db.Sequelize.Op.lte]: finishDate,
+          },
+          id: {
+            [db.Sequelize.Op.ne]: id
           }
         }
       });
@@ -217,10 +208,17 @@ class PromotionService {
           id: id
         }
       });
+      const updated = {
+        id,
+        name,
+        startDate,
+        finishDate,
+        description
+      }
       return {
         EM: 'Update promotion successfully',
         EC: 0,
-        DT: updatedPromotion
+        DT: updated
       };
     } catch (error) {
       return {
