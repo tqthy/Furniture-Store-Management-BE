@@ -67,7 +67,7 @@ class PromotionService {
       for (let i = 0; i < promotionProducts.length; i++) {
         promises.push(db.PromotionProduct.create({
           promotionId: promotionId,
-          productId: promotionProducts[i].variantId,
+          variantId: promotionProducts[i].variantId,
           discount: promotionProducts[i].discount
         }));
       }
@@ -95,6 +95,37 @@ class PromotionService {
         EC: 0,
         DT: promotions
       };
+    } catch (error) {
+      return {
+        EM: error.message,
+        EC: 1,
+        DT: ''
+      };
+    }
+  }
+
+  getPromotionByDate = async (date) => {
+    try {
+      // include with promotion products
+      const promotion = await db.Promotion.findOne({
+        where: {
+          startDate: {
+            [db.Sequelize.Op.lte]: date
+          },
+          finishDate: {
+            [db.Sequelize.Op.gte]: date
+          }
+        },
+        include: db.PromotionProduct,
+        raw: false,
+        nest: true
+      });
+
+      return {
+        EM: 'Get promotion by date promotion successfully',
+        EC: 0,
+        DT: promotion
+      }
     } catch (error) {
       return {
         EM: error.message,

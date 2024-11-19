@@ -21,6 +21,16 @@ class PromotionController {
     }
   }
 
+  static async getCurrentPromotion(req, res) {
+    try {
+      const { date } = req.query;
+      const response = await PromotionService.getPromotionByDate(date);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   // Create a new promotion
   static async createPromotion(req, res) {
     const { name, description, startDate, finishDate, promotionProducts } = req.body;
