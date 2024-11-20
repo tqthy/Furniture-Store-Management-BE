@@ -15,7 +15,7 @@ module.exports = {
       startDate: {
         type: Sequelize.DATEONLY
       },
-      desscription: {
+      description: {
         type: Sequelize.TEXT
       },
       status: {

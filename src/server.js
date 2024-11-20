@@ -31,6 +31,7 @@ config.ProductVariantRoute(app);
 config.invoiceRoute(app);
 config.providerRoute(app);
 config.customerRoute(app);
+config.promotionRoute(app);
 // config.fileRoute(app);
 
 config.staffRoute(app);

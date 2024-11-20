@@ -2,7 +2,7 @@ import { raw } from "body-parser";
 import db from "../models/index";
 
 class ProductService {
-    createProduct = async(catalogueId, name, description, warranty) => {
+    createProduct = async(catalogueId, name, description, warranty, image) => {
         try {
             const check = await db.Product.findOne(
                 { 
@@ -24,7 +24,7 @@ class ProductService {
             const newProduct = await db.Product.create({
                 catalogueId: catalogueId,
                 name: name,
-                image: "",
+                image: image,
                 description: description,
                 available: 0,
                 quantity: 0,
