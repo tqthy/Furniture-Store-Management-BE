@@ -57,9 +57,16 @@ class PromotionController {
         return res.status(400).json({ message: newPromotion.EM });
       }
       const newPromotionProducts = await PromotionService.createPromotionProduct(newPromotion.DT.id, promotionProducts);
-
+      if (newPromotionProducts.EC === 1) {
+        PromotionService.delete(newPromotion.DT.id);
+        return res.status(400).json({ message: newPromotionProducts.EM });
+      }
+      // Safely assign promotionProducts to the response object
+      newPromotion.DT = newPromotion.DT || {}; 
       newPromotion.DT.promotionProducts = newPromotionProducts.DT;
-      res.status(201).json(newPromotion);
+
+      // Return the updated promotion
+      res.status(200).json(newPromotion);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

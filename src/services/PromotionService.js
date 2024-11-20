@@ -10,16 +10,20 @@ class PromotionService {
 
       const overlappedPromotions = await db.Promotion.findAll({
         where: {
-          or: {
-            startDate: {
-              [db.Sequelize.Op.lte]: finishDate,
-              [db.Sequelize.Op.gte]: startDate,
-            },
-            finishDate: {
-              [db.Sequelize.Op.gte]: startDate,
-              [db.Sequelize.Op.lte]: finishDate,
-            }
+          [db.Sequelize.Op.or]: [
+        {
+          startDate: {
+            [db.Sequelize.Op.lte]: finishDate,
+            [db.Sequelize.Op.gte]: startDate,
           }
+        },
+        {
+          finishDate: {
+            [db.Sequelize.Op.gte]: startDate,
+            [db.Sequelize.Op.lte]: finishDate,
+          }
+        }
+          ]
         }
       });
 
