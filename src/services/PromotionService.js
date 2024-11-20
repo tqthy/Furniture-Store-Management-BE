@@ -140,8 +140,14 @@ class PromotionService {
       const promotion = await db.Promotion.findOne({
         where: {
           id: id
-        }
+        },
+        include: {
+          model: db.PromotionProduct,
+        },
+        raw: false,
+        nest: true
       });
+
       if (!promotion) {
         return {
           EM: 'Promotion not found',
@@ -149,14 +155,6 @@ class PromotionService {
           DT: ''
         };
       }
-
-      const promotionProducts = await db.PromotionProduct.findAll({
-        where: {
-          promotionId: id
-        }
-      });
-
-      promotion.dataValues.promotionProducts = promotionProducts;
       
       return {
         EM: 'Get promotion successfully',
