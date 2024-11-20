@@ -1,3 +1,4 @@
+import { or } from "sequelize";
 import db from "../models";
 
 class PromotionService {
@@ -9,13 +10,15 @@ class PromotionService {
 
       const overlappedPromotions = await db.Promotion.findAll({
         where: {
-          startDate: {
-            [db.Sequelize.Op.lte]: finishDate,
-            [db.Sequelize.Op.gte]: startDate,
-          },
-          finishDate: {
-            [db.Sequelize.Op.gte]: startDate,
-            [db.Sequelize.Op.lte]: finishDate,
+          or: {
+            startDate: {
+              [db.Sequelize.Op.lte]: finishDate,
+              [db.Sequelize.Op.gte]: startDate,
+            },
+            finishDate: {
+              [db.Sequelize.Op.gte]: startDate,
+              [db.Sequelize.Op.lte]: finishDate,
+            }
           }
         }
       });
@@ -330,7 +333,11 @@ class PromotionService {
           DT: ''
         };
       }
-      await promotion.destroy();
+      await db.Promotion.destroy({
+        where: {
+          id: id
+        }
+      })
       // delete promotion products
       await db.PromotionProduct.destroy({
         where: {
