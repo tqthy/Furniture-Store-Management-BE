@@ -32,7 +32,7 @@ config.invoiceRoute(app);
 config.providerRoute(app);
 config.customerRoute(app);
 config.promotionRoute(app);
-// config.fileRoute(app);
+config.fileRoute(app);
 
 config.staffRoute(app);
 app.use((req, res) => {
