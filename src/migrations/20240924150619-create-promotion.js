@@ -18,6 +18,9 @@ module.exports = {
       desscription: {
         type: Sequelize.TEXT
       },
+      status: {
+        type: Sequelize.ENUM('active', 'inactive', 'dropped')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

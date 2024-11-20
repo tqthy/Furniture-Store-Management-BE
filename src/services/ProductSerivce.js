@@ -1,3 +1,4 @@
+import { raw } from "body-parser";
 import db from "../models/index";
 
 class ProductService {
@@ -129,10 +130,12 @@ class ProductService {
                     attributes: ['id', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
                     include:[
                         {
-                            model: db.catalogue,
+                            model: db.Catalogue,
                             attributes: ['name'],
                         }
-                    ]
+                    ],
+                    raw: false,
+                    nest: true
                 }
             );
             return {

@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     finishDate: DataTypes.DATEONLY,
     startDate: DataTypes.DATEONLY,
     description: DataTypes.TEXT,
+    status: DataTypes.ENUM('active', 'inactive', 'dropped')
   }, {
     sequelize,
     modelName: 'Promotion',
