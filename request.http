@@ -323,3 +323,66 @@ Content-Type: application/json
     "username": "SaleStaff0001",
     "password": "SaleStaff0001"
 }
+
+////////////////////////////////////Promotion////////////////////////////////////
+###
+GET {{Web}}/promotion/get-all-promotions
+
+
+###
+// Lấy thông tin của 1 promotion + danh sách các sản phẩm(variant) + % giảm giá thông qua ID của promotion
+GET {{Web}}/promotion/:id
+
+###
+// Lấy thông tin của 1 promotion đang diễn ra + danh sách các sản phẩm(variant) + % giảm giá thông qua ngày
+GET {{Web}}/promotion/date=YYYY-MM-DD
+
+###
+// Tạo mới một promotion
+POST {{Web}}/promotion/create-promotion
+Content-Type: application/json
+
+{
+    "name": "promotion 1",
+    "description": "description for promotion 1",
+    "startDate": "2024-11-19",
+    "finishDate": "2024-11-21",
+    "promotionProducts": [
+        {
+            "variantId": 1,
+            "discount": 10
+        },
+        {
+            "variantId": 2,
+            "discount": 15
+        }
+    ]
+}
+
+###
+// Cập nhật promotion
+PUT {{Web}}/promotion/update-promotion
+
+Content-Type: application/json
+{
+    "id": 1,
+    "name": "promotion 1: updated",
+    "description": "description for promotion 1: updated",
+    "startDate": "2024-11-19",
+    "finishDate": "2024-11-22",
+    "promotionProducts": [
+        {
+            "variantId": 1,
+            "discount": 10
+        },
+        {
+            "variantId": 2,
+            "discount": 15
+        }
+    ]
+}
+
+###
+// Xoá promotion
+
+DELETE {{Web}}/promotion/delete-promotion/:id
