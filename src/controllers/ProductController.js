@@ -1,7 +1,7 @@
 import ProductService from '../services/ProductSerivce';
 class ProductController {
     createProduct = async(req, res) => {
-        const { name, description, warranty, catalogueId } = req.body;
+        const { name, description, warranty, catalogueId, image } = req.body;
         console.log(req.body);
         if (!name  || !warranty) {
             return res.status(200).json({
@@ -11,7 +11,7 @@ class ProductController {
             });
         }
         try {
-            const response = await ProductService.createProduct(catalogueId, name, description, warranty);
+            const response = await ProductService.createProduct(catalogueId, name, description, warranty, image);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });
