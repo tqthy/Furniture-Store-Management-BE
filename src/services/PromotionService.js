@@ -218,20 +218,42 @@ class PromotionService {
 
   updatePromotion = async (id, name, description, startDate, finishDate) => {
     try {
+      // const overlappedPromotions = await db.Promotion.findAll({
+      //   where: {
+      //     startDate: {
+      //       [db.Sequelize.Op.lte]: finishDate,
+      //       [db.Sequelize.Op.gte]: startDate,
+      //     },
+      //     finishDate: {
+      //       [db.Sequelize.Op.gte]: startDate,
+      //       [db.Sequelize.Op.lte]: finishDate,
+      //     },
+      //     id: {
+      //       [db.Sequelize.Op.ne]: id
+      //     }
+      //   }
+      // });
+      
       const overlappedPromotions = await db.Promotion.findAll({
         where: {
-          startDate: {
-            [db.Sequelize.Op.lte]: finishDate,
-            [db.Sequelize.Op.gte]: startDate,
-          },
-          finishDate: {
-            [db.Sequelize.Op.gte]: startDate,
-            [db.Sequelize.Op.lte]: finishDate,
-          },
           id: {
             [db.Sequelize.Op.ne]: id
+          },
+          [db.Sequelize.Op.or]: [
+          {
+            startDate: {
+              [db.Sequelize.Op.lte]: finishDate,
+              [db.Sequelize.Op.gte]: startDate,
+            }
+          },
+          {
+            finishDate: {
+              [db.Sequelize.Op.gte]: startDate,
+              [db.Sequelize.Op.lte]: finishDate,
+            }
           }
-        }
+            ]
+          }
       });
 
       if (overlappedPromotions.length > 0) {
