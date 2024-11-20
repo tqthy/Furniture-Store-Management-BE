@@ -21,6 +21,18 @@ class PromotionController {
     }
   }
 
+  static async stopPromotion(req, res) {
+    try {
+      const { id } = req.body;
+      const now = new Date();
+      console.log(now, id);
+      const response = await PromotionService.changeFinishDate(id, now);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
   static async getCurrentPromotion(req, res) {
     try {
       const { date } = req.query;

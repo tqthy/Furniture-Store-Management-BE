@@ -386,3 +386,13 @@ Content-Type: application/json
 // Xoá promotion
 
 DELETE {{Web}}/promotion/delete-promotion/:id
+
+###
+// Stop promotion
+
+PATCH {{Web}}/promotion/stop-promotion
+
+Content-Type: application/json
+{
+    "id": 1
+}

@@ -48,6 +48,45 @@ class PromotionService {
     }
   }
 
+  changeFinishDate = async (id, finishDate) => {
+    try {
+      const promotion = await db.Promotion.findOne({
+        where: {
+          id: id
+        }
+      });
+      console.log(promotion);
+      if (!promotion) {
+        return {
+          EM: 'Promotion not found',
+          EC: 1,
+          DT: ''
+        };
+      }
+      promotion.finishDate = finishDate;
+      const updateStatus = await db.Promotion.update({
+        finishDate: finishDate
+      }, {
+        where: {
+          id: id
+        }
+      });
+      if (!updateStatus) {
+        throw new Error('Cannot update promotion');
+      }
+      return {
+        EM: 'Stop promotion and change finish date successfully',
+        EC: 0,
+        DT: ''
+      };
+    } catch (error) {
+      return {
+        EM: error.message,
+        EC: 1,
+        DT: ''
+      }
+    }
+  }
   createPromotionProduct = async (promotionId, promotionProducts) => {
     try {
       const promotion = await db.Promotion.findOne({

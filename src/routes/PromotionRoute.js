@@ -8,6 +8,7 @@ const promotionRoute = (app) => {
     router.get('', PromotionController.getCurrentPromotion);
     router.post('/create-promotion', PromotionController.createPromotion);
     router.put('/update-promotion', PromotionController.updatePromotion);
+    router.patch('/stop-promotion', PromotionController.stopPromotion);
     router.delete('/delete-promotion/:id', PromotionController.deletePromotion);
     return app.use('/promotion', router);
 }
