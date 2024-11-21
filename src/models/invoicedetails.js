@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       InvoiceDetails.belongsTo(models.ProductVariant, { foreignKey: "variantId" });
       InvoiceDetails.belongsTo(models.Invoice, { foreignKey: "invoiceId" });
       InvoiceDetails.belongsTo(models.Promotion, { foreignKey: "promotionId" });
+      // 1 1 association with warranty
+      InvoiceDetails.hasOne(models.Warranty, { foreignKey: "invoiceDetailsId" });
     }
   }
   InvoiceDetails.init({
