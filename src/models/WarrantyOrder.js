@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     details: DataTypes.STRING,
     cost: DataTypes.DECIMAL,
     status: DataTypes.ENUM('pending', 'processing', 'done'),
-    estimatedFinishDate: DataTypes.DATE,
+    estimateFinishDate: DataTypes.DATE,
     finishDate: DataTypes.DATE,
   }, {
     sequelize,
