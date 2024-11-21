@@ -314,6 +314,28 @@ Content-Type: application/json
     "role": 3
 }
 
+###
+PUT {{Web}}/staffs/update-staff/1
+Content-Type: application/json
+
+{
+    "fullname": "Nguyễn Văn B",
+    "birth": "1999-12-20",
+    "gender": "male",
+    "idNumber": "0123456789",
+    "startDate": "2020-08-30",
+    "phone": "0123456789",
+    "email": "nguyenvana@gmail.com"
+}
+
+###
+GET {{Web}}/staffs/get-all-staffs
+
+###
+GET {{Web}}/staffs/get-staff/1
+
+###
+DELETE {{Web}}/staffs/delete-staff/1
 ////////////////////////////////////Authentication////////////////////////////////////
 ###
 POST {{Web}}/login

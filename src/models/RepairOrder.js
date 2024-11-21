@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   RepairOrder.init({
     productName: DataTypes.STRING,
-    description: DataTypes.STRING,
-    details: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    details: DataTypes.TEXT,
     cost: DataTypes.DECIMAL,
     status: DataTypes.ENUM('pending', 'processing', 'done'),
     estimateFinishDate: DataTypes.DATE,

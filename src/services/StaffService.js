@@ -1,6 +1,8 @@
+import { where } from 'sequelize';
 import db from '../models';
 import DbValueService from '../utils/DbValueService';
 import SecurityHandler from '../utils/SecurityService';
+import { raw } from 'body-parser';
 
 class StaffService {
     createStaff = async (fullname, birth, gender, idNumber, startDate, phone, email, role) => {
@@ -86,7 +88,7 @@ class StaffService {
         }
     }
 
-    updateStaff = async (id, name, email, role) => {
+    updateStaff = async (id, fullname, birth, gender, idNumber, startDate, phone, email) => {
         try {
             const staff = await db.Staff.findOne({
                 where: {
@@ -100,11 +102,24 @@ class StaffService {
                     DT: ''
                 }
             }
-            const updatedStaff = await staff.update({
-                name: name,
+            await db.Staff.update({
+                fullname: fullname,
                 email: email,
-                password: password,
-                role: role,
+                birth: birth,
+                gender: gender,
+                idNumber: idNumber,
+                startDate: startDate,
+                phone: phone,
+            },{                
+                where: {
+                    id: id
+                }
+            });
+
+            const updatedStaff = await db.Staff.findOne({
+                where: {
+                    id: id
+                }
             });
             return {
                 EM: 'update staff successfully',
@@ -134,7 +149,13 @@ class StaffService {
                     DT: ''
                 }
             }
-            await staff.destroy();
+            await db.Account.update({
+                status: 'inactive'
+            }, {
+                where: {
+                    id: staff.accountId
+                }
+            })
             return {
                 EM: 'delete staff successfully',
                 EC: 0,
@@ -154,7 +175,13 @@ class StaffService {
             const staff = await db.Staff.findOne({
                 where: {
                     id: id
-                }
+                },
+                include: {
+                    model: db.Account,
+                    attributes: ['username', 'status', 'roleId'],
+                },
+                raw: true,
+                nest: true
             });
             if (!staff) {
                 return {
@@ -177,9 +204,18 @@ class StaffService {
         }
     }
 
-    getAllStaff = async () => {
+    getAllStaffs = async () => {
         try {
-            const staffs = await db.Staff.findAll();
+            const staffs = await db.Staff.findAll(
+                {
+                    include: {
+                        model: db.Account,
+                        attributes: ['username', 'status'],
+                    },
+                    raw: false,
+                    nest: true
+                },
+            );
             return {
                 EM: 'get all staff successfully',
                 EC: 0,
