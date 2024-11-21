@@ -33,8 +33,9 @@ config.providerRoute(app);
 config.customerRoute(app);
 config.promotionRoute(app);
 config.fileRoute(app);
-
+config.maintainanceRoute(app);
 config.staffRoute(app);
+
 app.use((req, res) => {
     return res.send("404 not found");
 });

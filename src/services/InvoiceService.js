@@ -40,7 +40,24 @@ class InvoiceService {
             const Invoice = await db.Invoice.findOne({
                 where: {
                     id: id
-                }
+                },
+                include: [
+                    {
+                        model: db.InvoiceDetails,
+                        attributes: { exclude: ["createdAt", "updatedAt"] },
+                        include: [
+                            {
+                                model: db.ProductVariant,
+                                include: [
+                                    {
+                                        model: db.Product
+                                    }
+                                ],
+                                attributes: { include: ["warranty"] }
+                            }
+                        ]
+                    }
+                ]
             })
             if (!Invoice) {
                 return {
@@ -63,10 +80,11 @@ class InvoiceService {
                     id: id,
                 }
             })
+            Invoice.status = 'paid';
             return {
                 EM: 'Accept invoice successfully',
                 EC: 0,
-                DT: ""
+                DT: Invoice
             }
         } catch (error) {
             return {

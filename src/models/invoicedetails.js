@@ -13,11 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       InvoiceDetails.belongsTo(models.ProductVariant, { foreignKey: "variantId" });
       InvoiceDetails.belongsTo(models.Invoice, { foreignKey: "invoiceId" });
+      InvoiceDetails.belongsTo(models.Promotion, { foreignKey: "promotionId" });
+      // 1 1 association with warranty
+      InvoiceDetails.hasOne(models.Warranty, { foreignKey: "invoiceDetailsId" });
     }
   }
   InvoiceDetails.init({
     quantity: DataTypes.INTEGER,
     cost: DataTypes.DECIMAL(20,2),
+    unitPrice: DataTypes.DECIMAL(20,2),
+    discountAmount: DataTypes.DECIMAL(20,2),
   }, {
     sequelize,
     modelName: 'InvoiceDetails',
