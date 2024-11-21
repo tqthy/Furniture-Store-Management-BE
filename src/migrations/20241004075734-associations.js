@@ -47,18 +47,7 @@ module.exports = {
       name: "FK_04",
     })
 
-    await queryInterface.addConstraint('WarrantyAndRepair', {
-      fields: ['staffId'],
-      type: 'foreign key',
-      references: {
-        table: 'Staff',
-        field: 'id'
-      },
-      onDelete: 'cascade',
-      name: "FK_05"
-    })
-
-    await queryInterface.addConstraint('WarrantyAndRepair', {
+    await queryInterface.addConstraint('Warranty', {
       fields: ['customerId'],
       type: 'foreign key',
       references: {
@@ -66,18 +55,62 @@ module.exports = {
         field: 'id'
       },
       onDelete: 'cascade',
+      name: "FK_05"
+    })
+
+    await queryInterface.addConstraint('Warranty', {
+      fields: ['invoiceDetailsId'],
+      type: 'foreign key',
+      references: {
+        table: 'InvoiceDetails',
+        field: 'id'
+      },
+      onDelete: 'cascade',
       name: "FK_06"
     })
 
-    await queryInterface.addConstraint('WarrantyAndRepair', {
-      fields: ['variantId'],
+    await queryInterface.addConstraint('WarrantyOrder', {
+      fields: ['warrantyId'],
       type: 'foreign key',
       references: {
-        table: 'ProductVariant',
+        table: 'Warranty',
         field: 'id'
       },
       onDelete: 'cascade',
       name: "FK_07"
+    })
+
+    await queryInterface.addConstraint('WarrantyOrder', {
+      fields: ['staffId'],
+      type: 'foreign key',
+      references: {
+        table: 'Staff',
+        field: 'id'
+      },
+      onDelete: 'cascade',
+      name: "FK_28"
+    })
+
+    await queryInterface.addConstraint('RepairOrder', {
+      fields: ['staffId'],
+      type: 'foreign key',
+      references: {
+        table: 'Staff',
+        field: 'id'
+      },
+      onDelete: 'cascade',
+      name: "FK_29"
+    })
+
+    await queryInterface.addConstraint('RepairOrder', {
+      fields: ['customerId'],
+      type: 'foreign key',
+      references: {
+        table: 'Customer',
+        field: 'id'
+      },
+      onDelete: 'cascade',
+      name: "FK_30"
     })
 
     await queryInterface.addConstraint('GoodsReceipt', {
@@ -290,9 +323,10 @@ module.exports = {
     await queryInterface.removeConstraint('Account', "FK_02")
     await queryInterface.removeConstraint('RolePermission', "FK_03")
     await queryInterface.removeConstraint('RolePermission', "FK_04")
-    await queryInterface.removeConstraint('WarrantyAndRepair', "FK_05")
-    await queryInterface.removeConstraint('WarrantyAndRepair', "FK_06")
-    await queryInterface.removeConstraint('WarrantyAndRepair', "FK_07")
+    await queryInterface.removeConstraint('Warranty', "FK_05")
+    await queryInterface.removeConstraint('Warranty', "FK_06")
+    await queryInterface.removeConstraint('WarrantyOrder', "FK_07")
+    await queryInterface.removeConstraint('WarrantyOrder', "FK_28")
     await queryInterface.removeConstraint('GoodsReceipt', "FK_08")
     await queryInterface.removeConstraint('GoodsReceipt', "FK_09")
     await queryInterface.removeConstraint('GoodsReceiptDetails', "FK_10")
@@ -311,5 +345,7 @@ module.exports = {
     await queryInterface.removeConstraint('PromotionProduct', "FK_23")
     await queryInterface.removeConstraint('UserActivityLog', "FK_26")
     await queryInterface.removeConstraint('InvoiceDetails', "FK_27")
+    await queryInterface.removeConstraint('RepairOrder', "FK_29")
+    await queryInterface.removeConstraint('RepairOrder', "FK_30")
   }
 };

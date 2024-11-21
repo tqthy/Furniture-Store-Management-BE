@@ -12,9 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Staff.belongsTo(models.Account, { foreignKey: "accountId" });
-      Staff.hasMany(models.WarrantyAndRepair, { foreignKey: "staffId" });
       Staff.hasMany(models.GoodsReceipt, { foreignKey: "staffId" });
       Staff.hasMany(models.Invoice, { foreignKey: "staffId" });
+      Staff.hasMany(models.RepairOrder, { foreignKey: "staffId" });
+      Staff.hasMany(models.WarrantyOrder, { foreignKey: "staffId" });
     }
   }
   Staff.init({

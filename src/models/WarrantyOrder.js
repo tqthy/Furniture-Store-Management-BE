@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   WarrantyOrder.init({
-    description: DataTypes.STRING,
-    details: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    details: DataTypes.TEXT,
     cost: DataTypes.DECIMAL,
     status: DataTypes.ENUM('pending', 'processing', 'done'),
     estimateFinishDate: DataTypes.DATE,
