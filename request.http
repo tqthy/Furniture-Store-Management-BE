@@ -418,3 +418,101 @@ Content-Type: application/json
 {
     "id": 1
 }
+
+###
+// GET All Warranties
+
+GET {{Web}}/maintainance/warranty
+
+###
+// GET warrantyOrders by warrantyId
+
+GET {{Web}}/maintainance/warranty/order/:warrantyId
+
+###
+// GET warrantyOrders by status
+
+GET {{Web}}/maintainance/warranty/order/status/:status
+
+###
+// GET all warrantyOrders
+
+GET {{Web}}/maintainance/warranty/order/
+
+###
+// Tạo mới một yêu cầu bảo hành. cost và estimateFinishDate là optional
+
+POST {{Web}}/maintainance/warranty/order
+
+Content-Type: application/json
+{
+    "warrantyId": 4,
+    "description": "test warranty order",
+    "details": "details test warranty order",
+    "staffId": 1,
+    "cost": 100000,
+    "estimateFinishDate": "2024-12-01"
+}
+
+###
+// Cập nhật một yêu cầu bảo hành.
+
+PATCH {{Web}}/maintainance/warranty/order/:id
+
+Content-Type: application/json
+{
+    "description": "PATCH test warranty order",
+    "details": "PATCH details test warranty order",
+    "estimateFinishDate": "2024-12-31"
+}
+
+###
+// Xoá yêu cầu bảo hành
+
+DELETE {{WEb}}/maintainance/warranty/order/:id
+
+###
+// GET RepairOrders by status
+
+GET {{Web}}/maintainance/repair/status/:status
+
+###
+// GET all RepairOrders
+
+GET {{Web}}/maintainance/repair/order/
+
+###
+
+// Tạo mới yêu cầu sửa chữa
+
+POST {{Web}}/maintainance/repair/order/
+
+Content-Type: application/json
+{
+    "productName": "test product name",
+    "description": "test repair order",
+    "details": "details test repair order",
+    "staffId": 1,
+    "cost": 100000,
+    "estimateFinishDate": "2024-12-01",
+    "customerId": 1
+}
+
+###
+
+// Cập nhật yêu cầu sửa chữa
+
+PATCH {{Web}}/maintainance/repair/order/:id
+
+Content-Type: application/json
+{
+    "details": "details test repair order, hư nặng quá, tăng giá",
+    "cost": 200000,
+    "status": "processing"
+}
+
+###
+
+// Xoá yêu cầu sửa chữa
+
+DELETE {{Web}}/maintainance/repair/order/:id

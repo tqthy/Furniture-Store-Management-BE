@@ -68,10 +68,11 @@ class MaintainanceController {
       warrantyId: warrantyId,
       description: description,
       details: details,
-      cost: cost,
       staffId: staffId,
-      estimateFinishDate: estimateFinishDate
     };
+
+    if (cost) warrantyOrderData.cost = cost;
+    if (estimateFinishDate) warrantyOrderData.estimateFinishDate = estimateFinishDate;
 
     try {
       const response = await MaintainanceService.createWarrantyOrder(warrantyOrderData);
@@ -96,10 +97,11 @@ class MaintainanceController {
       customerId: customerId,
       description: description,
       details: details,
-      cost: cost,
       staffId: staffId,
-      estimateFinishDate: estimateFinishDate
     };
+
+    if (cost) repairOrderData.cost = cost;
+    if (estimateFinishDate) repairOrderData.estimateFinishDate = estimateFinishDate;
 
     try {
       const response = await MaintainanceService.createRepairOrder(repairOrderData);
@@ -111,7 +113,7 @@ class MaintainanceController {
 
 
   static async updateWarrantyOrder(req, res) {
-    const { description, details, cost, staffId, estimateFinishDate } = req.body;
+    const { description, details, cost, staffId, estimateFinishDate, status } = req.body;
     const warrantyOrderId = req.params.id;
     const warrantyOrderData = {};
     if (description) warrantyOrderData.description = description;
@@ -119,6 +121,7 @@ class MaintainanceController {
     if (cost) warrantyOrderData.cost = cost;
     if (staffId) warrantyOrderData.staffId = staffId;
     if (estimateFinishDate) warrantyOrderData.estimateFinishDate = estimateFinishDate;
+    if (status) warrantyOrderData.status = status;
     
     try {
       const response = await MaintainanceService.updateWarrantyOrder(warrantyOrderId, warrantyOrderData);
@@ -129,7 +132,7 @@ class MaintainanceController {
   }
 
   static async updateRepairOrder(req, res) {
-    const { productName, description, details, cost, staffId, estimateFinishDate } = req.body;
+    const { productName, description, details, cost, staffId, estimateFinishDate, status } = req.body;
     const repairOrderId = req.params.id;
     const repairOrderData = {};
     if (productName) repairOrderData.productName = productName;
@@ -138,6 +141,7 @@ class MaintainanceController {
     if (cost) repairOrderData.cost = cost;
     if (staffId) repairOrderData.staffId = staffId;
     if (estimateFinishDate) repairOrderData.estimateFinishDate = estimateFinishDate;
+    if (status) repairOrderData.status = status;
     
     try {
       const response = await MaintainanceService.updateRepairOrder(repairOrderId, repairOrderData);

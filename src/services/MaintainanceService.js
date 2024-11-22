@@ -41,7 +41,7 @@ class MaintainanceService {
 
   getWarrantyOrderByWarrantyId = async (warrantyId) => {
     try {
-      const warrantyOrder = await db.WarrantyOrder.findOne({
+      const warrantyOrder = await db.WarrantyOrder.findAll({
         where: {
           warrantyId: warrantyId
         }
