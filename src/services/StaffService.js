@@ -178,7 +178,7 @@ class StaffService {
                 },
                 include: {
                     model: db.Account,
-                    attributes: ['username', 'status'],
+                    attributes: ['username', 'status', 'roleId'],
                 },
                 raw: true,
                 nest: true

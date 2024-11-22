@@ -1,4 +1,5 @@
 import InvoiceService from "../services/InvoiceService";
+import MaintainanceService from "../services/MaintainanceService";
 
 class InvoiceController {
     createInvoice = async(req, res) => {
@@ -23,10 +24,35 @@ class InvoiceController {
         const id  = req.params.id;
         try {
             const response = await InvoiceService.acceptInvoice(id);
+            if (response.EC === 1) {
+                throw new Error(response.EM);
+            }
+            
+            const invoiceDetails = response.DT.InvoiceDetails;
+            const warranties = [];
+            const warrantyStartDate = new Date();
+            const customerId = response.DT.customerId;
+            for (const invoiceDetail of invoiceDetails) {
+                const warrantyMonth = invoiceDetail.ProductVariant.Product.warranty;
+                const warrantyEndDate = new Date(warrantyStartDate.setMonth(warrantyStartDate.getMonth() + warrantyMonth));
+                warranties.push({
+                    customerId: customerId,
+                    invoiceDetailsId: invoiceDetail.id,
+                    startDate: warrantyStartDate,
+                    endDate: warrantyEndDate
+                });
+            }
+
+            const newWarranties = await MaintainanceService.createWarranty(warranties);
+            if (newWarranties.EC === 0) {
+                response.DT.warranties = newWarranties.DT;
+            }
+
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });
         }
+    
     }
 
     getAllInvoices = async(req, res) => {
