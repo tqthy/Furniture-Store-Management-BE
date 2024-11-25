@@ -179,20 +179,21 @@ class MaintainanceService {
         fields.finishDate = new Date();
       }
 
-      const res = await db.WarrantyOrder.update(fields, {
+      const [updateCount, updatedWarrantyOrders] = await db.WarrantyOrder.update(fields, {
         where: {
           id: id
-        }
+        },
+        returning: true 
       });
-
-      if (!res) {
+  
+      if (updateCount === 0) {
         throw new Error('Cannot update warranty order');
       }
-
+  
       return {
         EM: 'Update warranty order successfully',
         EC: 0,
-        DT: ''
+        DT: updatedWarrantyOrders[0] 
       }
     } catch(error) {
       console.error(error);
@@ -239,20 +240,21 @@ class MaintainanceService {
         fields.finishDate = new Date();
       }
 
-      const res = await db.RepairOrder.update(fields, {
+      const [updateCount, updatedRepairOrders] = await db.RepairOrder.update(fields, {
         where: {
           id: id
-        }
+        },
+        returning: true
       });
 
-      if (!res) {
+      if (updateCount === 0) {
         throw new Error('Cannot update repair order');
       }
 
       return {
         EM: 'Update repair order successfully',
         EC: 0,
-        DT: ''
+        DT: updatedRepairOrders[0]
       }
     } catch(error) {
       console.error(error);
