@@ -75,8 +75,8 @@ Content-Type: application/json
     "sku": "sgkfndf",
     "price": 19000,
     "buyingPrice": 100000,
-    "color": "red",
-    "size": "dài 25cm, rộng 20cm"
+    "color": "pink",
+    "size": "dài 30cm, rộng 25cm"
 }
 
 ###
@@ -127,7 +127,8 @@ Content-Type: application/json
         {"variantId": 1, "quantity": 10, "cost": 1000},
         {"variantId": 2, "quantity": 10, "cost": 1000}
     ],
-    "totalCost": 10000
+    "totalCost": 10000,
+    "providerId": 1
 }
 
 ###
@@ -135,7 +136,7 @@ Content-Type: application/json
 GET {{Web}}/goods-receipt/get-all-goods-receipts
 
 ###
-GET  {{Web}}/goods-receipt/get-goods-receipt/1
+GET  {{Web}}/goods-receipt/get-goods-receipt/3
 
 ###
 //sửa hóa đơn thanh toán

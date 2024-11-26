@@ -157,28 +157,6 @@ module.exports = {
       name: "FK_11"
     })
 
-    await queryInterface.addConstraint('ProductProvider', {
-      fields: ['providerId'],
-      type: 'foreign key',
-      references: {
-        table: 'Provider',
-        field: 'id'
-      },
-      onDelete: 'cascade',
-      name: "FK_12"
-    })
-
-    await queryInterface.addConstraint('ProductProvider', {
-      fields: ['variantId'],
-      type: 'foreign key',
-      references: {
-        table: 'ProductVariant',
-        field: 'id'
-      },
-      onDelete: 'cascade',
-      name: "FK_13"
-    })
-
     await queryInterface.addConstraint('Product', {
       fields: ['catalogueId'],
       type: 'foreign key',
@@ -331,8 +309,6 @@ module.exports = {
     await queryInterface.removeConstraint('GoodsReceipt', "FK_09")
     await queryInterface.removeConstraint('GoodsReceiptDetails', "FK_10")
     await queryInterface.removeConstraint('GoodsReceiptDetails', "FK_11")
-    await queryInterface.removeConstraint('ProductProvider', "FK_12")
-    await queryInterface.removeConstraint('ProductProvider', "FK_13")
     await queryInterface.removeConstraint('Product', "FK_14")
     await queryInterface.removeConstraint('ProductVariant', "FK_15")
     await queryInterface.removeConstraint('InvoiceDetails', "FK_16")
