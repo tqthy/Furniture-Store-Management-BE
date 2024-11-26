@@ -2,7 +2,7 @@ import { raw } from "body-parser";
 import db from "../models/index";
 
 class GoodsReceiptService {
-    createGoodsReceipt = async(shipping, GoodsReceiptDetailsData, totalCost) => {
+    createGoodsReceipt = async(shipping, GoodsReceiptDetailsData, totalCost, providerId) => {
         const t = await db.sequelize.transaction();
         try {
             const goodsReceipt = await db.GoodsReceipt.create({
@@ -11,6 +11,7 @@ class GoodsReceiptService {
                 status: "pending",
                 shipping: shipping,
                 totalCost: totalCost,
+                providerId: providerId
             }, { transaction: t })
             for (const data of GoodsReceiptDetailsData) {
                 await db.GoodsReceiptDetails.create({
@@ -193,7 +194,11 @@ class GoodsReceiptService {
                                 ]
                             }
                         ],
-                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                        attributes: { exclude: ["createdAt", "updatedAt"] },
+                    },
+                    {
+                        model: db.Provider,
+                        attributes: { exclude: ["createdAt", "updatedAt", "status"] },
                     }
                 ],
                 nest: true,
