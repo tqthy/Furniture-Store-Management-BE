@@ -1,5 +1,4 @@
 import db from "../models/index";
-import sequelize from "sequelize";
 class InvoiceService {
     createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId) => {
         const t = await db.sequelize.transaction();
@@ -15,7 +14,9 @@ class InvoiceService {
                     invoiceId: invoice.id,
                     variantId: data.variantId,
                     quantity: data.quantity,
-                    cost: data.cost
+                    cost: data.cost,
+                    unitPrice: data.unitPrice,
+                    discountAmount: data.discountAmount
                 }, { transaction: t });
             }
 
@@ -255,7 +256,9 @@ class InvoiceService {
                     invoiceId: id,
                     variantId: data.variantId,
                     quantity: data.quantity,
-                    cost: data.cost
+                    cost: data.cost,
+                    unitPrice: data.unitPrice,
+                    discountAmount: data.discountAmount
                 })
             });
             const updatedInvoice = await db.Invoice.findOne({
