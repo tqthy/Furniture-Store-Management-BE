@@ -180,7 +180,8 @@ Content-Type: application/json
         {"variantId": 1, "quantity": 6, "cost": 5000, "discountAmount": 1000, "unitPrice": 3000 },
         {"variantId": 2, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
     ],
-    "totalCost": 10000
+    "totalCost": 10000,
+    "customerId": 1
 }
 
 ###
@@ -188,7 +189,7 @@ Content-Type: application/json
 GET {{Web}}/invoices/get-all-invoices
 
 ###
-GET  {{Web}}/invoices/get-invoice/1
+GET  {{Web}}/invoices/get-invoice/5
 
 ###
 //sửa hóa đơn thanh toán
@@ -211,12 +212,12 @@ Content-Type: application/json
 //khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
 //khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
 //với 1 là id của hóa đơn
-PUT {{Web}}/invoices/accept-invoice/1
+PUT {{Web}}/invoices/accept-invoice/5
 
 ###
 //từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
 //với 1 là id của hóa đơn
-PUT {{Web}}/invoices/reject-invoice/1
+PUT {{Web}}/invoices/reject-invoice/5
 
 ////////////////////////////////////Provider////////////////////////////////////
 ###

@@ -3,7 +3,7 @@ import MaintainanceService from "../services/MaintainanceService";
 
 class InvoiceController {
     createInvoice = async(req, res) => {
-        const { InvoiceDetailsData, totalCost } = req.body;
+        const { InvoiceDetailsData, totalCost, customerId } = req.body;
         if (!InvoiceDetailsData || !totalCost) {
             return res.status(200).json({
                 EM: 'Mising invoice details data',
@@ -12,7 +12,7 @@ class InvoiceController {
             });
         }
         try {
-            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, null);
+            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, customerId);
             res.status(200).json(response);
 
         } catch(error) {
