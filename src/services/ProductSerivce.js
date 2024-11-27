@@ -127,7 +127,7 @@ class ProductService {
         try {
             const products = await db.Product.findAll(
                 {
-                    attributes: ['id', 'name', 'description', 'available', 'quantity', 'defective', 'sold', 'warranty', 'status'],
+                    attributes: { exclude: ["createdAt", "updatedAt"] },
                     include:[
                         {
                             model: db.Catalogue,
