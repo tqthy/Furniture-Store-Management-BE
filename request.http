@@ -175,10 +175,10 @@ Content-Type: application/json
 
 {
     "InvoiceDetailsData": [
-        {"variantId": 1, "quantity": 3, "cost": 1000},
-        {"variantId": 2, "quantity": 2, "cost": 1000},
-        {"variantId": 1, "quantity": 6, "cost": 1000},
-        {"variantId": 2, "quantity": 2, "cost": 1000}
+        {"variantId": 1, "quantity": 3, "cost": 10000, "discountAmount": 2000, "unitPrice": 8000 },
+        {"variantId": 2, "quantity": 2, "cost": 20000, "discountAmount": 4000, "unitPrice": 16000 },
+        {"variantId": 1, "quantity": 6, "cost": 5000, "discountAmount": 1000, "unitPrice": 3000 },
+        {"variantId": 2, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
     ],
     "totalCost": 10000
 }
@@ -197,10 +197,10 @@ Content-Type: application/json
 
 {
     "InvoiceDetailsData": [
-        {"variantId": 1, "quantity": 5, "cost": 2000},
-        {"variantId": 2, "quantity": 2, "cost": 1000},
-        {"variantId": 1, "quantity": 2, "cost": 4000},
-        {"variantId": 2, "quantity": 7, "cost": 2000}
+        {"variantId": 1, "quantity": 5, "cost": 2000, "discountAmount": 2000, "unitPrice": 1000 },
+        {"variantId": 2, "quantity": 2, "cost": 1000, "discountAmount": 2000, "unitPrice": 1000 },
+        {"variantId": 1, "quantity": 2, "cost": 4000, "discountAmount": 2000, "unitPrice": 1000 },
+        {"variantId": 2, "quantity": 7, "cost": 2000, "discountAmount": 2000, "unitPrice": 1000 }
     ],
     "totalCost": 10000
 }
@@ -469,8 +469,7 @@ Content-Type: application/json
 
 ###
 // Xoá yêu cầu bảo hành
-
-DELETE {{WEb}}/maintainance/warranty/order/:id
+DELETE {{Web}}/maintainance/warranty/order/:id
 
 ###
 // GET RepairOrders by status
