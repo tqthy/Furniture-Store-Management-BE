@@ -54,11 +54,14 @@ class InvoiceService {
                                         model: db.Product
                                     }
                                 ],
-                                attributes: { include: ["warranty"] }
+                                attributes: { exclude: ["createdAt", "updatedAt"] }
                             }
                         ]
                     }
-                ]
+                ],
+                attributes: { exclude: ["createdAt", "updatedAt"] },
+                nest: true,
+                raw: false
             })
             if (!Invoice) {
                 return {
@@ -157,6 +160,10 @@ class InvoiceService {
                             }
                         ],
                         attributes: { exclude: ["createdAt", "updatedAt"] }
+                    },
+                    {
+                        model: db.Customer,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
                     }
                 ],
                 nest: true,
@@ -196,6 +203,10 @@ class InvoiceService {
                                 attributes: { exclude: ["createdAt", "updatedAt"] }
                             },
                         ],
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                    },
+                    {
+                        model: db.Customer,
                         attributes: { exclude: ["createdAt", "updatedAt"] }
                     }
                 ],
