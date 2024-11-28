@@ -43,7 +43,7 @@ class InvoiceController {
                 });
             }
 
-            const newWarranties = await MaintainanceService.createWarranty(warranties);
+            const newWarranties = await MaintainanceService.createWarranties(warranties);
             if (newWarranties.EC === 0) {
                 response.DT.warranties = newWarranties.DT;
             }
