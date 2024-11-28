@@ -143,10 +143,14 @@ class ProductVariantService {
                             model: db.Product,
                             attributes: ['name']
                         },
+                        {
+                            model: db.Inventory,
+                            attributes: ['quantity', 'defective', 'sold', 'available']
+                        }
                     ],
                     attributes: { exclude: ["createdAt", "updatedAt"] },
                     nest: true,
-                    raw: true
+                    raw: false
                 }
             )
             return {
