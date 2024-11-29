@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { DATE } = require('sequelize/lib/data-types');
 module.exports = (sequelize, DataTypes) => {
   class Account extends Model {
     /**
@@ -19,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     password: DataTypes.STRING,
     status: DataTypes.ENUM("active", "inactive"),
+    resetPasswordToken: DataTypes.INTEGER,
+    resetPasswordExpires: DATE,
   }, {
     sequelize,
     modelName: 'Account',
