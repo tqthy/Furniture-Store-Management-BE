@@ -161,12 +161,12 @@ Content-Type: application/json
 //khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
 //khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
 //với 1 là id của hóa đơn
-PUT {{Web}}/goods-receipt/accept-goods-receipt/1
+PUT {{Web}}/goods-receipt/accept-goods-receipt/3
 
 ###
 //từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
 //với 1 là id của hóa đơn
-PUT {{Web}}/goods-receipt/reject-goods-receipt/1
+PUT {{Web}}/goods-receipt/reject-goods-receipt/3
 
 ////////////////////////////////////Invoice////////////////////////////////////
 ###
@@ -312,7 +312,7 @@ Content-Type: application/json
     "idNumber": "0123456789",
     "startDate": "2020-08-30",
     "phone": "0123456789",
-    "email": "nguyenvana@gmail.com",
+    "email": "vuthanhtam12062003@gmail.com",
     "role": 3
 }
 
@@ -346,6 +346,33 @@ Content-Type: application/json
 {
     "username": "SaleStaff0001",
     "password": "SaleStaff0001"
+}
+
+// forgot password
+###
+POST {{Web}}/forgot-password
+Content-Type: application/json
+
+{
+    "email": "vuthanhtam12062003@gmail.com"
+}
+
+###
+POST {{Web}}/verify-forgot-password-token
+Content-Type: application/json
+
+{
+    "token": 7102
+}
+
+###
+POST {{Web}}/reset-password
+Content-Type: application/json
+
+{
+    "token": 7102,
+    "newPassword": "vuthanhtam12062003",
+    "retypeNewPassword": "vuthanhtam12062003"
 }
 
 ////////////////////////////////////Promotion////////////////////////////////////
