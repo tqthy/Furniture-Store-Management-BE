@@ -36,7 +36,8 @@ config.fileRoute(app);
 config.maintainanceRoute(app);
 config.staffRoute(app);
 
-app.use('/order', require('./routes/order'));
+app.use('/order-vnpay', require('./routes/order-vnpay'));
+app.use('/order-momo', require('./routes/order-momo'));
 
 app.use((req, res) => {
     return res.send("404 not found");
