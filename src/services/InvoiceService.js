@@ -388,5 +388,40 @@ class InvoiceService {
             }
         }
     }
+
+    async getPaymentMethodStatistic(fromDate, toDate) {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                nest: true,
+                raw: false
+            })
+            let paymentMethodStatistic = {};
+            Invoices.forEach(Invoice => {
+                if (paymentMethodStatistic[Invoice.paymentMethod]) {
+                    paymentMethodStatistic[Invoice.paymentMethod] += Invoice.totalCost;
+                } else {
+                    paymentMethodStatistic[Invoice.paymentMethod] = Invoice.totalCost;
+                }
+            })
+            return {
+                EM: 'Get payment method statistic successfully',
+                EC: 0,
+                DT: paymentMethodStatistic
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
 }
 module.exports = new InvoiceService();
