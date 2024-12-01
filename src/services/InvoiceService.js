@@ -310,5 +310,44 @@ class InvoiceService {
             }
         }
     }
+
+    async getTotalSoldProduct(fromDate, toDate) {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                include: [
+                    {
+                        model: db.InvoiceDetails,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                    }
+                ],
+                nest: true,
+                raw: false
+            })
+            let totalSoldProduct = 0;
+            Invoices.forEach(Invoice => {
+                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
+                    totalSoldProduct += InvoiceDetail.quantity;
+                })
+            })
+            return {
+                EM: 'Get total sold product successfully',
+                EC: 0,
+                DT: totalSoldProduct
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
 }
 module.exports = new InvoiceService();
