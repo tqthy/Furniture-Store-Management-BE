@@ -1,12 +1,13 @@
 import db from "../models/index";
 class InvoiceService {
-    createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId) => {
+    createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId, paymentMethod) => {
         const t = await db.sequelize.transaction();
         try {
             const invoice = await db.Invoice.create({
             status: "pending",
             totalCost: totalCost,
             staffId: staffId,
+            paymentMethod: paymentMethod,
             customerId: customerId
             }, { transaction: t });
             for (const data of InvoiceDetailsData) {
@@ -234,7 +235,7 @@ class InvoiceService {
         }
     }
 
-    updateInvoice = async(id, InvoiceDetailsData, totalCost, staffId, customerId) => {
+    updateInvoice = async(id, InvoiceDetailsData, totalCost, staffId, customerId, paymentMethod) => {
         try {
             const Invoice = await db.Invoice.findOne({
                 where: {
@@ -251,7 +252,8 @@ class InvoiceService {
             await db.Invoice.update({
                 staffId: staffId,
                 customerId: customerId,
-                totalCost: totalCost
+                totalCost: totalCost,
+                paymentMethod: paymentMethod
             }, {
                 where: {
                     id: id

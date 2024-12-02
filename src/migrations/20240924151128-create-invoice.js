@@ -15,6 +15,9 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('paid', 'canceled', 'pending')
       },
+      paymentMethod: {
+        type: Sequelize.ENUM('Cash', 'QR code')
+      },
       customerId: {
         type: Sequelize.INTEGER
       },
