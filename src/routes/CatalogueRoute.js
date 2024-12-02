@@ -1,5 +1,6 @@
 import CatalogueController from "../controllers/CatalogueController";
 import express from "express";
+import JwtService from "../middleware/JwtService";
 
 const router = express.Router();
 const catalogueRoute = (app) => {

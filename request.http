@@ -1,12 +1,12 @@
 @Web = http://localhost:8080
 @Email=
 @Password=
-@BearerToken=
-
+@BearerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJyb2xlIjozLCJzdGFmZklkIjoxfSwiaWF0IjoxNzMzMTE1OTQ0fQ.gzEMftLNe8qym42VrQ9R2rRbbhEKlFQe_wBth7doAc8
 //Catalogue
 // Tạo catalogue
 POST {{Web}}/catalogues/create-catalogue
 Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
 
 {
     "name": "nội thất nhà bếp"
@@ -347,8 +347,8 @@ POST {{Web}}/login
 Content-Type: application/json
 
 {
-    "username": "SaleStaff0001",
-    "password": "SaleStaff0001"
+    "username": "SaleStaff0002",
+    "password": "vuthanhtam12062003"
 }
 
 // forgot password
@@ -557,11 +557,11 @@ GET {{Web}}/authorization/get-all-permissions
 GET {{Web}}/authorization/permissions-by-role/1
 
 ###
-PUT {{Web}}/authorization/update-permissons/1
+PUT {{Web}}/authorization/update-permissons/3
 Content-Type: application/json
 
 {
-    "permissions": [1, 2, 3, 4, 5]
+    "permissions": []
 }
 
 
