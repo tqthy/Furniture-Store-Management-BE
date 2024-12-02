@@ -365,7 +365,7 @@ POST {{Web}}/verify-forgot-password-token
 Content-Type: application/json
 
 {
-    "token": 7102
+    "token": 188845
 }
 
 ###
@@ -373,7 +373,7 @@ POST {{Web}}/reset-password
 Content-Type: application/json
 
 {
-    "token": 7102,
+    "token": 188845,
     "newPassword": "vuthanhtam12062003",
     "retypeNewPassword": "vuthanhtam12062003"
 }
