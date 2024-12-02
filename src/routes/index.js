@@ -11,6 +11,7 @@ import fileRoute from './FileRoute'
 import authRoute from './AuthRoute'
 import promotionRoute from './PromotionRoute'
 import maintainanceRoute from './MaintainanceRoute'
+import authorizationRoute from './AuthorizationRoute'
 const config = { 
     catalogueRoute,
     productRoute,
@@ -23,6 +24,7 @@ const config = {
     fileRoute,
     authRoute,
     promotionRoute,
-    maintainanceRoute
+    maintainanceRoute,
+    authorizationRoute
 }
 export default config;
