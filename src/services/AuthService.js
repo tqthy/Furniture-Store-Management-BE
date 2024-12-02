@@ -22,7 +22,6 @@ class AuthService {
                     DT: null
                 }
             }
-            console.log(user.roleId);
             const isCorrectPass = SecurityService.checkPassword(password, user.password);
             if (isCorrectPass) {
                 let payload = {};
@@ -90,7 +89,7 @@ class AuthService {
             const token = SecurityService.generateResetPasswordToken();
             await db.Account.update({
                 resetPasswordToken: token,
-                resetPasswordExpires: new Date(Date.now() + parseInt(expires))
+                resetPasswordExpires: new Date(Date.now() + 600000)
             },
             {
                 where: {
