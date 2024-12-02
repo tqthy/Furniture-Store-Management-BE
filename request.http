@@ -547,3 +547,18 @@ Content-Type: application/json
 // Xoá yêu cầu sửa chữa
 
 DELETE {{Web}}/maintainance/repair/order/:id
+
+////////////////////////////////////Authorization////////////////////////////////////
+###
+GET {{Web}}/authorization/get-all-permissions
+
+###
+GET {{Web}}/authorization/permissions-by-role/1
+
+###
+PUT {{Web}}/authorization/update-permissons/1
+Content-Type: application/json
+
+{
+    "permissions": [1, 2, 3, 4, 5]
+}

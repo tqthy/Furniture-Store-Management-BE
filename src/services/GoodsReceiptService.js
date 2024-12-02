@@ -1,4 +1,3 @@
-import { raw } from "body-parser";
 import db from "../models/index";
 
 class GoodsReceiptService {
