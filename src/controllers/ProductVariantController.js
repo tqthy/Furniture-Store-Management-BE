@@ -54,6 +54,7 @@ class ProductVariantController {
     }
 
     getAllProductVariants = async(req, res) => {
+        console.log(req.route.path);
         try {
             const response = await ProductVariantService.getAllProductVariants();
             return res.status(200).json(response);

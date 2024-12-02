@@ -3,8 +3,8 @@ import MaintainanceService from "../services/MaintainanceService";
 
 class InvoiceController {
     createInvoice = async(req, res) => {
-        const { InvoiceDetailsData, totalCost, customerId } = req.body;
-        if (!InvoiceDetailsData || !totalCost) {
+        const { InvoiceDetailsData, totalCost, customerId, paymentMethod } = req.body;
+        if (!InvoiceDetailsData || !totalCost || !paymentMethod) {
             return res.status(200).json({
                 EM: 'Mising invoice details data',
                 EC: 1,
@@ -12,7 +12,7 @@ class InvoiceController {
             });
         }
         try {
-            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, customerId);
+            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, customerId, paymentMethod);
             res.status(200).json(response);
 
         } catch(error) {
@@ -76,8 +76,8 @@ class InvoiceController {
 
     updateInvoice = async(req, res) => {
         const id = req.params.id;
-        const {InvoiceDetailsData, totalCost } = req.body;
-        if (!InvoiceDetailsData || !totalCost) {
+        const {InvoiceDetailsData, totalCost, paymentMethod, customerId } = req.body;
+        if (!InvoiceDetailsData || !totalCost || !paymentMethod) {
             return res.status(200).json({
                 EM: 'Missing invoice details data',
                 EC: 1,
@@ -85,7 +85,7 @@ class InvoiceController {
             });
         }
         try {
-            const response = await InvoiceService.updateInvoice(id, InvoiceDetailsData, totalCost, null, null);
+            const response = await InvoiceService.updateInvoice(id, InvoiceDetailsData, totalCost, null, customerId, paymentMethod);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });
