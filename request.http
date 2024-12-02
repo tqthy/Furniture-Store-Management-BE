@@ -544,3 +544,7 @@ Content-Type: application/json
 // Xoá yêu cầu sửa chữa
 
 DELETE {{Web}}/maintainance/repair/order/:id
+
+// GET general dashboard
+
+GET {{Web}}/report/general?fromDate=2024-01-01&toDate=2024-12-24

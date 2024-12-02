@@ -311,7 +311,7 @@ class InvoiceService {
         }
     }
 
-    async getTotalSoldProduct(fromDate, toDate) {
+    getTotalSoldProduct = async (fromDate, toDate) => {
         try {
             const Invoices = await db.Invoice.findAll({
                 where: {
@@ -350,7 +350,7 @@ class InvoiceService {
         }
     }
 
-    async getTotalRevenue(fromDate, toDate) {
+    getTotalRevenue = async (fromDate, toDate) => {
         try {
             const Invoices = await db.Invoice.findAll({
                 where: {
@@ -389,7 +389,7 @@ class InvoiceService {
         }
     }
 
-    async getPaymentMethodStatistic(fromDate, toDate) {
+    getPaymentMethodStatistic = async(fromDate, toDate) => {
         try {
             const Invoices = await db.Invoice.findAll({
                 where: {

@@ -35,6 +35,7 @@ config.promotionRoute(app);
 config.fileRoute(app);
 config.maintainanceRoute(app);
 config.staffRoute(app);
+config.reportRoute(app);
 
 app.use((req, res) => {
     return res.send("404 not found");
