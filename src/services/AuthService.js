@@ -22,6 +22,7 @@ class AuthService {
                     DT: null
                 }
             }
+            console.log(user.roleId);
             const isCorrectPass = SecurityService.checkPassword(password, user.password);
             if (isCorrectPass) {
                 let payload = {};
@@ -35,14 +36,14 @@ class AuthService {
                     })
                     payload = {
                         id: user.id,
-                        role: user.role,
+                        role: user.roleId,
                         staffId: staff.id
                     }
                 }
                 else {
                     payload = {
                         id: user.id,
-                        role: user.role,
+                        role: user.roleId,
                     }
                 }
                 let token = JwtService.createJwt(payload);
@@ -51,7 +52,8 @@ class AuthService {
                     EC: 0,
                     DT: {
                         token: token,
-                        staff
+                        staff,
+                        role: user.roleId
                     }
                 }
             }

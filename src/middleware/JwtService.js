@@ -17,17 +17,6 @@ class JwtService {
         return token;
     }
 
-    verifyToken = (token) => {
-        let key = process.env.JWT_SECRET;
-        let decoded = null;
-        try {
-            decoded = jwt.verify(token, key);
-        } catch (e) {
-            console.log(e);
-        }
-        return decoded;
-    }
-
     checkUserJwt = (req, res, next) => {
         const route = `${req.baseUrl}${req.route.path}`;
         req.route = route;
@@ -58,28 +47,20 @@ class JwtService {
         }
     };
 
-    extractToken = (req) => {
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.split(" ")[0] === "Bearer"
-        ) {
-            return req.headers.authorization.split(" ")[1];
-        }
-        return null;
-    };
-
     checkUserPermission = async(req, res, next) => {
         if (req.user) {
             const route = req.route;
             const permmision = await db.Permission.findOne({
                 include:[
                     {
-                        Model: db.RolePermission,
+                        model: db.RolePermission,
                         where: {
-                            roleId: req.user.roleId,
+                            roleId: req.user.role,
                         }
-                    }
+                    },
                 ],
+                raw: true,
+                nest: true,
                 where: {
                     url: route,
                     method: req.method,
@@ -92,7 +73,7 @@ class JwtService {
                     DT: "",
                 });
             }
-            return next();
+            next();
         } else {
             return res.status(200).json({
                 EM: "Not authenticated user",
@@ -101,5 +82,26 @@ class JwtService {
             });
         }
     };
+}
+
+const extractToken = (req) => {
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.split(" ")[0] === "Bearer"
+    ) {
+        return req.headers.authorization.split(" ")[1];
+    }
+    return null;
+};
+
+const verifyToken = (token) => {
+    let key = process.env.JWT_SECRET;
+    let decoded = null;
+    try {
+        decoded = jwt.verify(token, key);
+    } catch (e) {
+        console.log(e);
+    }
+    return decoded;
 }
 module.exports = new JwtService();
