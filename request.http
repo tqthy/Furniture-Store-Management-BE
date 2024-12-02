@@ -548,6 +548,7 @@ Content-Type: application/json
 
 DELETE {{Web}}/maintainance/repair/order/:id
 
+
 ////////////////////////////////////Authorization////////////////////////////////////
 ###
 GET {{Web}}/authorization/get-all-permissions
@@ -562,3 +563,8 @@ Content-Type: application/json
 {
     "permissions": [1, 2, 3, 4, 5]
 }
+
+
+// GET general dashboard
+
+GET {{Web}}/report/general?fromDate=2024-01-01&toDate=2024-12-24

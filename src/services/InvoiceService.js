@@ -312,5 +312,118 @@ class InvoiceService {
             }
         }
     }
+
+    getTotalSoldProduct = async (fromDate, toDate) => {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                include: [
+                    {
+                        model: db.InvoiceDetails,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                    }
+                ],
+                nest: true,
+                raw: false
+            })
+            let totalSoldProduct = 0;
+            Invoices.forEach(Invoice => {
+                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
+                    totalSoldProduct += InvoiceDetail.quantity;
+                })
+            })
+            return {
+                EM: 'Get total sold product successfully',
+                EC: 0,
+                DT: totalSoldProduct
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getTotalRevenue = async (fromDate, toDate) => {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                include: [
+                    {
+                        model: db.InvoiceDetails,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                    }
+                ],
+                nest: true,
+                raw: false
+            })
+            let totalRevenue = 0;
+            Invoices.forEach(Invoice => {
+                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
+                    totalRevenue += InvoiceDetail.totalCost;
+                })
+            })
+            return {
+                EM: 'Get total revenue successfully',
+                EC: 0,
+                DT: totalRevenue
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getPaymentMethodStatistic = async(fromDate, toDate) => {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                nest: true,
+                raw: false
+            })
+            let paymentMethodStatistic = {};
+            Invoices.forEach(Invoice => {
+                if (paymentMethodStatistic[Invoice.paymentMethod]) {
+                    paymentMethodStatistic[Invoice.paymentMethod] += Invoice.totalCost;
+                } else {
+                    paymentMethodStatistic[Invoice.paymentMethod] = Invoice.totalCost;
+                }
+            })
+            return {
+                EM: 'Get payment method statistic successfully',
+                EC: 0,
+                DT: paymentMethodStatistic
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
 }
 module.exports = new InvoiceService();

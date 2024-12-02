@@ -296,5 +296,30 @@ class GoodsReceiptService {
             }
         }
     }
+
+    async getTotalImportCost(fromDate, toDate) {
+        try {
+            const totalCost = await db.GoodsReceipt.sum('totalCost', {
+                where: {
+                    status: 'accepted',
+                    receiptDate: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                }
+            }) || 0;
+            return {
+                EM: 'Get total import cost successfully',
+                EC: 0,
+                DT: totalCost
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
 }
 module.exports = new GoodsReceiptService();

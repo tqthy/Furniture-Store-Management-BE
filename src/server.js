@@ -35,6 +35,7 @@ config.promotionRoute(app);
 config.fileRoute(app);
 config.maintainanceRoute(app);
 config.staffRoute(app);
+config.reportRoute(app);
 config.authorizationRoute(app);
 
 app.use((req, res) => {
