@@ -150,7 +150,7 @@ class PromotionService {
     }
   }
 
-  getPromotionByDate = async (date) => {
+  getPromotionAndProductByDate = async (date) => {
     try {
       // include with promotion products
       const promotion = await db.Promotion.findOne({
@@ -168,7 +168,42 @@ class PromotionService {
       });
 
       return {
-        EM: 'Get promotion by date promotion successfully',
+        EM: 'Get promotion and products by date successfully',
+        EC: 0,
+        DT: promotion
+      }
+    } catch (error) {
+      return {
+        EM: error.message,
+        EC: 1,
+        DT: ''
+      };
+    }
+  }
+
+  getPromotionByDate = async (date) => {
+    try {
+      const promotion = await db.Promotion.findOne({
+        where: {
+          startDate: {
+            [db.Sequelize.Op.lte]: date
+          },
+          finishDate: {
+            [db.Sequelize.Op.gte]: date
+          }
+        }
+      });
+
+      if (!promotion) {
+        return {
+          EM: 'Promotion not found',
+          EC: 1,
+          DT: ''
+        };
+      }
+
+      return {
+        EM: 'Get promotion by date successfully',
         EC: 0,
         DT: promotion
       }
