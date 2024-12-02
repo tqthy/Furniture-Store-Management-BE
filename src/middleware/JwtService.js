@@ -34,14 +34,14 @@ class JwtService {
             } else {
                 return res.status(200).json({
                     EM: "Not authenticated user",
-                    EC: 1,
+                    EC: 2,
                     DT: "",
                 });
             }
         } else {
             return res.status(200).json({
                 EM: "Not authenticated user",
-                EC: 1,
+                EC: 2,
                 DT: "",
             });
         }
@@ -69,7 +69,7 @@ class JwtService {
             if (!permmision) {
                 return res.status(200).json({
                     EM: "you have no permission to do this",
-                    EC: 1,
+                    EC: 2,
                     DT: "",
                 });
             }
@@ -77,7 +77,7 @@ class JwtService {
         } else {
             return res.status(200).json({
                 EM: "Not authenticated user",
-                EC: 1,
+                EC: 2,
                 DT: "",
             });
         }
