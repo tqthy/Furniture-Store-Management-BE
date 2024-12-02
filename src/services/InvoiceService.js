@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import db from "../models/index";
 class InvoiceService {
     createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId) => {
@@ -413,6 +414,39 @@ class InvoiceService {
                 EM: 'Get payment method statistic successfully',
                 EC: 0,
                 DT: paymentMethodStatistic
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getTotalQuantitySoldAndRevenueByPromotion = async(promotionId) => {
+        try {
+            const InvoiceDetails = await db.InvoiceDetails.findAll({
+                where: {
+                    promotionId: promotionId
+                }
+            });
+            let totalQuantitySold = 0;
+            let totalRevenue = 0;
+
+            InvoiceDetails.forEach(InvoiceDetail => {
+                totalQuantitySold += InvoiceDetail.quantity;
+                totalRevenue += InvoiceDetail.cost;
+            });
+
+            return {
+                EM: 'Get total quantity sold and revenue by promotion successfully',
+                EC: 0,
+                DT: {
+                    totalQuantitySold: totalQuantitySold,
+                    totalRevenue: totalRevenue
+                }
             }
         } catch (error) {
             console.error(error);
