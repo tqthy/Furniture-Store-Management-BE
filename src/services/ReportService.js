@@ -5,7 +5,7 @@ class ReportService {
         try {
 
             const report = await db.sequelize.query(
-              `SELECT PV.id productVariantId, PV.SKU SKU, PV.importPrice importPrice  , SUM(InvoiceDetails.quantity) sumQuantity, SUM(InvoiceDetails.cost) sumCost
+              `SELECT PV.id productVariantId, PV.SKU SKU, PV.importPrice importPrice, SUM(InvoiceDetails.quantity) sumQuantity, SUM(InvoiceDetails.cost) sumCost
               FROM ProductVariant PV
               LEFT JOIN InvoiceDetails ON ProductVariant.id = InvoiceDetails.variantId
               LEFT JOIN Invoice ON InvoiceDetails.invoiceId = Invoice.id
@@ -41,7 +41,7 @@ class ReportService {
               `SELECT Staff.id staffId, 
                 Staff.fullname staffName, 
                 COUNT(Invoice.id) countInvoice, 
-                SUM(Invoice.total) sumTotal,
+                SUM(Invoice.totalCost) sumTotal,
                 SUM(InvoiceDetails.quantity) sumQuantity
                 FROM Staff
                 LEFT JOIN Invoice ON Staff.id = Invoice.staffId
