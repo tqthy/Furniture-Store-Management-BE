@@ -41,13 +41,14 @@ class AuthorizationService {
                     ],
                     raw: false,
                     nest: true,
-                    attributes: ['id', 'name']
+                    attributes: ['id']
                 }
             );
+            const permissionIds = rolePermissions.map(item => item.id);
             return {
                 EM: "Get role permissions successfully",
                 EC: 0,
-                DT: rolePermissions
+                DT: permissionIds
             }
         } catch(error) {
             return {

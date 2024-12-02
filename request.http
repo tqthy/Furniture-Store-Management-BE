@@ -554,14 +554,14 @@ DELETE {{Web}}/maintainance/repair/order/:id
 GET {{Web}}/authorization/get-all-permissions
 
 ###
-GET {{Web}}/authorization/permissions-by-role/1
+GET {{Web}}/authorization/permissions-by-role/3
 
 ###
 PUT {{Web}}/authorization/update-permissons/3
 Content-Type: application/json
 
 {
-    "permissions": []
+    "permissions": [1,2,3,4]
 }
 
 
