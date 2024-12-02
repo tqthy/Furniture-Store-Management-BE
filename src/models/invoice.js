@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   Invoice.init({
     totalCost: DataTypes.DECIMAL(20,2),
     status: DataTypes.ENUM('paid', 'canceled','pending'),
+    paymentMethod: DataTypes.ENUM('Cash', 'QR code'),
   }, {
     sequelize,
     modelName: 'Invoice',

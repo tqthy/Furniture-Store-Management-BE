@@ -1,6 +1,6 @@
 
 import jwt from "jsonwebtoken";
-import { toNamespacedPath } from "path";
+import db from "../models";
 require("dotenv").config();
 
 const nonSecuredPath = ["/login", "/logout"];
@@ -29,7 +29,8 @@ class JwtService {
     }
 
     checkUserJwt = (req, res, next) => {
-        if (nonSecuredPath.includes(req.path)) return next();
+        const route = `${req.baseUrl}${req.route.path}`;
+        req.route = route;
         let cookies = req.cookies;
         const tokenFromHeader = extractToken(req);
         if ((cookies && cookies.jwt) || tokenFromHeader) {
@@ -67,23 +68,35 @@ class JwtService {
         return null;
     };
 
-    checkUserPermission = (req, res, next) => {
+    checkUserPermission = async(req, res, next) => {
         if (req.user) {
-            let role = req.user.role;
-            let currentUrl = req.route.path;
-            console.log(currentUrl);
-            if (!role || role.length === 0) {
-                return res.status(401).json({
+            const route = req.route;
+            const permmision = await db.Permission.findOne({
+                include:[
+                    {
+                        Model: db.RolePermission,
+                        where: {
+                            roleId: req.user.roleId,
+                        }
+                    }
+                ],
+                where: {
+                    url: route,
+                    method: req.method,
+                }
+            });
+            if (!permmision) {
+                return res.status(200).json({
                     EM: "you have no permission to do this",
-                    EC: -1,
+                    EC: 1,
                     DT: "",
                 });
             }
             return next();
         } else {
-            return res.status(401).json({
+            return res.status(200).json({
                 EM: "Not authenticated user",
-                EC: -1,
+                EC: 1,
                 DT: "",
             });
         }

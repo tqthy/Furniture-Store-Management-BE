@@ -100,7 +100,7 @@ GET {{Web}}/variants/get-all-variants/1
 
 ###
 //lấy danh sách variant
-GET {{Web}}/variants
+GET {{Web}}/variants/
 
 ###
 //chi tiết của 1 product variant
@@ -170,6 +170,7 @@ PUT {{Web}}/goods-receipt/reject-goods-receipt/3
 
 ////////////////////////////////////Invoice////////////////////////////////////
 ###
+// "paymentMethod": "QR code" or "paymentMethod": "Cash"
 POST {{Web}}/invoices/create-invoice
 Content-Type: application/json
 
@@ -181,6 +182,7 @@ Content-Type: application/json
         {"variantId": 2, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
     ],
     "totalCost": 10000,
+    "paymentMethod": "Cash",
     "customerId": 1
 }
 
@@ -189,11 +191,11 @@ Content-Type: application/json
 GET {{Web}}/invoices/get-all-invoices
 
 ###
-GET  {{Web}}/invoices/get-invoice/5
+GET  {{Web}}/invoices/get-invoice/7
 
 ###
 //sửa hóa đơn thanh toán
-PUT {{Web}}/invoices/update-invoice/2
+PUT {{Web}}/invoices/update-invoice/6
 Content-Type: application/json
 
 {
@@ -203,6 +205,7 @@ Content-Type: application/json
         {"variantId": 1, "quantity": 2, "cost": 4000, "discountAmount": 2000, "unitPrice": 1000 },
         {"variantId": 2, "quantity": 7, "cost": 2000, "discountAmount": 2000, "unitPrice": 1000 }
     ],
+    "paymentMethod": "Cash",
     "totalCost": 10000
 }
 
@@ -544,6 +547,23 @@ Content-Type: application/json
 // Xoá yêu cầu sửa chữa
 
 DELETE {{Web}}/maintainance/repair/order/:id
+
+
+////////////////////////////////////Authorization////////////////////////////////////
+###
+GET {{Web}}/authorization/get-all-permissions
+
+###
+GET {{Web}}/authorization/permissions-by-role/1
+
+###
+PUT {{Web}}/authorization/update-permissons/1
+Content-Type: application/json
+
+{
+    "permissions": [1, 2, 3, 4, 5]
+}
+
 
 // GET general dashboard
 
