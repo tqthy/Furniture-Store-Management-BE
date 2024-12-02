@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       resetPasswordExpires: {
-        type: Sequelize.DATETIME
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
