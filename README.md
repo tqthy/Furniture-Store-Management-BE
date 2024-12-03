@@ -25,7 +25,9 @@ A project to develop the backend of a Furniture Store Management System using **
 - **Database**: PostgreSQL
 - **Authentication**: JWT (JSON Web Token)
 - **Storage**: AWS S3
-
+- **Deployment**: Docker + AWS EC2
+- **CI/CD**: GitHub Actions
+- **Unit testing**: Jest
 ---
 
 ## 📌 Future Enhancements
