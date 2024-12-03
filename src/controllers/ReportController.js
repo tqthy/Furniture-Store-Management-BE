@@ -29,10 +29,20 @@ class ReportController {
           result.currentPromotion = values[4].DT;
         });
 
-        const totalQuantitySoldAndRevenueByPromotion = await InvoiceService.getTotalQuantitySoldAndRevenueByPromotion(result.currentPromotion.id);
-        result.currentPromotion.totalQuantitySold = totalQuantitySoldAndRevenueByPromotion.DT.totalQuantitySold;
-        result.currentPromotion.totalRevenue = totalQuantitySoldAndRevenueByPromotion.DT.totalRevenue;
+        if (!result.currentPromotion) {
+          result.currentPromotion = {
+            id: null,
+            name: 'There is no promotion happening at this time',
+            totalQuantitySold: 0,
+            totalRevenue: 0,
+          }
+        } else {
+          const totalQuantitySoldAndRevenueByPromotion = await InvoiceService.getTotalQuantitySoldAndRevenueByPromotion(result.currentPromotion.id);
+          result.currentPromotion.totalQuantitySold = totalQuantitySoldAndRevenueByPromotion.DT.totalQuantitySold;
+          result.currentPromotion.totalRevenue = totalQuantitySoldAndRevenueByPromotion.DT.totalRevenue;
+        }
 
+        
 
         return res.status(200).json({
           EC: 0,
