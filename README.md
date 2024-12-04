@@ -39,7 +39,7 @@ A project to develop the backend of a Furniture Store Management System using **
 ## 👨‍💻 Authors
 
 - 22521461 - Trần Quỳnh Thy - [GitHub](https://github.com/tqthy)
-- 2252xxxx - Vũ Thành Tâm - [GitHub]()
+- 22521295 - Vũ Thành Tâm - [GitHub](https://github.com/Tam-Vu)
 
 ## 📝 License
 
