@@ -566,5 +566,5 @@ Content-Type: application/json
 
 
 // GET general dashboard
-
+###
 GET {{Web}}/report/general?fromDate=2024-01-01&toDate=2024-12-24
