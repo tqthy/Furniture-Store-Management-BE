@@ -12,16 +12,16 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        name: 'SaleStaff',
+        name: 'Sale Staff',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: 'InventoryStaff',
+        name: 'Inventory Staff',
         createdAt: new Date(),
         updatedAt: new Date(),
       },      {
-        name: 'RepairStaff',
+        name: 'Repair Staff',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
