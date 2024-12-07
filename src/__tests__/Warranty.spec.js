@@ -1,5 +1,5 @@
-const MaintainanceService = require('../services/MaintainanceService'); // Adjust path
-const MaintainanceController = require('../controllers/MaintainanceController'); // Adjust path
+const MaintainanceService = require('../services/MaintainanceService'); 
+const MaintainanceController = require('../controllers/MaintainanceController'); 
 
 jest.mock('../services/MaintainanceService');
 

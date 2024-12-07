@@ -1,5 +1,5 @@
-const db = require('../models'); // Adjust the path to your db models
-const service = require('../services/InvoiceService'); // Adjust the path to your service
+const db = require('../models'); 
+const service = require('../services/InvoiceService'); 
 
 jest.mock('../models', () => ({
   sequelize: {
