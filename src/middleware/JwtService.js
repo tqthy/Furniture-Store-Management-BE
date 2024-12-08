@@ -3,14 +3,13 @@ import jwt from "jsonwebtoken";
 import db from "../models";
 require("dotenv").config();
 
-const nonSecuredPath = ["/login", "/logout"];
 class JwtService {
 
     createJwt = (payload) => {
         let key = process.env.JWT_SECRET;
         let token = null;
         try {
-            token = jwt.sign({ payload }, key);
+            token = jwt.sign({ payload }, key, { expiresIn: '30d' });
         } catch (e) {
             console.log(e);
         }
@@ -18,14 +17,14 @@ class JwtService {
     }
 
     checkUserJwt = (req, res, next) => {
-        const route = `${req.baseUrl}${req.route.path}`;
-        req.route = route;
         let cookies = req.cookies;
         const tokenFromHeader = extractToken(req);
         if ((cookies && cookies.jwt) || tokenFromHeader) {
             let token = cookies && cookies.jwt ? cookies.jwt : tokenFromHeader;
             let decoded = verifyToken(token);
             if (decoded) {
+                const route = `${req.baseUrl}${req.route.path}`;
+                req.route = route;
                 //lấy user hiện tại: dùng req.user
                 req.user = decoded.payload;
                 //lấy token hiện tại: dùng req.token
