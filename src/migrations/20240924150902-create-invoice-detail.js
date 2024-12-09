@@ -13,13 +13,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cost: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       unitPrice: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       discountAmount: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       promotionId: {
         type: Sequelize.INTEGER
