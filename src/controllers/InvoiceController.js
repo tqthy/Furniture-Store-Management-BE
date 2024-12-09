@@ -3,8 +3,8 @@ import MaintainanceService from "../services/MaintainanceService";
 
 class InvoiceController {
     createInvoice = async(req, res) => {
-        const { InvoiceDetailsData, totalCost, customerId, paymentMethod } = req.body;
-        if (!InvoiceDetailsData || !totalCost || !paymentMethod) {
+        const { InvoiceDetailsData, totalCost, customerId } = req.body;
+        if (!InvoiceDetailsData || !totalCost) {
             return res.status(200).json({
                 EM: 'Mising invoice details data',
                 EC: 1,
@@ -12,7 +12,7 @@ class InvoiceController {
             });
         }
         try {
-            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, customerId, paymentMethod);
+            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, customerId);
             res.status(200).json(response);
 
         } catch(error) {
@@ -22,8 +22,9 @@ class InvoiceController {
     
     acceptInvoice = async(req, res) => {
         const id  = req.params.id;
+        const {paymentMethod } = req.body;
         try {
-            const response = await InvoiceService.acceptInvoice(id);
+            const response = await InvoiceService.acceptInvoice(id, paymentMethod);
             if (response.EC === 1) {
                 throw new Error(response.EM);
             }
