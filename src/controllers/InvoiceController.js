@@ -78,7 +78,7 @@ class InvoiceController {
     updateInvoice = async(req, res) => {
         const id = req.params.id;
         const {InvoiceDetailsData, totalCost, paymentMethod, customerId } = req.body;
-        if (!InvoiceDetailsData || !totalCost || !paymentMethod) {
+        if (!InvoiceDetailsData || !totalCost) {
             return res.status(200).json({
                 EM: 'Missing invoice details data',
                 EC: 1,
