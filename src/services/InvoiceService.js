@@ -1,14 +1,14 @@
 import { where } from "sequelize";
 import db from "../models/index";
 class InvoiceService {
-    createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId, paymentMethod) => {
+    createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId) => {
         const t = await db.sequelize.transaction();
         try {
             const invoice = await db.Invoice.create({
             status: "pending",
             totalCost: totalCost,
             staffId: staffId,
-            paymentMethod: paymentMethod,
+            paymentMethod: null,
             customerId: customerId
             }, { transaction: t });
             for (const data of InvoiceDetailsData) {
@@ -38,31 +38,14 @@ class InvoiceService {
         }
     }
 
-    acceptInvoice = async(id) => {
+    acceptInvoice = async(id, paymentMethod) => {
         try {
             const Invoice = await db.Invoice.findOne({
                 where: {
                     id: id
                 },
-                include: [
-                    {
-                        model: db.InvoiceDetails,
-                        attributes: { exclude: ["createdAt", "updatedAt"] },
-                        include: [
-                            {
-                                model: db.ProductVariant,
-                                include: [
-                                    {
-                                        model: db.Product
-                                    }
-                                ],
-                                attributes: { exclude: ["createdAt", "updatedAt"] }
-                            }
-                        ]
-                    }
-                ],
                 attributes: { exclude: ["createdAt", "updatedAt"] },
-                nest: true,
+                nest: false,
                 raw: false
             })
             if (!Invoice) {
@@ -80,17 +63,46 @@ class InvoiceService {
                 }
             }
             await db.Invoice.update({
-                status: 'paid'
+                status: 'paid',
+                paymentMethod: paymentMethod
             }, {
                 where: {
                     id: id,
                 }
             })
-            Invoice.status = 'paid';
+
+            const result = await db.Invoice.findOne(
+                {
+                    where: {
+                        id: id
+                    },
+                    include: [
+                        {
+                            model: db.InvoiceDetails,
+                            attributes: { exclude: ["createdAt", "updatedAt"] },
+                            include: [
+                                {
+                                    model: db.ProductVariant,
+                                    include: [
+                                        {
+                                            model: db.Product
+                                        }
+                                    ],
+                                    attributes: { exclude: ["createdAt", "updatedAt"] }
+                                }
+                            ]
+                        }
+                    ],
+                    attributes: { exclude: ["createdAt", "updatedAt"] },
+                    nest: true,
+                    raw: false
+                },
+            )
+
             return {
                 EM: 'Accept invoice successfully',
                 EC: 0,
-                DT: Invoice
+                DT: result
             }
         } catch (error) {
             return {
@@ -236,7 +248,7 @@ class InvoiceService {
         }
     }
 
-    updateInvoice = async(id, InvoiceDetailsData, totalCost, staffId, customerId, paymentMethod) => {
+    updateInvoice = async(id, InvoiceDetailsData, totalCost, staffId, customerId) => {
         try {
             const Invoice = await db.Invoice.findOne({
                 where: {
@@ -254,7 +266,7 @@ class InvoiceService {
                 staffId: staffId,
                 customerId: customerId,
                 totalCost: totalCost,
-                paymentMethod: paymentMethod
+                paymentMethod: null
             }, {
                 where: {
                     id: id

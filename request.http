@@ -68,7 +68,7 @@ GET {{Web}}/products/get-all-products
 ###
 //tạo variant cho product
 //với 1 là productId
-POST {{Web}}/variants/create-variant/1
+POST {{Web}}/variants/create-variant/2
 Content-Type: application/json
 
 {
@@ -170,19 +170,17 @@ PUT {{Web}}/goods-receipt/reject-goods-receipt/3
 
 ////////////////////////////////////Invoice////////////////////////////////////
 ###
-// "paymentMethod": "QR code" or "paymentMethod": "Cash"
 POST {{Web}}/invoices/create-invoice
 Content-Type: application/json
 
 {
     "InvoiceDetailsData": [
-        {"variantId": 1, "quantity": 3, "cost": 10000, "discountAmount": 2000, "unitPrice": 8000 },
-        {"variantId": 2, "quantity": 2, "cost": 20000, "discountAmount": 4000, "unitPrice": 16000 },
-        {"variantId": 1, "quantity": 6, "cost": 5000, "discountAmount": 1000, "unitPrice": 3000 },
-        {"variantId": 2, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
+        {"variantId": 3, "quantity": 3, "cost": 10000, "discountAmount": 2000, "unitPrice": 8000 },
+        {"variantId": 3, "quantity": 2, "cost": 20000, "discountAmount": 4000, "unitPrice": 16000 },
+        {"variantId": 3, "quantity": 6, "cost": 5000, "discountAmount": 1000, "unitPrice": 3000 },
+        {"variantId": 3, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
     ],
     "totalCost": 10000,
-    "paymentMethod": "Cash",
     "customerId": 1
 }
 
@@ -215,7 +213,13 @@ Content-Type: application/json
 //khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
 //khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
 //với 1 là id của hóa đơn
+// "paymentMethod": "QR code" or "paymentMethod": "Cash"
 PUT {{Web}}/invoices/accept-invoice/5
+Content-Type: application/json
+
+{
+    "paymentMethod": "Cash"
+}
 
 ###
 //từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
