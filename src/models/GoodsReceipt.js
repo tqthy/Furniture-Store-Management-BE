@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   GoodsReceipt.init({
     receiptDate: DataTypes.DATEONLY,
-    totalCost: DataTypes.DECIMAL(20,2),
-    shipping: DataTypes.DECIMAL(20,2),
+    totalCost: DataTypes.INTEGER,
+    shipping: DataTypes.INTEGER,
     status: DataTypes.ENUM('accepted', 'rejected','pending'),
   }, {
     sequelize,

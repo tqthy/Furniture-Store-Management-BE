@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       totalCost: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       status: {
         type: Sequelize.ENUM('paid', 'canceled', 'pending')

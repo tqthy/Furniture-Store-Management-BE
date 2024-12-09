@@ -351,8 +351,8 @@ POST {{Web}}/login
 Content-Type: application/json
 
 {
-    "username": "SaleStaff0003",
-    "password": "SaleStaff0003"
+    "username": "Manager",
+    "password": "Manager"
 }
 
 // forgot password

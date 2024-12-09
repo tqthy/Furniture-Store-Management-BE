@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cost: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       goodsReceiptId: {
         type: Sequelize.INTEGER
