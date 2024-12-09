@@ -4,6 +4,7 @@ import Connection from "./config/connectDB";
 import express from "express";
 import bodyParser from "body-parser";
 import config from "./routes/index";
+import seddData from "./config/initializerDb";
 // import catalogueRoute from "./routes/CatalogueRoute";
 // import { checkUserJwt } from "./middlewares/jwtService";
 require("dotenv").config();
@@ -21,6 +22,7 @@ app.use(
 );
 
 Connection();
+seddData.seedAccount();
 // use middleware
 // import path here
 config.authRoute(app);
