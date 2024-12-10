@@ -1,7 +1,7 @@
 @Web = http://localhost:8080
 @Email=
 @Password=
-@BearerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJyb2xlIjozLCJzdGFmZklkIjoxfSwiaWF0IjoxNzMzMTE1OTQ0fQ.gzEMftLNe8qym42VrQ9R2rRbbhEKlFQe_wBth7doAc8
+@BearerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoyLCJyb2xlIjoxfSwiaWF0IjoxNzMzNzUyODYyLCJleHAiOjE3MzYzNDQ4NjJ9.t_75f5forLunfVZuEtt2XjaYL8aoTbm1mCN0jeO20lM
 //Catalogue
 // Tạo catalogue
 POST {{Web}}/catalogues/create-catalogue
@@ -15,6 +15,7 @@ Authorization: Bearer {{BearerToken}}
 ###
 // Lấy danh sách catalogue
 GET {{Web}}/catalogues/get-all-catalogues
+Authorization: Bearer {{BearerToken}}
 
 
 ###
@@ -310,6 +311,7 @@ DELETE {{Web}}/customers/delete-customer/1
 //thêm nhân viên
 ###
 POST {{Web}}/staffs/create-staff
+Authorization: Bearer {{BearerToken}}
 Content-Type: application/json
 
 {
@@ -319,7 +321,7 @@ Content-Type: application/json
     "idNumber": "0123456789",
     "startDate": "2020-08-30",
     "phone": "0123456789",
-    "email": "vuthanhtam12062003@gmail.com",
+    "email": "vuthanhtam12062002@gmail.com",
     "role": 3
 }
 
@@ -351,8 +353,8 @@ POST {{Web}}/login
 Content-Type: application/json
 
 {
-    "username": "Manager",
-    "password": "Manager"
+    "username": "Admin",
+    "password": "Admin"
 }
 
 // forgot password
@@ -561,11 +563,11 @@ GET {{Web}}/authorization/get-all-permissions
 GET {{Web}}/authorization/permissions-by-role/3
 
 ###
-PUT {{Web}}/authorization/update-permissons/3
+PUT {{Web}}/authorization/update-permissons/1
 Content-Type: application/json
 
 {
-    "permissions": [1,2,3,4]
+    "permissions": [1,2,3,4,5,6,7,8,57]
 }
 
 

@@ -5,11 +5,11 @@ import JwtService from "../middleware/JwtService";
 const router = express.Router();
 const ProductVariantRoute = (app) => {
     router.post('/create-variant/:productId', ProductVariantController.createProductVariant);
-    router.put('/update-variant/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductVariantController.updateProductVariant);
-    router.delete('/delete-variant/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductVariantController.deleteProductVariant);
-    router.get('/get-all-variants/:productId', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductVariantController.getAllProductVariantsByProductId);
-    router.get('/get-variant/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductVariantController.getProductVariantById);
-    router.get('/', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductVariantController.getAllProductVariants)
+    router.put('/update-variant/:id', ProductVariantController.updateProductVariant);
+    router.delete('/delete-variant/:id', ProductVariantController.deleteProductVariant);
+    router.get('/get-all-variants/:productId', ProductVariantController.getAllProductVariantsByProductId);
+    router.get('/get-variant/:id', ProductVariantController.getProductVariantById);
+    router.get('/', ProductVariantController.getAllProductVariants)
     return app.use('/variants', router);
 }
 

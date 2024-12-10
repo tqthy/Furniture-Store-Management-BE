@@ -19,6 +19,8 @@ class JwtService {
     checkUserJwt = (req, res, next) => {
         let cookies = req.cookies;
         const tokenFromHeader = extractToken(req);
+        console.log(tokenFromHeader);
+        console.log(cookies);
         if ((cookies && cookies.jwt) || tokenFromHeader) {
             let token = cookies && cookies.jwt ? cookies.jwt : tokenFromHeader;
             let decoded = verifyToken(token);
@@ -49,6 +51,7 @@ class JwtService {
     checkUserPermission = async(req, res, next) => {
         if (req.user) {
             const route = req.route;
+            console.log(route);
             const permmision = await db.Permission.findOne({
                 include:[
                     {
@@ -65,6 +68,7 @@ class JwtService {
                     method: req.method,
                 }
             });
+            console.log(permmision);
             if (!permmision) {
                 return res.status(200).json({
                     EM: "you have no permission to do this",

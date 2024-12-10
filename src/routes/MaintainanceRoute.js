@@ -3,19 +3,19 @@ import express from "express";
 import JwtService from "../middleware/JwtService";
 const router = express.Router();
 const maintainanceRoute = (app) => {
-    router.get('/warranty', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.getAllWarranties);
-    router.get('/warranty/order/:warrantyId', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.getWarrantyOrderByWarrantyId);
-    router.get('/warranty/order/status/:status', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.getWarrantyOrderByStatus);
-    router.get('/warranty/order/', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.getAllWarrantyOrders);
-    router.post('/warranty/order/', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.createWarrantyOrder);
-    router.patch('/warranty/order/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.updateWarrantyOrder);
-    router.delete('/warranty/order/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.deleteWarrantyOrder);
+    router.get('/warranty', MaintainanceController.getAllWarranties);
+    router.get('/warranty/order/:warrantyId', MaintainanceController.getWarrantyOrderByWarrantyId);
+    router.get('/warranty/order/status/:status', MaintainanceController.getWarrantyOrderByStatus);
+    router.get('/warranty/order/', MaintainanceController.getAllWarrantyOrders);
+    router.post('/warranty/order/', MaintainanceController.createWarrantyOrder);
+    router.patch('/warranty/order/:id', MaintainanceController.updateWarrantyOrder);
+    router.delete('/warranty/order/:id', MaintainanceController.deleteWarrantyOrder);
 
-    router.get('/repair/status/:status', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.getRepairOrderByStatus);
-    router.get('/repair/order/', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.getAllRepairOrders);
-    router.post('/repair/order/', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.createRepairOrder);
-    router.patch('/repair/order/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.updateRepairOrder);
-    router.delete('/repair/order/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, MaintainanceController.deleteRepairOrder);
+    router.get('/repair/status/:status', MaintainanceController.getRepairOrderByStatus);
+    router.get('/repair/order/', MaintainanceController.getAllRepairOrders);
+    router.post('/repair/order/', MaintainanceController.createRepairOrder);
+    router.patch('/repair/order/:id', MaintainanceController.updateRepairOrder);
+    router.delete('/repair/order/:id', MaintainanceController.deleteRepairOrder);
     return app.use('/maintainance', router);
 }
 
