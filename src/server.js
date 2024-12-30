@@ -15,7 +15,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
     cors({
-        origin: process.env.URL_FRONTEND,
+        // origin: process.env.URL_FRONTEND,
+        origin: (origin, callback) => {
+            callback(null, true); // Dynamically allow all origins
+        },
         methods: "GET,POST,PUT,PATCH,DELETE",
         credentials: true,
     })
