@@ -1,6 +1,7 @@
 import GoodsReceiptService from "../services/GoodsReceiptService";
 class GoodsReceiptController {
     createGoodsReceipt = async(req, res) => {
+        const staffId = req.user.staffId;
         const { shipping, GoodsReceiptDetailsData, totalCost, providerId } = req.body;
         if (!shipping || !GoodsReceiptDetailsData || !totalCost || !providerId) {
             return res.status(200).json({
@@ -10,7 +11,7 @@ class GoodsReceiptController {
             });
         }
         try {
-            const response = await GoodsReceiptService.createGoodsReceipt(shipping, GoodsReceiptDetailsData, totalCost, providerId);
+            const response = await GoodsReceiptService.createGoodsReceipt(shipping, GoodsReceiptDetailsData, totalCost, providerId, staffId);
             await GoodsReceiptService.acceptGoodsReceipt(response.DT.id);
             res.status(200).json(response);
 

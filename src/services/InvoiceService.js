@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import db from "../models/index";
 class InvoiceService {
     createInvoice = async(totalCost, InvoiceDetailsData, staffId, customerId) => {

@@ -56,7 +56,8 @@ class MaintainanceController {
   }
 
   static async createWarrantyOrder(req, res) {
-    const { warrantyId, description, details, cost, staffId, estimateFinishDate } = req.body;
+    const { warrantyId, description, details, cost, estimateFinishDate } = req.body;
+    const staffId = req.user.staffId;
     if (!warrantyId || 
         !description || 
         !details || 
@@ -83,7 +84,8 @@ class MaintainanceController {
   }
 
   static async createRepairOrder(req, res) {
-    const { productName, customerId ,description, details, cost, staffId, estimateFinishDate } = req.body;
+    const { productName, customerId ,description, details, cost, estimateFinishDate } = req.body;
+    const staffId = req.user.staffId;
     if (!productName || 
         !description || 
         !details || 
