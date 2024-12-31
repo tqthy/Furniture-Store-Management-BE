@@ -20,7 +20,7 @@ class ProductController {
 
     updateProduct = async(req, res) => {
         const { id } = req.params;
-        const { catalogueId, name, description, warranty } = req.body;
+        const { catalogueId, name, description, warranty, image } = req.body;
         if (!id || !name || !description || !warranty) {
             return res.status(200).json({
                 EM: 'Missing required fields',
@@ -29,7 +29,7 @@ class ProductController {
             });
         }
         try {
-            const response = await ProductService.updateProduct(id, catalogueId, name, description, warranty);
+            const response = await ProductService.updateProduct(id, catalogueId, name, description, warranty, image);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });
