@@ -4,7 +4,7 @@ import JwtService from "../middleware/JwtService";
 
 const router = express.Router();
 const productRoute = (app) => {
-    router.post('/create-product', ProductController.createProduct);
+    router.post('/create-product', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductController.createProduct);
     router.put('/update-product/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductController.updateProduct);
     router.delete('/delete-product/:id', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductController.deleteProduct);
     router.get('/get-all-products', JwtService.checkUserJwt, JwtService.checkUserPermission, ProductController.getAllProducts);
