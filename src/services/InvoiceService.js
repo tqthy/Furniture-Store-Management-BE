@@ -309,7 +309,6 @@ class InvoiceService {
                 ],
                 nest: true,
                 raw: false,
-                attributes: { exclude: ["createdAt", "updatedAt"] }
             })
             return {
                 EM: 'Update goods receipt successfully',
