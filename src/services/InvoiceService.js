@@ -523,11 +523,10 @@ class InvoiceService {
                 }
             });
             let totalQuantitySold = 0;
-            let totalRevenue = 0;
-            
+            let totalRevenue = 0; 
             InvoiceDetails.forEach(InvoiceDetail => {
-                totalQuantitySold += InvoiceDetail.dataValues.quantity;
-                totalRevenue += InvoiceDetail.dataValues.cost;
+                totalQuantitySold += InvoiceDetail.quantity;
+                totalRevenue += InvoiceDetail.cost;
             });
                 
             return {

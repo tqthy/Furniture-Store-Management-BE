@@ -28,7 +28,13 @@ class ReportController {
           result.paymentMethodStatistic = values[3].DT;
           result.currentPromotion = values[4].DT;
         });
-
+        if (result.paymentMethodStatistic && typeof result.paymentMethodStatistic === 'object') {
+          if (result.paymentMethodStatistic['QR code']) {
+            result.paymentMethodStatistic.qr = result.paymentMethodStatistic['QR code'];
+            delete result.paymentMethodStatistic['QR code'];
+            delete result.paymentMethodStatistic.null;
+          }
+        }
         const totalQuantitySoldAndRevenueByPromotion = await InvoiceService.getTotalQuantitySoldAndRevenueByPromotion(result.currentPromotion.id);
         result.currentPromotion.totalQuantitySold = totalQuantitySoldAndRevenueByPromotion.DT.totalQuantitySold;
         result.currentPromotion.totalRevenue = totalQuantitySoldAndRevenueByPromotion.DT.totalRevenue;
