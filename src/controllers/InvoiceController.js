@@ -32,11 +32,12 @@ class InvoiceController {
             
             const invoiceDetails = response.DT.InvoiceDetails;
             const warranties = [];
-            const warrantyStartDate = new Date();
+            const currentDate = new Date();
+            const warrantyStartDate = currentDate;
             const customerId = response.DT.customerId;
             for (const invoiceDetail of invoiceDetails) {
                 const warrantyMonth = invoiceDetail.ProductVariant.Product.warranty;
-                const warrantyEndDate = new Date(warrantyStartDate.setMonth(warrantyStartDate.getMonth() + warrantyMonth));
+                const warrantyEndDate = new Date(currentDate.setMonth(currentDate.getMonth() + warrantyMonth));
                 warranties.push({
                     customerId: customerId,
                     invoiceDetailsId: invoiceDetail.id,
