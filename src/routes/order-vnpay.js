@@ -1,9 +1,11 @@
 const moment = require('moment');
 
 import express from "express";
+import InvoiceService from "../services/InvoiceService";
+
 let router = express.Router();
 
-router.post('/create_payment_url', function (req, res, next) {
+router.post('/create_payment_url', async function (req, res, next) {
     
   process.env.TZ = 'Asia/Ho_Chi_Minh';
   
@@ -20,9 +22,9 @@ router.post('/create_payment_url', function (req, res, next) {
   let vnpUrl = process.env.vnp_Url;
   let returnUrl = process.env.vnp_ReturnUrl;
   let orderId = moment(date).format('DDHHmmss');
+  let invoiceId = req.body.invoiceId;
   let amount = req.body.amount;
   let bankCode = req.body.bankCode;
-  
   let locale = req.body.language;
   if(locale === null || locale === ''){
       locale = 'vn';
@@ -42,7 +44,7 @@ router.post('/create_payment_url', function (req, res, next) {
   vnp_Params['vnp_IpAddr'] = ipAddr;
   vnp_Params['vnp_CreateDate'] = createDate;
   if(bankCode !== null && bankCode !== ''){
-      vnp_Params['vnp_BankCode'] = bankCode;
+    vnp_Params['vnp_BankCode'] = bankCode;
   }
 
   vnp_Params = sortObject(vnp_Params);
@@ -55,11 +57,16 @@ router.post('/create_payment_url', function (req, res, next) {
   vnp_Params['vnp_SecureHash'] = signed;
   vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
+  const check = await InvoiceService.updateInvoiceNumber(invoiceId, orderId);
+  if (!check || check.EC !== 0) {
+    res.status(200).json({error: 'Cannot update invoice number'});
+  }
+
   res.status(200).json({vpnUrl: vnpUrl});
 });
 
 
-router.get('/vnpay_ipn', function (req, res, next) {
+router.get('/vnpay_ipn', async function (req, res, next) {
   console.log("ITS ME BABY"); 
   let vnp_Params = req.query;
   let secureHash = vnp_Params['vnp_SecureHash'];
@@ -83,7 +90,8 @@ router.get('/vnpay_ipn', function (req, res, next) {
   //let paymentStatus = '1'; // Giả sử '1' là trạng thái thành công bạn cập nhật sau IPN được gọi và trả kết quả về nó
   //let paymentStatus = '2'; // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
   
-  let checkOrderId = true; // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
+  let checkOrderId = await InvoiceService.checkInvoice(orderId); // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL
+
   let checkAmount = true; // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
   if(secureHash === signed){ //kiểm tra checksum
       if(checkOrderId){
@@ -93,6 +101,7 @@ router.get('/vnpay_ipn', function (req, res, next) {
                       //thanh cong
                       //paymentStatus = '1'
                       // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
+                      await InvoiceService.updateInvoiceStatus(orderId, 'paid');
                       res.status(200).json({RspCode: '00', Message: 'Success'})
                   }
                   else {

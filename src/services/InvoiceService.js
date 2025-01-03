@@ -23,9 +23,9 @@ class InvoiceService {
 
             await t.commit();
             return {
-            EM: 'Create invoice receipt successfully',
-            EC: 0,
-            DT: invoice
+                EM: 'Create invoice receipt successfully',
+                EC: 0,
+                DT: invoice
             };
         } catch (error) {
             if (!t.finished) await t.rollback();
@@ -34,6 +34,59 @@ class InvoiceService {
             EC: 1,
             DT: ''
             };
+        }
+    }
+
+    updateInvoiceNumber = async(id, invoiceNumber) => {
+        try {
+            const Invoice = await db.Invoice.findOne({
+                where: {
+                    id: id
+                }
+            })
+            if (!Invoice) {
+                return {
+                    EM: 'Invoice not found',
+                    EC: 1,
+                    DT: ''
+                }
+            }
+            await db.Invoice.update({
+                invoiceNumber: invoiceNumber
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return {
+                EM: 'Update invoice number successfully',
+                EC: 0,
+                DT: ''
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    checkInvoice = async(invoiceNumber) => {
+        try {
+            const Invoice = await db.Invoice.findOne({
+                where: {
+                    invoiceNumber: invoiceNumber
+                }
+            })
+            if (!Invoice) {
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
         }
     }
 
@@ -111,6 +164,30 @@ class InvoiceService {
             }
         }
     }
+
+    updateInvoiceStatus = async(invoiceNumber, status) => {
+        try {
+            const Invoice = await db.Invoice.findOne({
+                where: {
+                    invoiceNumber: invoiceNumber
+                }
+            })
+            if (!Invoice) {
+                throw new Error('Invoice not found');
+            }
+            await db.Invoice.update({
+                status: status
+            }, {
+                where: {
+                    invoiceNumber: invoiceNumber,
+                }
+            })
+            return;
+        } catch(error) {
+            console.error(error);
+            return;
+        }
+    };
 
     rejectInvoice = async(id) => {
         try {
