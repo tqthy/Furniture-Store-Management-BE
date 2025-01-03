@@ -52,9 +52,13 @@ class InvoiceController {
             }
 
             const newWarranties = await MaintainanceService.createWarranties(warranties);
-            console.log('New warranties: ', newWarranties);
             if (newWarranties.EC === 0) {
-                response.DT.warranties = newWarranties.DT; // Ensure this field is correctly updated
+                response.DT.warranties = newWarranties.DT.map(warranty => ({
+                    id: warranty.dataValues.id,
+                    startDate: warranty.dataValues.startDate,
+                    endDate: warranty.dataValues.endDate,
+                    customerId: warranty.dataValues.customerId,
+                }));
             }
 
             return res.status(200).json(response);
