@@ -5,7 +5,14 @@ class MaintainanceService {
   //missing input validation
   createWarranties = async (warranties) => {
     try {
-      const newWarranties = await db.Warranty.bulkCreate(warranties);
+      let newWarranties = await db.Warranty.bulkCreate(warranties);
+      // newWarranties = newWarranties.map(warranty => ({
+      //   id: warranty.dataValues.id,
+      //   startDate: warranty.dataValues.startDate,
+      //   endDate: warranty.dataValues.endDate,
+      //   customerId: warranty.dataValues.customerId,
+      // }));
+      
       return {
         EM: 'Create warranties successfully',
         EC: 0,

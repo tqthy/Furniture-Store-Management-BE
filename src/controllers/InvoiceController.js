@@ -21,52 +21,62 @@ class InvoiceController {
         }
     }
     
-    acceptInvoice = async(req, res) => {
-        const id  = req.params.id;
-        const {paymentMethod } = req.body;
+    acceptInvoice = async (req, res) => {
+        const id = req.params.id;
+        const { paymentMethod } = req.body;
+    
         try {
             const response = await InvoiceService.acceptInvoice(id, paymentMethod);
             if (response.EC === 1) {
                 throw new Error(response.EM);
             }
-            
-            const invoiceDetails = response.DT.InvoiceDetails;
+    
+            const invoiceDetails = response.DT.InvoiceDetails.map(detail => detail.toJSON());
             const warranties = [];
-            const currentDate = new Date(); // Current date for reference
+            const currentDate = new Date();
             const customerId = response.DT.customerId;
-
+    
             for (const invoiceDetail of invoiceDetails) {
                 const warrantyMonth = invoiceDetail.ProductVariant.Product.warranty;
-
-                // Create fresh date instances
-                const warrantyStartDate = new Date(currentDate); 
+    
+                const warrantyStartDate = new Date(currentDate);
                 const warrantyEndDate = new Date(warrantyStartDate);
                 warrantyEndDate.setMonth(warrantyEndDate.getMonth() + warrantyMonth);
-
+    
                 warranties.push({
                     customerId: customerId,
                     invoiceDetailsId: invoiceDetail.id,
                     startDate: warrantyStartDate,
-                    endDate: warrantyEndDate
+                    endDate: warrantyEndDate,
                 });
             }
+    
 
             const newWarranties = await MaintainanceService.createWarranties(warranties);
             if (newWarranties.EC === 0) {
-                response.DT.warranties = newWarranties.DT.map(warranty => ({
-                    id: warranty.dataValues.id,
-                    startDate: warranty.dataValues.startDate,
-                    endDate: warranty.dataValues.endDate,
-                    customerId: warranty.dataValues.customerId,
-                }));
+                response.DT.warranties = newWarranties.DT;
             }
+            const cleanResponse = {
+                EM: response.EM,
+                EC: response.EC,
+                DT: {
+                    ...response.DT.toJSON(), // Convert top-level instance to JSON
+                    InvoiceDetails: response.DT.InvoiceDetails.map(detail => ({
+                        ProductVariant: {
+                            ...detail.ProductVariant.toJSON(), // Convert nested ProductVariant to JSON
+                            Product: detail.ProductVariant.Product.toJSON(), // Convert nested Product to JSON
+                        },
+                    })),
+                    warranties: newWarranties.DT,
+                },
+            };
 
-            return res.status(200).json(response);
-        } catch(error) {
+            return res.status(200).json(cleanResponse);
+        } catch (error) {
+            console.error(error);
             return res.status(500).json({ error: error.message });
         }
-    
-    }
+    };
 
     getAllInvoices = async(req, res) => {
         try {
