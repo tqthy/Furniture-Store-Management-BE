@@ -4,6 +4,7 @@ import Connection from "./config/connectDB";
 import express from "express";
 import bodyParser from "body-parser";
 import config from "./routes/index";
+import seddData from "./config/initializerDb";
 // import catalogueRoute from "./routes/CatalogueRoute";
 // import { checkUserJwt } from "./middlewares/jwtService";
 require("dotenv").config();
@@ -14,13 +15,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
     cors({
-        origin: process.env.URL_FRONTEND,
+        // origin: process.env.URL_FRONTEND,
+        origin: (origin, callback) => {
+            callback(null, true); // Dynamically allow all origins
+        },
         methods: "GET,POST,PUT,PATCH,DELETE",
         credentials: true,
     })
 );
 
 Connection();
+seddData.seedAccount();
 // use middleware
 // import path here
 config.authRoute(app);
@@ -35,6 +40,8 @@ config.promotionRoute(app);
 config.fileRoute(app);
 config.maintainanceRoute(app);
 config.staffRoute(app);
+config.reportRoute(app);
+config.authorizationRoute(app);
 
 app.use('/order-vnpay', require('./routes/order-vnpay'));
 app.use('/order-momo', require('./routes/order-momo'));

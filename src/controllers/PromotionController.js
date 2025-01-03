@@ -36,7 +36,7 @@ class PromotionController {
   static async getCurrentPromotion(req, res) {
     try {
       const { date } = req.query;
-      const response = await PromotionService.getPromotionByDate(date);
+      const response = await PromotionService.getPromotionAndProductByDate(date);
       res.status(200).json(response);
     } catch (error) {
       res.status(500).json({ message: error.message });

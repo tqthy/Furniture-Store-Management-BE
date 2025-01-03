@@ -3,6 +3,7 @@ import MaintainanceService from "../services/MaintainanceService";
 
 class InvoiceController {
     createInvoice = async(req, res) => {
+        const staffId = req.user.staffId;
         const { InvoiceDetailsData, totalCost, customerId } = req.body;
         if (!InvoiceDetailsData || !totalCost) {
             return res.status(200).json({
@@ -12,7 +13,7 @@ class InvoiceController {
             });
         }
         try {
-            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, null, customerId);
+            const response = await InvoiceService.createInvoice(totalCost, InvoiceDetailsData, staffId, customerId);
             res.status(200).json(response);
 
         } catch(error) {
@@ -22,8 +23,9 @@ class InvoiceController {
     
     acceptInvoice = async(req, res) => {
         const id  = req.params.id;
+        const {paymentMethod } = req.body;
         try {
-            const response = await InvoiceService.acceptInvoice(id);
+            const response = await InvoiceService.acceptInvoice(id, paymentMethod);
             if (response.EC === 1) {
                 throw new Error(response.EM);
             }
@@ -76,7 +78,8 @@ class InvoiceController {
 
     updateInvoice = async(req, res) => {
         const id = req.params.id;
-        const {InvoiceDetailsData, totalCost } = req.body;
+        const staffId = req.user.staffId;
+        const {InvoiceDetailsData, totalCost, paymentMethod, customerId } = req.body;
         if (!InvoiceDetailsData || !totalCost) {
             return res.status(200).json({
                 EM: 'Missing invoice details data',
@@ -85,7 +88,7 @@ class InvoiceController {
             });
         }
         try {
-            const response = await InvoiceService.updateInvoice(id, InvoiceDetailsData, totalCost, null, null);
+            const response = await InvoiceService.updateInvoice(id, InvoiceDetailsData, totalCost, staffId, customerId, paymentMethod);
             return res.status(200).json(response);
         } catch(error) {
             return res.status(500).json({ error: error.message });

@@ -53,7 +53,7 @@ jobs:
             echo "Removing old images..."
             docker rmi ${DOCKER_HUB_USERNAME}/expressjs-app:latest
             echo "Starting new container..."
-            docker run --env-file /path/on/ec2/env -d --name expressjs-app -p 3000:8080 ${DOCKER_HUB_USERNAME}/expressjs-app:latest
+            docker run --env-file /path/on/ec2/env -d --name expressjs-app -p 8080:8080 ${DOCKER_HUB_USERNAME}/expressjs-app:latest
           EOF
           echo "Finish ssh"
           rm key1.pem env

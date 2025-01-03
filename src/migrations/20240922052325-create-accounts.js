@@ -21,6 +21,12 @@ module.exports = {
       status: {
         type: Sequelize.ENUM("active", "inactive")
       },
+      resetPasswordToken: {
+        type: Sequelize.INTEGER
+      },
+      resetPasswordExpires: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

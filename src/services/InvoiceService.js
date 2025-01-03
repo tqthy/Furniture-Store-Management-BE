@@ -7,6 +7,7 @@ class InvoiceService {
             status: "pending",
             totalCost: totalCost,
             staffId: staffId,
+            paymentMethod: null,
             customerId: customerId
             }, { transaction: t });
             for (const data of InvoiceDetailsData) {
@@ -36,31 +37,14 @@ class InvoiceService {
         }
     }
 
-    acceptInvoice = async(id) => {
+    acceptInvoice = async(id, paymentMethod) => {
         try {
             const Invoice = await db.Invoice.findOne({
                 where: {
                     id: id
                 },
-                include: [
-                    {
-                        model: db.InvoiceDetails,
-                        attributes: { exclude: ["createdAt", "updatedAt"] },
-                        include: [
-                            {
-                                model: db.ProductVariant,
-                                include: [
-                                    {
-                                        model: db.Product
-                                    }
-                                ],
-                                attributes: { exclude: ["createdAt", "updatedAt"] }
-                            }
-                        ]
-                    }
-                ],
                 attributes: { exclude: ["createdAt", "updatedAt"] },
-                nest: true,
+                nest: false,
                 raw: false
             })
             if (!Invoice) {
@@ -78,17 +62,46 @@ class InvoiceService {
                 }
             }
             await db.Invoice.update({
-                status: 'paid'
+                status: 'paid',
+                paymentMethod: paymentMethod
             }, {
                 where: {
                     id: id,
                 }
             })
-            Invoice.status = 'paid';
+
+            const result = await db.Invoice.findOne(
+                {
+                    where: {
+                        id: id
+                    },
+                    include: [
+                        {
+                            model: db.InvoiceDetails,
+                            attributes: { exclude: ["createdAt", "updatedAt"] },
+                            include: [
+                                {
+                                    model: db.ProductVariant,
+                                    include: [
+                                        {
+                                            model: db.Product
+                                        }
+                                    ],
+                                    attributes: { exclude: ["createdAt", "updatedAt"] }
+                                }
+                            ]
+                        }
+                    ],
+                    attributes: { exclude: ["createdAt", "updatedAt"] },
+                    nest: true,
+                    raw: false
+                },
+            )
+
             return {
                 EM: 'Accept invoice successfully',
                 EC: 0,
-                DT: Invoice
+                DT: result
             }
         } catch (error) {
             return {
@@ -251,7 +264,8 @@ class InvoiceService {
             await db.Invoice.update({
                 staffId: staffId,
                 customerId: customerId,
-                totalCost: totalCost
+                totalCost: totalCost,
+                paymentMethod: null
             }, {
                 where: {
                     id: id
@@ -295,7 +309,6 @@ class InvoiceService {
                 ],
                 nest: true,
                 raw: false,
-                attributes: { exclude: ["createdAt", "updatedAt"] }
             })
             return {
                 EM: 'Update goods receipt successfully',
@@ -303,6 +316,152 @@ class InvoiceService {
                 DT: updatedInvoice
             }
         } catch (error) {
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getTotalSoldProduct = async (fromDate, toDate) => {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                include: [
+                    {
+                        model: db.InvoiceDetails,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                    }
+                ],
+                nest: true,
+                raw: false
+            })
+            let totalSoldProduct = 0;
+            Invoices.forEach(Invoice => {
+                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
+                    totalSoldProduct += InvoiceDetail.quantity;
+                })
+            })
+            return {
+                EM: 'Get total sold product successfully',
+                EC: 0,
+                DT: totalSoldProduct
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getTotalRevenue = async (fromDate, toDate) => {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                include: [
+                    {
+                        model: db.InvoiceDetails,
+                        attributes: { exclude: ["createdAt", "updatedAt"] }
+                    }
+                ],
+                nest: true,
+                raw: false
+            })
+            let totalRevenue = 0;
+            Invoices.forEach(Invoice => {
+                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
+                    totalRevenue += InvoiceDetail.totalCost;
+                })
+            })
+            return {
+                EM: 'Get total revenue successfully',
+                EC: 0,
+                DT: totalRevenue
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getPaymentMethodStatistic = async(fromDate, toDate) => {
+        try {
+            const Invoices = await db.Invoice.findAll({
+                where: {
+                    status: 'paid',
+                    createdAt: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                },
+                nest: true,
+                raw: false
+            })
+            let paymentMethodStatistic = {};
+            Invoices.forEach(Invoice => {
+                if (paymentMethodStatistic[Invoice.paymentMethod]) {
+                    paymentMethodStatistic[Invoice.paymentMethod] += Invoice.totalCost;
+                } else {
+                    paymentMethodStatistic[Invoice.paymentMethod] = Invoice.totalCost;
+                }
+            })
+            return {
+                EM: 'Get payment method statistic successfully',
+                EC: 0,
+                DT: paymentMethodStatistic
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    getTotalQuantitySoldAndRevenueByPromotion = async(promotionId) => {
+        try {
+            const InvoiceDetails = await db.InvoiceDetails.findAll({
+                where: {
+                    promotionId: promotionId
+                }
+            });
+            let totalQuantitySold = 0;
+            let totalRevenue = 0;
+
+            InvoiceDetails.forEach(InvoiceDetail => {
+                totalQuantitySold += InvoiceDetail.quantity;
+                totalRevenue += InvoiceDetail.cost;
+            });
+
+            return {
+                EM: 'Get total quantity sold and revenue by promotion successfully',
+                EC: 0,
+                DT: {
+                    totalQuantitySold: totalQuantitySold,
+                    totalRevenue: totalRevenue
+                }
+            }
+        } catch (error) {
+            console.error(error);
             return {
                 EM: error.message,
                 EC: 1,

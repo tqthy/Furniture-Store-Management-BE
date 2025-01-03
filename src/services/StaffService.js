@@ -178,7 +178,14 @@ class StaffService {
                 },
                 include: {
                     model: db.Account,
-                    attributes: ['username', 'status', 'roleId'],
+                    attributes: ['username', 'status'],
+                    include:
+                    [
+                        {
+                            model: db.Role,
+                            attributes: ['name', 'id']
+                        }
+                    ]
                 },
                 raw: true,
                 nest: true
@@ -211,6 +218,13 @@ class StaffService {
                     include: {
                         model: db.Account,
                         attributes: ['username', 'status'],
+                        include:
+                        [
+                            {
+                                model: db.Role,
+                                attributes: ['name', 'id']
+                            }
+                        ]
                     },
                     raw: false,
                     nest: true

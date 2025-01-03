@@ -47,7 +47,7 @@ class ProductService {
         }
     }
 
-    updateProduct = async(id, catalogueId, name, description, warranty) => {
+    updateProduct = async(id, catalogueId, name, description, warranty, image) => {
         try {
             const product = await db.Product.findOne({
                 where: {
@@ -66,6 +66,7 @@ class ProductService {
                 name: name,
                 description: description,
                 warranty: warranty,
+                image: image
             }, {
                 where: {
                     id: id

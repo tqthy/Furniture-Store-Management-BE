@@ -1,12 +1,12 @@
 @Web = http://localhost:8080
 @Email=
 @Password=
-@BearerToken=
-
+@BearerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjoxLCJyb2xlIjozLCJzdGFmZklkIjoxfSwiaWF0IjoxNzMzMTE1OTQ0fQ.gzEMftLNe8qym42VrQ9R2rRbbhEKlFQe_wBth7doAc8
 //Catalogue
 // Tạo catalogue
 POST {{Web}}/catalogues/create-catalogue
 Content-Type: application/json
+Authorization: Bearer {{BearerToken}}
 
 {
     "name": "nội thất nhà bếp"
@@ -68,7 +68,7 @@ GET {{Web}}/products/get-all-products
 ###
 //tạo variant cho product
 //với 1 là productId
-POST {{Web}}/variants/create-variant/1
+POST {{Web}}/variants/create-variant/2
 Content-Type: application/json
 
 {
@@ -100,7 +100,7 @@ GET {{Web}}/variants/get-all-variants/1
 
 ###
 //lấy danh sách variant
-GET {{Web}}/variants
+GET {{Web}}/variants/
 
 ###
 //chi tiết của 1 product variant
@@ -161,12 +161,12 @@ Content-Type: application/json
 //khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
 //khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
 //với 1 là id của hóa đơn
-PUT {{Web}}/goods-receipt/accept-goods-receipt/1
+PUT {{Web}}/goods-receipt/accept-goods-receipt/3
 
 ###
 //từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
 //với 1 là id của hóa đơn
-PUT {{Web}}/goods-receipt/reject-goods-receipt/1
+PUT {{Web}}/goods-receipt/reject-goods-receipt/3
 
 ////////////////////////////////////Invoice////////////////////////////////////
 ###
@@ -175,10 +175,10 @@ Content-Type: application/json
 
 {
     "InvoiceDetailsData": [
-        {"variantId": 1, "quantity": 3, "cost": 10000, "discountAmount": 2000, "unitPrice": 8000 },
-        {"variantId": 2, "quantity": 2, "cost": 20000, "discountAmount": 4000, "unitPrice": 16000 },
-        {"variantId": 1, "quantity": 6, "cost": 5000, "discountAmount": 1000, "unitPrice": 3000 },
-        {"variantId": 2, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
+        {"variantId": 3, "quantity": 3, "cost": 10000, "discountAmount": 2000, "unitPrice": 8000 },
+        {"variantId": 3, "quantity": 2, "cost": 20000, "discountAmount": 4000, "unitPrice": 16000 },
+        {"variantId": 3, "quantity": 6, "cost": 5000, "discountAmount": 1000, "unitPrice": 3000 },
+        {"variantId": 3, "quantity": 2, "cost": 7000, "discountAmount": 3000, "unitPrice": 4000 }
     ],
     "totalCost": 10000,
     "customerId": 1
@@ -189,11 +189,11 @@ Content-Type: application/json
 GET {{Web}}/invoices/get-all-invoices
 
 ###
-GET  {{Web}}/invoices/get-invoice/5
+GET  {{Web}}/invoices/get-invoice/7
 
 ###
 //sửa hóa đơn thanh toán
-PUT {{Web}}/invoices/update-invoice/2
+PUT {{Web}}/invoices/update-invoice/6
 Content-Type: application/json
 
 {
@@ -203,6 +203,7 @@ Content-Type: application/json
         {"variantId": 1, "quantity": 2, "cost": 4000, "discountAmount": 2000, "unitPrice": 1000 },
         {"variantId": 2, "quantity": 7, "cost": 2000, "discountAmount": 2000, "unitPrice": 1000 }
     ],
+    "paymentMethod": "Cash",
     "totalCost": 10000
 }
 
@@ -212,7 +213,13 @@ Content-Type: application/json
 //khi inventory tăng lên thì sẽ tự cập nhật lại số lượng sản phẩm trong kho
 //khi đó available, total sẽ xét, nếu khác 0 thì status thành in stock
 //với 1 là id của hóa đơn
+// "paymentMethod": "QR code" or "paymentMethod": "Cash"
 PUT {{Web}}/invoices/accept-invoice/5
+Content-Type: application/json
+
+{
+    "paymentMethod": "Cash"
+}
 
 ###
 //từ chối hóa đơn thanh toán (hủy hoặc không nhận hàng do hàng không đạt yêu cầu)
@@ -312,7 +319,7 @@ Content-Type: application/json
     "idNumber": "0123456789",
     "startDate": "2020-08-30",
     "phone": "0123456789",
-    "email": "nguyenvana@gmail.com",
+    "email": "vuthanhtam12062003@gmail.com",
     "role": 3
 }
 
@@ -344,8 +351,35 @@ POST {{Web}}/login
 Content-Type: application/json
 
 {
-    "username": "SaleStaff0001",
-    "password": "SaleStaff0001"
+    "username": "Manager",
+    "password": "Manager"
+}
+
+// forgot password
+###
+POST {{Web}}/forgot-password
+Content-Type: application/json
+
+{
+    "email": "vuthanhtam12062003@gmail.com"
+}
+
+###
+POST {{Web}}/verify-forgot-password-token
+Content-Type: application/json
+
+{
+    "token": 188845
+}
+
+###
+POST {{Web}}/reset-password
+Content-Type: application/json
+
+{
+    "token": 188845,
+    "newPassword": "vuthanhtam12062003",
+    "retypeNewPassword": "vuthanhtam12062003"
 }
 
 ////////////////////////////////////Promotion////////////////////////////////////
@@ -517,3 +551,24 @@ Content-Type: application/json
 // Xoá yêu cầu sửa chữa
 
 DELETE {{Web}}/maintainance/repair/order/:id
+
+
+////////////////////////////////////Authorization////////////////////////////////////
+###
+GET {{Web}}/authorization/get-all-permissions
+
+###
+GET {{Web}}/authorization/permissions-by-role/3
+
+###
+PUT {{Web}}/authorization/update-permissons/3
+Content-Type: application/json
+
+{
+    "permissions": [1,2,3,4]
+}
+
+
+// GET general dashboard
+###
+GET {{Web}}/report/general?fromDate=2024-01-01&toDate=2024-12-24

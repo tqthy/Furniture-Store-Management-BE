@@ -19,10 +19,10 @@ module.exports = {
         type: Sequelize.ENUM('accepted', 'pending', 'rejected')
       },
       totalCost: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       shipping: {
-        type: Sequelize.DECIMAL(20,2)
+        type: Sequelize.INTEGER
       },
       staffId: {
         type: Sequelize.INTEGER

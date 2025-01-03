@@ -1,8 +1,7 @@
-import { raw } from "body-parser";
 import db from "../models/index";
 
 class GoodsReceiptService {
-    createGoodsReceipt = async(shipping, GoodsReceiptDetailsData, totalCost, providerId) => {
+    createGoodsReceipt = async(shipping, GoodsReceiptDetailsData, totalCost, providerId, staffId) => {
         const t = await db.sequelize.transaction();
         try {
             const goodsReceipt = await db.GoodsReceipt.create({
@@ -11,7 +10,8 @@ class GoodsReceiptService {
                 status: "pending",
                 shipping: shipping,
                 totalCost: totalCost,
-                providerId: providerId
+                providerId: providerId,
+                staffId: staffId
             }, { transaction: t })
             for (const data of GoodsReceiptDetailsData) {
                 await db.GoodsReceiptDetails.create({
@@ -290,6 +290,31 @@ class GoodsReceiptService {
                 DT: updatedgoodsReceipt
             }
         } catch (error) {
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    async getTotalImportCost(fromDate, toDate) {
+        try {
+            const totalCost = await db.GoodsReceipt.sum('totalCost', {
+                where: {
+                    status: 'accepted',
+                    receiptDate: {
+                        [db.Sequelize.Op.between]: [fromDate, toDate]
+                    }
+                }
+            }) || 0;
+            return {
+                EM: 'Get total import cost successfully',
+                EC: 0,
+                DT: totalCost
+            }
+        } catch (error) {
+            console.error(error);
             return {
                 EM: error.message,
                 EC: 1,
