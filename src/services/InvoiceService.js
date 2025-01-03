@@ -17,7 +17,8 @@ class InvoiceService {
                     quantity: data.quantity,
                     cost: data.cost,
                     unitPrice: data.unitPrice,
-                    discountAmount: data.discountAmount
+                    discountAmount: data.discountAmount,
+                    promotionId: data.promotionId
                 }, { transaction: t });
             }
 
@@ -459,11 +460,10 @@ class InvoiceService {
                 nest: true,
                 raw: false
             })
+            // console.log(Invoices);
             let totalRevenue = 0;
             Invoices.forEach(Invoice => {
-                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
-                    totalRevenue += InvoiceDetail.totalCost;
-                })
+                totalRevenue += Invoice.dataValues.totalCost;
             })
             return {
                 EM: 'Get total revenue successfully',
@@ -524,12 +524,12 @@ class InvoiceService {
             });
             let totalQuantitySold = 0;
             let totalRevenue = 0;
-
+            
             InvoiceDetails.forEach(InvoiceDetail => {
-                totalQuantitySold += InvoiceDetail.quantity;
-                totalRevenue += InvoiceDetail.cost;
+                totalQuantitySold += InvoiceDetail.dataValues.quantity;
+                totalRevenue += InvoiceDetail.dataValues.cost;
             });
-
+                
             return {
                 EM: 'Get total quantity sold and revenue by promotion successfully',
                 EC: 0,

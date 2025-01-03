@@ -183,16 +183,17 @@ class PromotionService {
 
   getPromotionByDate = async (date) => {
     try {
+      
       const promotion = await db.Promotion.findOne({
         where: {
-          startDate: {
-            [db.Sequelize.Op.lte]: date
-          },
-          finishDate: {
-            [db.Sequelize.Op.gte]: date
-          }
+          [db.Sequelize.Op.and]: [
+            { startDate: { [db.Sequelize.Op.lte]: date } },
+            { finishDate: { [db.Sequelize.Op.gte]: date  }}
+          ]
         }
       });
+  
+
 
       if (!promotion) {
         return {
@@ -208,6 +209,7 @@ class PromotionService {
         DT: promotion
       }
     } catch (error) {
+      console.log(error);
       return {
         EM: error.message,
         EC: 1,
