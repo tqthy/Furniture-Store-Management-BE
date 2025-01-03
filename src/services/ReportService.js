@@ -5,12 +5,20 @@ class ReportService {
         try {
 
             const report = await db.sequelize.query(
-              `SELECT PV.id productVariantId, PV.SKU SKU, PV.importPrice importPrice, SUM(InvoiceDetails.quantity) sumQuantity, SUM(InvoiceDetails.cost) sumCost
-              FROM ProductVariant PV
-              LEFT JOIN InvoiceDetails ON ProductVariant.id = InvoiceDetails.variantId
-              LEFT JOIN Invoice ON InvoiceDetails.invoiceId = Invoice.id
-              WHERE Invoice.createdAt BETWEEN :fromDate AND :toDate
-              GROUP BY ProductVariant.id
+              // `SELECT PV.id productVariantId, PV.SKU SKU, PV.importPrice importPrice, SUM(InvoiceDetails.quantity) sumQuantity, SUM(InvoiceDetails.cost) sumCost
+              // FROM ProductVariant PV
+              // LEFT JOIN InvoiceDetails ON ProductVariant.id = InvoiceDetails.variantId
+              // LEFT JOIN Invoice ON InvoiceDetails.invoiceId = Invoice.id
+              // WHERE Invoice.createdAt BETWEEN :fromDate AND :toDate
+              // GROUP BY ProductVariant.id
+              // ORDER BY sumCost DESC`,
+             `SELECT PV.id AS productVariantId, PV."SKU" AS SKU, PV."buyingPrice" AS importPrice,
+              SUM("InvoiceDetails".quantity) AS sumQuantity, SUM("InvoiceDetails".cost) AS sumCost
+              FROM "ProductVariant" PV
+              LEFT JOIN "InvoiceDetails" ON PV.id = "InvoiceDetails"."variantId"
+              LEFT JOIN "Invoice" ON "InvoiceDetails"."invoiceId" = "Invoice".id
+              WHERE "Invoice"."createdAt" BETWEEN :fromDate AND :toDate
+              GROUP BY PV.id
               ORDER BY sumCost DESC`,
               {
                 replacements: {
@@ -27,6 +35,7 @@ class ReportService {
                 DT: report
             };
         } catch (error) {
+          console.error(error);
             return {
                 EM: error.message,
                 EC: 1,
@@ -38,17 +47,16 @@ class ReportService {
     getSaleStaffReport = async (fromDate, toDate) => {
         try {
             const report = await db.sequelize.query(
-              `SELECT Staff.id staffId, 
-                Staff.fullname staffName, 
-                COUNT(Invoice.id) countInvoice, 
-                SUM(Invoice.totalCost) sumTotal,
-                SUM(InvoiceDetails.quantity) sumQuantity
-                FROM Staff
-                LEFT JOIN Invoice ON Staff.id = Invoice.staffId
-                LEFT JOIN InvoiceDetails ON Invoice.id = InvoiceDetails.invoiceId
-                WHERE Invoice.createdAt BETWEEN :fromDate AND :toDate
-                AND Staff.role = 'Sale
-                GROUP BY Staff.id'`,
+              `SELECT "Staff".id AS staffId, 
+              "Staff".fullname AS staffName, 
+              COUNT("Invoice".id) AS countInvoice, 
+              SUM("Invoice"."totalCost") AS sumTotal,
+              SUM("InvoiceDetails".quantity) AS sumQuantity
+              FROM "Staff"
+              LEFT JOIN "Invoice" ON "Staff".id = "Invoice"."staffId"
+              LEFT JOIN "InvoiceDetails" ON "Invoice".id = "InvoiceDetails"."invoiceId"
+              WHERE "Invoice"."createdAt" BETWEEN :fromDate AND :toDate
+              GROUP BY "Staff".id;`,
               {
                 replacements: {
                   fromDate: fromDate,
@@ -64,6 +72,7 @@ class ReportService {
                 DT: report
             };
         } catch (error) {
+          console.error(error);
             return {
                 EM: error.message,
                 EC: 1,
