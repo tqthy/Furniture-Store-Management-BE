@@ -32,12 +32,17 @@ class InvoiceController {
             
             const invoiceDetails = response.DT.InvoiceDetails;
             const warranties = [];
-            const currentDate = new Date();
-            const warrantyStartDate = currentDate;
+            const currentDate = new Date(); // Current date for reference
             const customerId = response.DT.customerId;
+
             for (const invoiceDetail of invoiceDetails) {
                 const warrantyMonth = invoiceDetail.ProductVariant.Product.warranty;
-                const warrantyEndDate = new Date(currentDate.setMonth(currentDate.getMonth() + warrantyMonth));
+
+                // Create fresh date instances
+                const warrantyStartDate = new Date(currentDate); 
+                const warrantyEndDate = new Date(warrantyStartDate);
+                warrantyEndDate.setMonth(warrantyEndDate.getMonth() + warrantyMonth);
+
                 warranties.push({
                     customerId: customerId,
                     invoiceDetailsId: invoiceDetail.id,
@@ -47,8 +52,9 @@ class InvoiceController {
             }
 
             const newWarranties = await MaintainanceService.createWarranties(warranties);
+            console.log('New warranties: ', newWarranties);
             if (newWarranties.EC === 0) {
-                response.DT.warranties = newWarranties.DT;
+                response.DT.warranties = newWarranties.DT; // Ensure this field is correctly updated
             }
 
             return res.status(200).json(response);
