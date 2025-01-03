@@ -176,7 +176,8 @@ class InvoiceService {
                 throw new Error('Invoice not found');
             }
             await db.Invoice.update({
-                status: status
+                status: status,
+                paymentMethod: 'QR code'
             }, {
                 where: {
                     invoiceNumber: invoiceNumber,
