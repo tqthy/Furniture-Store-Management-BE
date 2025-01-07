@@ -8,15 +8,15 @@ class ReportController {
       try {
         const { fromDate, toDate } = req.query;
         const promises = [];
-        const totalSoldProduct = InvoiceService.getTotalSoldProduct(fromDate, toDate);
+        const totalSoldProduct = await InvoiceService.getTotalSoldProduct(fromDate, toDate);
         promises.push(totalSoldProduct);
-        const totalRevenue = InvoiceService.getTotalRevenue(fromDate, toDate);
+        const totalRevenue = await InvoiceService.getTotalRevenue(fromDate, toDate);
         promises.push(totalRevenue);
-        const totalExpense = GoodsReceiptService.getTotalImportCost(fromDate, toDate);
+        const totalExpense = await GoodsReceiptService.getTotalImportCost(fromDate, toDate);
         promises.push(totalExpense);
-        const paymentMethodStatistic = InvoiceService.getPaymentMethodStatistic(fromDate, toDate);
+        const paymentMethodStatistic = await InvoiceService.getPaymentMethodStatistic(fromDate, toDate);
         promises.push(paymentMethodStatistic);
-        const currentPromotionResult = PromotionService.getPromotionByDate(toDate);
+        const currentPromotionResult = await PromotionService.getPromotionByDate(toDate);
         promises.push(currentPromotionResult);
 
         let result = {};
