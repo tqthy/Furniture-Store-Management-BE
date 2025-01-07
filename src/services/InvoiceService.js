@@ -17,15 +17,16 @@ class InvoiceService {
                     quantity: data.quantity,
                     cost: data.cost,
                     unitPrice: data.unitPrice,
-                    discountAmount: data.discountAmount
+                    discountAmount: data.discountAmount,
+                    promotionId: data.promotionId
                 }, { transaction: t });
             }
 
             await t.commit();
             return {
-            EM: 'Create invoice receipt successfully',
-            EC: 0,
-            DT: invoice
+                EM: 'Create invoice receipt successfully',
+                EC: 0,
+                DT: invoice
             };
         } catch (error) {
             if (!t.finished) await t.rollback();
@@ -34,6 +35,59 @@ class InvoiceService {
             EC: 1,
             DT: ''
             };
+        }
+    }
+
+    updateInvoiceNumber = async(id, invoiceNumber) => {
+        try {
+            const Invoice = await db.Invoice.findOne({
+                where: {
+                    id: id
+                }
+            })
+            if (!Invoice) {
+                return {
+                    EM: 'Invoice not found',
+                    EC: 1,
+                    DT: ''
+                }
+            }
+            await db.Invoice.update({
+                invoiceNumber: invoiceNumber
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return {
+                EM: 'Update invoice number successfully',
+                EC: 0,
+                DT: ''
+            }
+        } catch (error) {
+            console.error(error);
+            return {
+                EM: error.message,
+                EC: 1,
+                DT: ''
+            }
+        }
+    }
+
+    checkInvoice = async(invoiceNumber) => {
+        try {
+            const Invoice = await db.Invoice.findOne({
+                where: {
+                    invoiceNumber: invoiceNumber
+                }
+            })
+            if (!Invoice) {
+                return false;
+            }
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
         }
     }
 
@@ -111,6 +165,31 @@ class InvoiceService {
             }
         }
     }
+
+    updateInvoiceStatus = async(invoiceNumber, status) => {
+        try {
+            const Invoice = await db.Invoice.findOne({
+                where: {
+                    invoiceNumber: invoiceNumber
+                }
+            })
+            if (!Invoice) {
+                throw new Error('Invoice not found');
+            }
+            await db.Invoice.update({
+                status: status,
+                paymentMethod: 'QR code'
+            }, {
+                where: {
+                    invoiceNumber: invoiceNumber,
+                }
+            })
+            return;
+        } catch(error) {
+            console.error(error);
+            return;
+        }
+    };
 
     rejectInvoice = async(id) => {
         try {
@@ -381,11 +460,10 @@ class InvoiceService {
                 nest: true,
                 raw: false
             })
+            // console.log(Invoices);
             let totalRevenue = 0;
             Invoices.forEach(Invoice => {
-                Invoice.InvoiceDetails.forEach(InvoiceDetail => {
-                    totalRevenue += InvoiceDetail.totalCost;
-                })
+                totalRevenue += Invoice.dataValues.totalCost;
             })
             return {
                 EM: 'Get total revenue successfully',
@@ -445,13 +523,12 @@ class InvoiceService {
                 }
             });
             let totalQuantitySold = 0;
-            let totalRevenue = 0;
-
+            let totalRevenue = 0; 
             InvoiceDetails.forEach(InvoiceDetail => {
                 totalQuantitySold += InvoiceDetail.quantity;
                 totalRevenue += InvoiceDetail.cost;
             });
-
+                
             return {
                 EM: 'Get total quantity sold and revenue by promotion successfully',
                 EC: 0,

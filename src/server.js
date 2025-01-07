@@ -43,6 +43,9 @@ config.staffRoute(app);
 config.reportRoute(app);
 config.authorizationRoute(app);
 
+app.use('/order-vnpay', require('./routes/order-vnpay'));
+app.use('/order-momo', require('./routes/order-momo'));
+
 app.use((req, res) => {
     return res.send("404 not found");
 });
